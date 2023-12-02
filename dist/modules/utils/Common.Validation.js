@@ -13,8 +13,15 @@ const educationValidation = zod_1.z.object({
     year: zod_1.z.number().int(),
 });
 const personalInfoValidation = zod_1.z.object({
-    present_address: zod_1.z.string().min(10),
-    permanent_address: zod_1.z.string().min(10),
+    address: zod_1.z.object({
+        present_address: zod_1.z.string().min(10),
+        permanent_address: zod_1.z.string().min(10),
+    }),
+    fullName: zod_1.z.object({
+        firstName: zod_1.z.string().min(3),
+        middleName: zod_1.z.string().optional(),
+        lastName: zod_1.z.string().min(3),
+    }),
     date_of_birth: zod_1.z.string().min(6),
     gender: zod_1.z.string().min(4),
     profile_image: zod_1.z.string().min(5),

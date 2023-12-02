@@ -6,6 +6,7 @@ const CommonSchema_1 = require("../utils/CommonSchema");
 const adminSchema = new mongoose_1.Schema({
     adminId: {
         type: String,
+        ref: "User",
         unique: true,
         index: true,
         required: [true, "User id is required!"],

@@ -12,6 +12,11 @@ const userSchema = new mongoose_1.default.Schema({
         index: true,
         required: [true, "User id is required!"],
     },
+    username: {
+        type: String,
+        unique: true,
+        required: [true, "User name is required!"],
+    },
     password: {
         type: String,
         default: process.env.DEFAULT_PASSWORD,
@@ -41,10 +46,8 @@ const userSchema = new mongoose_1.default.Schema({
     role: {
         type: String,
         required: [true, "Role is required!"],
-        enum: {
-            values: ["patient", "doctor", "admin", " nurse", "staff"],
-            message: "{VALUES} is not correct role. Choose patient, doctor or admin as role",
-        },
+        enum: ["patient", "doctor", "admin", "nurse", "staff"],
+        message: "{VALUES} is not correct role. Choose patient, doctor, admin, nurse or staff as role",
     },
     status: {
         type: String,
