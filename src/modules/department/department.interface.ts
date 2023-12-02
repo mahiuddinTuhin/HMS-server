@@ -1,7 +1,7 @@
 export type TDepartment = {
   departmentId: string;
   departmentName: string;
-  allDoctorsId: string[];
-  medicalHistoryId: string[];
+  allDoctors: string[];
   licences: string;
+  allMedicalHistoryId: string[];
 };

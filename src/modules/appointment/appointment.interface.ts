@@ -7,5 +7,5 @@ export type TAppointments = {
   isPaid: boolean;
   date: Date;
   schedule: TSchedule;
-  serial: number;
+  isClosed: boolean;
 };

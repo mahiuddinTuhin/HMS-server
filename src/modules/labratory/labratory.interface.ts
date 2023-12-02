@@ -3,9 +3,9 @@ export type TLaboratory = {
   labName: string;
   equipments: string[];
   allStaffId: string[];
-  testsOffered: string[];
+  testsOffers: string[];
   contactInfo: string[];
-  diagnosisHistory: diagnosisId[];
+  allDiagnosisHistory: string[];
 };
 
 export type diagnosisId = string;

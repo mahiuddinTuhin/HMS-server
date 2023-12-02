@@ -15,12 +15,14 @@ export type TPersonalInfo = {
   permanent_address: string;
   date_of_birth: string;
   gender: string;
+  profile_image: string;
 };
 
 export type TGuardian = {
-  name: string;
-  contactNumber: string;
-  address: string;
+  relation?: string;
+  name?: string;
+  contactNumber?: string;
+  address?: string;
 };
 
 export type TSchedule =

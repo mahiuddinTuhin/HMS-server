@@ -12,10 +12,9 @@ users   [icon: user, color: red] {
 
 
 Admin   [icon: gcp-administration, color: green] {
-    adminId string pk
+    adminId string fk
     contactInfo Tcontacts
     education TEducation[]
-    date_of_birth string
     profile_image string
     personalInfo TPersonalInfo
    }
@@ -25,7 +24,7 @@ Department   [icon: azure-groups, color: gray] {
   departmentId string pk
   departmentName string
   allDoctors string[] fk
-  medicalHistoryId string[] fk
+  allMedicalHistoryId string[] fk
   licences string
 }
 
@@ -35,14 +34,14 @@ Laboratory   [icon: azure-collaborative-service, color: gray] {
   labName string
   equipments string[]
   allStaff string[] fk
-  testsOffered string[]
+  testsOffers string[]
   contactInfo string[]
-  diagnosisHistory string[] fk
+  allDiagnosisHistory string[] fk
 }
 
 
 Staff   [icon: gcp-web-security-scanner, color: yellow] {
-  staffId string pk
+  staffId string fk
   shift "day" | "night"
   contactInfo Tcontacts
   education TEducation[]
@@ -51,7 +50,7 @@ Staff   [icon: gcp-web-security-scanner, color: yellow] {
 
 
 Doctor   [icon: gcp-security-health-advisor, color: violet] {
-  doctorId string pk
+  doctorId string fk
   schedule string[]
   allMedicalHistory string[] fk
   contactInfo Tcontacts
@@ -63,7 +62,7 @@ Doctor   [icon: gcp-security-health-advisor, color: violet] {
 
 
 Nurse   [icon: gcp-support, color: purple] {
-    nurseId string pk
+    nurseId string fk
     shift "day" | "night"
     contactInfo Tcontacts
     education TEducation[]
@@ -77,16 +76,16 @@ Appointments   [icon: gcp-asset-inventory, color: gray] {
   doctorId string fk
   patientId string fk
   isPaid boolean
+  isClosed boolean
   date Date
   schedule TSchedule
-  serial number
 }
 
 
 Patient   [icon: aws-personal-health-dashboard, color: blue] {
-  patientId string pk
+  patientId string fk
   allMedicalHistory string[] fk
-  allAppointments string[] fk
+  allAppointmentHistory string[] fk
   allDiagnosis string[] fk
   isAdmitted boolean
   currentMedicalDepartmentId string fk
@@ -127,14 +126,6 @@ MedicalHistory   [icon: pie-chart, color: gray] {
   patientComments string
 }
 
-
-
-
-
-
-
-
-
 users.userId < Admin.adminId
 users.userId < Doctor.doctorId
 users.userId < Nurse.nurseId
@@ -142,7 +133,7 @@ users.userId < Patient.patientId
 users.userId < Staff.staffId
 
 
-MedicalHistory.medicalHistoryId < Doctor.medicalHistoryId
+MedicalHistory.medicalHistoryId < Doctor.allMedicalHistory
 MedicalHistory.medicalHistoryId < Patient.medicalHistoryId
 Appointments.appointmentId < Doctor.appointmentId
 Appointments.appointmentId < Patient.appointmentId
@@ -157,7 +148,7 @@ Doctor.departmentId < Department.departmentId
 
 Diagnosis.patientId < Patient.patientId
 Diagnosis.doctorId < Doctor.doctorId
-Diagnosis.labStaffId < Staff.labStaffId
+Diagnosis.labStaffId < Staff.staffId
 Diagnosis.adminId < Admin.adminId
 
 
