@@ -9,16 +9,16 @@ import Department from "../department/department.mode";
 const createDepartment = async (data: TDepartment) => {
   try {
     const newDepartment: any = await Department.create(data);
-    if (!newDepartment.length) {
+    if (!newDepartment) {
       throw new AppError(
-        "Creating department failed!",
+        "Creating department failed! from data model.",
         StatusCodes.BAD_REQUEST,
       );
     }
     return newDepartment;
   } catch (error) {
     throw new AppError(
-      `Creating department failed!: ${error}`,
+      `Creating department failed from services!: ${error}`,
       StatusCodes.INTERNAL_SERVER_ERROR,
     );
   }

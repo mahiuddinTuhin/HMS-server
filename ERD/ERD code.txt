@@ -31,7 +31,7 @@ Department   [icon: azure-groups, color: gray] {
   licences string
 }
 
-
+//admin will create the department
 Laboratory   [icon: azure-collaborative-service, color: gray] {
   labId string pk
   labName string
