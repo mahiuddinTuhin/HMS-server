@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { RequestHandler } from "express";
+import { StatusCodes } from "http-status-codes";
 import { ResponseToServer } from "../../util/ResponseToServer";
 import catchAsync from "../../util/catchAsync";
+import AppError from "../../util/customError";
 import { userServices } from "./users.services";
 
 /* 1. creating admin */
@@ -15,46 +17,108 @@ const createAdmin: RequestHandler = catchAsync(async (req, res) => {
       res,
       true,
       200,
-      "successfully created doctor's data.",
+      "successfully created admin's data.",
       newAdmin,
     );
   } else {
-    throw new Error("Failed to create doc!");
+    throw new AppError(
+      "Failed to create admin!",
+      StatusCodes.INTERNAL_SERVER_ERROR,
+    );
   }
 });
 
-/* creating doctor */
+/* 2. creating doctor */
 const createDoctor: RequestHandler = catchAsync(async (req, res) => {
   const data = req.body;
 
-  const newDoc: any = await userServices.createDocService(data);
+  const newDoctor: any = await userServices.createDocService(data);
 
-  if (newDoc) {
+  if (newDoctor) {
     ResponseToServer(
       req,
       res,
       true,
       200,
       "successfully created doctor's data.",
-      newDoc,
+      newDoctor,
     );
   } else {
-    throw new Error("Failed to create doc!");
+    throw new AppError(
+      "Failed to create doc!",
+      StatusCodes.INTERNAL_SERVER_ERROR,
+    );
   }
 });
 
-/* creating patient */
+/* 3. creating Nurse */
+const createNurse: RequestHandler = catchAsync(async (req, res) => {
+  const data = req.body;
+
+  const newNurse: any = await userServices.createNurseService(data);
+
+  if (newNurse) {
+    ResponseToServer(
+      req,
+      res,
+      true,
+      200,
+      "successfully created nurse's data.",
+      newNurse,
+    );
+  } else {
+    throw new AppError(
+      "Failed to create doc!",
+      StatusCodes.INTERNAL_SERVER_ERROR,
+    );
+  }
+});
+
+/* 4. creating patient */
 const createPatient: RequestHandler = catchAsync(async (req, res) => {
   const body = req.body;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const result: any = await userServices.createPatientService(body);
-  if (result) {
-    ResponseToServer(req, res, true, 200, "Successfyully created users!", {
-      data: result,
-    });
+  const newPatient: any = await userServices.createPatientService(body);
+
+  if (newPatient.length) {
+    ResponseToServer(
+      req,
+      res,
+      true,
+      200,
+      "successfully created Patient's data.",
+      newPatient,
+    );
   } else {
-    throw new Error("");
+    throw new AppError(
+      "Failed to create Patient!",
+      StatusCodes.INTERNAL_SERVER_ERROR,
+    );
+  }
+});
+
+/* 5. creating patient */
+const createStaff: RequestHandler = catchAsync(async (req, res) => {
+  const body = req.body;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const newStaff: any = await userServices.createStaffService(body);
+
+  if (newStaff.length) {
+    ResponseToServer(
+      req,
+      res,
+      true,
+      200,
+      "successfully created Staff's data.",
+      newStaff,
+    );
+  } else {
+    throw new AppError(
+      "Failed to create Staff!",
+      StatusCodes.INTERNAL_SERVER_ERROR,
+    );
   }
 });
 
@@ -112,4 +176,6 @@ export const userControllers = {
   deleteUserById,
   updateUserById,
   getAllUser,
+  createNurse,
+  createStaff,
 };

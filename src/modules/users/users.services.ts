@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { StatusCodes } from "http-status-codes";
-import mongoose, { startSession } from "mongoose";
+import mongoose from "mongoose";
 import AppError from "../../util/customError";
 import { Admin } from "../admin/admin.mode";
 import { Doctor } from "../doctors/doctors.model";
+import { Nurse } from "../nurse/nurse.model";
 import { Patient } from "../patients/patient.mdoel";
 import { TUsers } from "./users.interface";
 import { Users } from "./users.model";
+import { Staff } from "../staff/staff.model";
 
 /* 1. creating admin service */
 const createAdminService = async (data: any) => {
@@ -21,8 +23,6 @@ const createAdminService = async (data: any) => {
     role: "admin",
     isDeleted: false,
   };
-
-  console.log(data);
 
   const session = await mongoose.startSession();
 
@@ -50,16 +50,16 @@ const createAdminService = async (data: any) => {
 
     const adminData = { ...restOfData, adminId: data?.userId };
 
-    const newDoctor = await Admin.create([adminData], { session });
+    const newAdmin = await Admin.create([adminData], { session });
 
-    if (!newDoctor.length) {
+    if (!newAdmin.length) {
       throw new Error("Doctor data creation failed!");
     }
 
     await session.commitTransaction();
     await session.endSession();
 
-    return newDoctor;
+    return newAdmin;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     await session.abortTransaction();
@@ -68,31 +68,55 @@ const createAdminService = async (data: any) => {
   }
 };
 
-/* creating doctor */
+/* 2. creating doctor service*/
 const createDocService = async (data: any) => {
   /* taking necessary data for user */
   const userData: Partial<TUsers> = {
-    userId: data.userId,
-    password: data.password,
-    email: data.email,
+    userId: data?.userId,
+    username:
+      data?.username ||
+      data.personalInfo.fullName.firstName + "2023" ||
+      "D" + new Date().getTime(),
+    password: data?.password || process.env.DEFAULT_PASSWORD,
+    needsPasswordChange: true,
+    email: data?.email,
+    role: "doctor",
+    isDeleted: false,
   };
 
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
+
     const newUser = await Users.create([userData], { session });
+
     if (!newUser.length) {
-      throw new Error("Error occured in transactions.");
+      throw new AppError(
+        "Error occured in creating user transactions.",
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
-    const { password, email, profile_image, ...restOfData } = data;
-    const docData = { ...restOfData, user_Id: newUser[0]?._id };
+    const {
+      password,
+      email,
+      needsPasswordChange,
+      role,
+      isDeleted,
+      userId,
+      ...restOfData
+    } = data;
 
-    const newDoctor = await Doctor.create([docData], { session });
+    const doctorData = { ...restOfData, doctorId: data?.userId };
+
+    const newDoctor = await Doctor.create([doctorData], { session });
 
     if (!newDoctor.length) {
-      throw new Error("Doctor data creation failed!");
+      throw new AppError(
+        "Error occured in creating Doctor data transactions.",
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     await session.commitTransaction();
@@ -107,43 +131,192 @@ const createDocService = async (data: any) => {
   }
 };
 
-/* creating patient */
-const createPatientService = async (data: any) => {
+/*  3. create nurse service */
+const createNurseService = async (data: any) => {
+  /* taking necessary data for common user */
   const userData: Partial<TUsers> = {
-    userId: data.userId,
-    password: data.password,
-    email: data.email,
+    userId: data?.userId,
+    username:
+      data?.username ||
+      data.personalInfo.fullName.firstName + "2023" ||
+      "N" + new Date().getTime(),
+    password: data?.password || process.env.DEFAULT_PASSWORD,
+    needsPasswordChange: true,
+    email: data?.email,
+    role: "nurse",
+    isDeleted: false,
   };
 
-  const session = await startSession();
-
-  const { password, email, profile_image, ...restOfData } = data;
+  const session = await mongoose.startSession();
 
   try {
-    /* starting session */
     session.startTransaction();
+
     const newUser = await Users.create([userData], { session });
 
     if (!newUser.length) {
-      throw new Error("User creation failed.");
+      throw new AppError(
+        "Error occured in creating user transactions.",
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
-    const patientData = { ...restOfData, user_Id: newUser[0]?._id };
-    const newPatient = await Patient.create([patientData], { session });
-    if (!newPatient.length) {
-      throw new Error("User creation failed.");
+    const {
+      password,
+      email,
+      needsPasswordChange,
+      role,
+      isDeleted,
+      userId,
+      ...restOfData
+    } = data;
+
+    const adminData = { ...restOfData, nurseId: data?.userId };
+
+    const newNurse = await Nurse.create([adminData], { session });
+
+    if (!newNurse.length) {
+      throw new AppError(
+        "Error occured in creating nurse model transactions.",
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     await session.commitTransaction();
     await session.endSession();
-    /* ends session */
+
+    return newNurse;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw error;
+  }
+};
+
+/* 4. creating patient */
+const createPatientService = async (data: any) => {
+  /* taking necessary data for common user */
+  const userData: Partial<TUsers> = {
+    userId: data?.userId,
+    username:
+      data?.username ||
+      data.personalInfo.fullName.firstName + "2023" ||
+      "P" + new Date().getTime(),
+    password: data?.password || process.env.DEFAULT_PASSWORD,
+    needsPasswordChange: true,
+    email: data?.email,
+    role: "patient",
+    isDeleted: false,
+  };
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const newUser = await Users.create([userData], { session });
+
+    if (!newUser.length) {
+      throw new AppError(
+        "Error occured in creating user transactions.",
+        StatusCodes.BAD_REQUEST,
+      );
+    }
+
+    const {
+      password,
+      email,
+      needsPasswordChange,
+      role,
+      isDeleted,
+      userId,
+      ...restOfData
+    } = data;
+
+    const patientData = { ...restOfData, patientId: data?.userId };
+
+    const newPatient = await Patient.create([patientData], { session });
+
+    if (!newPatient.length) {
+      throw new AppError(
+        "Error occured in creating nurse model transactions.",
+        StatusCodes.BAD_REQUEST,
+      );
+    }
+
+    await session.commitTransaction();
+    await session.endSession();
 
     return newPatient;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();
-    throw new Error(error);
+    throw error;
+  }
+};
+
+/* 5. creating staff */
+const createStaffService = async (data: any) => {
+  /* taking necessary data for common user */
+  const userData: Partial<TUsers> = {
+    userId: data?.userId,
+    username:
+      data?.username ||
+      data.personalInfo.fullName.firstName + "2023" ||
+      "S" + new Date().getTime(),
+    password: data?.password || process.env.DEFAULT_PASSWORD,
+    needsPasswordChange: true,
+    email: data?.email,
+    role: "staff",
+    isDeleted: false,
+  };
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const newUser = await Users.create([userData], { session });
+
+    if (!newUser.length) {
+      throw new AppError(
+        "Error occured in creating user transactions.",
+        StatusCodes.BAD_REQUEST,
+      );
+    }
+
+    const {
+      password,
+      email,
+      needsPasswordChange,
+      role,
+      isDeleted,
+      userId,
+      ...restOfData
+    } = data;
+
+    const staffData = { ...restOfData, staffId: data?.userId };
+
+    const newStaff = await Staff.create([staffData], { session });
+
+    if (!newStaff.length) {
+      throw new AppError(
+        "Error occured in creating staff model transactions.",
+        StatusCodes.BAD_REQUEST,
+      );
+    }
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    return newStaff;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw error;
   }
 };
 
@@ -182,6 +355,8 @@ const updateUserById = async (id: number, data: TUsers) => {
 export const userServices = {
   createAdminService,
   createDocService,
+  createNurseService,
+  createStaffService,
   createPatientService,
   getUserById,
   deleteUserById,
