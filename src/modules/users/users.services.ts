@@ -7,16 +7,17 @@ import { Admin } from "../admin/admin.mode";
 import { Doctor } from "../doctors/doctors.model";
 import { Nurse } from "../nurse/nurse.model";
 import { Patient } from "../patients/patient.mdoel";
+import { Staff } from "../staff/staff.model";
 import { TUsers } from "./users.interface";
 import { Users } from "./users.model";
-import { Staff } from "../staff/staff.model";
 
 /* 1. creating admin service */
 const createAdminService = async (data: any) => {
   /* taking necessary data for common user */
   const userData: Partial<TUsers> = {
     userId: data?.userId,
-    username: data?.username || data.personalInfo.fullName.firstName + "2023",
+    username:
+      data?.username || data?.personalInfo?.fullName?.firstName + "2023" || "",
     password: data?.password || process.env.DEFAULT_PASSWORD,
     needsPasswordChange: true,
     email: data?.email,

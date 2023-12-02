@@ -15,10 +15,9 @@ export const doctorSchema = new Schema<TDoctor>(
 
     schedule: [
       {
-        values: {
-          enum: schedules,
-          message: "{VALUE} is not accepted as schedule!",
-        },
+        type: String,
+        enum: schedules,
+        message: "{VALUE} is not accepted as schedule!",
       },
     ],
     allMedicalHistory: [

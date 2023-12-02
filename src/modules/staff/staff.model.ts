@@ -7,7 +7,12 @@ const staffSchema = new Schema<TStaff>({
     type: String,
     required: [true, "Staff id is required"],
   },
-  shift: String,
+  shift: {
+    type: String,
+    enum: ["night", "day"],
+    message: "Staff's shift should be night or day!",
+    required: [true, "Shift is required"],
+  },
   contactInfo: utilsSchema.nonPatientContactSchema,
   education: [utilsSchema.nonPatientEducationSchema],
   personalInfo: utilsSchema.NonPatientPersonalInfo,

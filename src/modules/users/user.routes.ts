@@ -20,7 +20,7 @@ router.post("/create-doctor", userControllers.createDoctor);
 
 /* 3. create Nurse */
 
-router.post("/create-nurse", userControllers.createDoctor);
+router.post("/create-nurse", userControllers.createNurse);
 
 /* 4. create patient */
 
@@ -28,7 +28,7 @@ router.post("/create-patient", userControllers.createPatient);
 
 /* 5. create staff */
 
-router.post("/create-patient", userControllers.createStaff);
+router.post("/create-staff", userControllers.createStaff);
 
 router.get("/", userControllers.getAllUser);
 router.get("/:userId", userControllers.getUserById);

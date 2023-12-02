@@ -43,10 +43,7 @@ const patientSchema = new Schema<TPatient>({
 
   bills: Number,
 
-  contactNumber: {
-    type: String,
-    required: [true, "Required a contact numnber!"],
-  },
+  contactNumber: String,
 
   emergencyContact: String,
 
