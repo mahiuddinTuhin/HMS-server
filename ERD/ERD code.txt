@@ -1,0 +1,165 @@
+users   [icon: user, color: red] {
+  userId string pk
+  password string
+  needsPasswordChange boolean
+  email string
+  role string
+  failed_login_attempts number
+  last_login Date
+  last_failed_login Date
+  isDeleted boolean
+}
+
+
+Admin   [icon: gcp-administration, color: green] {
+    adminId string pk
+    contactInfo Tcontacts
+    education TEducation[]
+    date_of_birth string
+    profile_image string
+    personalInfo TPersonalInfo
+   }
+
+
+Department   [icon: azure-groups, color: gray] {
+  departmentId string pk
+  departmentName string
+  allDoctors string[] fk
+  medicalHistoryId string[] fk
+  licences string
+}
+
+
+Laboratory   [icon: azure-collaborative-service, color: gray] {
+  labId string pk
+  labName string
+  equipments string[]
+  allStaff string[] fk
+  testsOffered string[]
+  contactInfo string[]
+  diagnosisHistory string[] fk
+}
+
+
+Staff   [icon: gcp-web-security-scanner, color: yellow] {
+  staffId string pk
+  shift "day" | "night"
+  contactInfo Tcontacts
+  education TEducation[]
+  personalInfo TPersonalInfo
+}
+
+
+Doctor   [icon: gcp-security-health-advisor, color: violet] {
+  doctorId string pk
+  schedule string[]
+  allMedicalHistory string[] fk
+  contactInfo Tcontacts
+  departmentId string fk
+  education TEducation[]
+  license_info string[]
+  personalInfo TPersonalInfo
+}
+
+
+Nurse   [icon: gcp-support, color: purple] {
+    nurseId string pk
+    shift "day" | "night"
+    contactInfo Tcontacts
+    education TEducation[]
+    personalInfo TPersonalInfo
+   }
+
+
+
+Appointments   [icon: gcp-asset-inventory, color: gray] {
+  appointmentId string pk
+  doctorId string fk
+  patientId string fk
+  isPaid boolean
+  date Date
+  schedule TSchedule
+  serial number
+}
+
+
+Patient   [icon: aws-personal-health-dashboard, color: blue] {
+  patientId string pk
+  allMedicalHistory string[] fk
+  allAppointments string[] fk
+  allDiagnosis string[] fk
+  isAdmitted boolean
+  currentMedicalDepartmentId string fk
+  bills number
+  contactNumber string
+  emergencyContact string
+  insuranceInfo string
+  guardian TGuardian
+  personalInfo TPersonalInfo
+}
+
+
+
+Diagnosis   [icon: azure-load-test, color: gray] {
+  diagnosisId string pk
+  patientId string fk
+  doctorId string fk
+  labStaffId string fk
+  adminId string fk
+  diagnosisName string
+  diagnosisDetails string[]
+  costs number
+  isPaid boolean
+  testTime string
+  reportTime string
+}
+
+
+MedicalHistory   [icon: pie-chart, color: gray] {
+  medicalHistoryId string pk
+  doctorId string fk
+  patientId string fk
+  diagonosisId string[] fk
+  medications string[]
+  releasedOn string
+  bill number
+  doctorComments string
+  patientComments string
+}
+
+
+
+
+
+
+
+
+
+users.userId < Admin.adminId
+users.userId < Doctor.doctorId
+users.userId < Nurse.nurseId
+users.userId < Patient.patientId
+users.userId < Staff.staffId
+
+
+MedicalHistory.medicalHistoryId < Doctor.medicalHistoryId
+MedicalHistory.medicalHistoryId < Patient.medicalHistoryId
+Appointments.appointmentId < Doctor.appointmentId
+Appointments.appointmentId < Patient.appointmentId
+
+Laboratory.allStaff < Staff.staffId
+Laboratory.diagnosisHistory < Diagnosis.diagnosisId
+
+Department.allDoctors < Doctor.doctorId
+Department.medicalHistoryId < MedicalHistory.medicalHistoryId
+Doctor.departmentId < Department.departmentId
+
+
+Diagnosis.patientId < Patient.patientId
+Diagnosis.doctorId < Doctor.doctorId
+Diagnosis.labStaffId < Staff.labStaffId
+Diagnosis.adminId < Admin.adminId
+
+
+Patient.currentMedicalDepartmentId < Department.departmentId
+Patient.allDiagnosis < Diagnosis.diagnosisId
