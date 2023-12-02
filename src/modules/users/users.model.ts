@@ -5,13 +5,14 @@ const userSchema = new mongoose.Schema<TUsers>(
   {
     userId: {
       type: String,
-      required: [true, "A user id is required."],
       unique: true,
       index: true,
+      required: [true, "User id is required!"],
     },
 
     password: {
       type: String,
+      default: process.env.DEFAULT_PASSWORD,
       validate: {
         validator: (value: string) => {
           // Password should be at least 8 characters long, containing at least one uppercase letter, one lowercase letter, one number, and one special character
@@ -24,6 +25,7 @@ const userSchema = new mongoose.Schema<TUsers>(
           "-Password should be at least 8 characters long,\n -containing at least one uppercase letter, \n-one lowercase letter, \n-one number, \n-and one special character!",
       },
     },
+
     needsPasswordChange: {
       type: Boolean,
       default: true,
@@ -42,8 +44,9 @@ const userSchema = new mongoose.Schema<TUsers>(
 
     role: {
       type: String,
+      required: [true, "Role is required!"],
       enum: {
-        values: ["patient", "doctor", "admin"],
+        values: ["patient", "doctor", "admin", " nurse", "staff"],
         message:
           "{VALUES} is not correct role. Choose patient, doctor or admin as role",
       },
@@ -51,12 +54,12 @@ const userSchema = new mongoose.Schema<TUsers>(
 
     status: {
       type: String,
+      default: "active",
       enum: {
         values: ["active", "inactive"],
         message:
           "{VALUES} is not correct role. Choose active or inactive as status",
       },
-      default: "active",
     },
 
     failed_login_attempts: {
@@ -65,14 +68,10 @@ const userSchema = new mongoose.Schema<TUsers>(
     },
 
     last_login: {
-      type: Date,
+      type: String,
     },
 
     last_failed_login: {
-      type: Date,
-    },
-
-    profile_image: {
       type: String,
     },
 

@@ -4,6 +4,25 @@ import { ResponseToServer } from "../../util/ResponseToServer";
 import catchAsync from "../../util/catchAsync";
 import { userServices } from "./users.services";
 
+/* 1. creating admin */
+const createAdmin: RequestHandler = catchAsync(async (req, res) => {
+  const data = req.body;
+  const newAdmin: any = await userServices.createAdminService(data);
+
+  if (newAdmin) {
+    ResponseToServer(
+      req,
+      res,
+      true,
+      200,
+      "successfully created doctor's data.",
+      newAdmin,
+    );
+  } else {
+    throw new Error("Failed to create doc!");
+  }
+});
+
 /* creating doctor */
 const createDoctor: RequestHandler = catchAsync(async (req, res) => {
   const data = req.body;
@@ -86,6 +105,7 @@ const updateUserById: RequestHandler = catchAsync(async (req, res) => {
 });
 
 export const userControllers = {
+  createAdmin,
   createDoctor,
   createPatient,
   getUserById,

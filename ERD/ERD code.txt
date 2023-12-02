@@ -1,5 +1,6 @@
 users   [icon: user, color: red] {
   userId string pk
+  username string
   password string
   needsPasswordChange boolean
   email string
@@ -24,7 +25,7 @@ Department   [icon: azure-groups, color: gray] {
   departmentId string pk
   departmentName string
   allDoctors string[] fk
-  allMedicalHistoryId string[] fk
+  allMedicalHistory string[] fk
   licences string
 }
 

@@ -1,10 +1,72 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { StatusCodes } from "http-status-codes";
 import mongoose, { startSession } from "mongoose";
+import AppError from "../../util/customError";
+import { Admin } from "../admin/admin.mode";
 import { Doctor } from "../doctors/doctors.model";
 import { Patient } from "../patients/patient.mdoel";
 import { TUsers } from "./users.interface";
 import { Users } from "./users.model";
+
+/* 1. creating admin service */
+const createAdminService = async (data: any) => {
+  /* taking necessary data for common user */
+  const userData: Partial<TUsers> = {
+    userId: data?.userId,
+    username: data?.username || data.personalInfo.fullName.firstName + "2023",
+    password: data?.password || process.env.DEFAULT_PASSWORD,
+    needsPasswordChange: true,
+    email: data?.email,
+    role: "admin",
+    isDeleted: false,
+  };
+
+  console.log(data);
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const newUser = await Users.create([userData], { session });
+
+    if (!newUser.length) {
+      throw new AppError(
+        "Error occured in creating user transactions.",
+        StatusCodes.BAD_REQUEST,
+      );
+    }
+
+    const {
+      password,
+      email,
+      needsPasswordChange,
+      role,
+      isDeleted,
+      userId,
+      ...restOfData
+    } = data;
+
+    const adminData = { ...restOfData, adminId: data?.userId };
+
+    const newDoctor = await Admin.create([adminData], { session });
+
+    if (!newDoctor.length) {
+      throw new Error("Doctor data creation failed!");
+    }
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    return newDoctor;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw error;
+  }
+};
 
 /* creating doctor */
 const createDocService = async (data: any) => {
@@ -13,7 +75,6 @@ const createDocService = async (data: any) => {
     userId: data.userId,
     password: data.password,
     email: data.email,
-    profile_image: data.profile_image,
   };
 
   const session = await mongoose.startSession();
@@ -52,7 +113,6 @@ const createPatientService = async (data: any) => {
     userId: data.userId,
     password: data.password,
     email: data.email,
-    profile_image: data.profile_image,
   };
 
   const session = await startSession();
@@ -120,6 +180,7 @@ const updateUserById = async (id: number, data: TUsers) => {
 };
 
 export const userServices = {
+  createAdminService,
   createDocService,
   createPatientService,
   getUserById,

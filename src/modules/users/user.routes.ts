@@ -1,16 +1,19 @@
 import { Router } from "express";
 import validateRequest from "../../middleware/ZodValidator";
 
+import { AdminValidation } from "../admin/admin.validation";
 import { ZDoctors } from "../doctors/doctors.validation";
 import { userControllers } from "./user.controllers";
-import { userZValidation } from "./users.zodValidation";
 
 const router = Router();
 
+router.post("/create-patient", userControllers.createPatient);
+
+/* creating admin */
 router.post(
-  "/create-patient",
-  validateRequest(userZValidation),
-  userControllers.createPatient,
+  "/create-admin",
+  validateRequest(AdminValidation),
+  userControllers.createAdmin,
 );
 
 router.post(

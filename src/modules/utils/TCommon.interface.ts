@@ -7,12 +7,19 @@ export type Tcontacts = {
 export type TEducation = {
   institute: string;
   degree: string;
-  year: string;
+  year: number;
 };
 
 export type TPersonalInfo = {
-  present_address: string;
-  permanent_address: string;
+  fullName: {
+    firstName: string;
+    middleName: string;
+    lastName: string;
+  };
+  address: {
+    present_address: string;
+    permanent_address: string;
+  };
   date_of_birth: string;
   gender: string;
   profile_image: string;
@@ -36,3 +43,5 @@ export type TSchedule =
   | "4:00 PM"
   | "5:00 PM"
   | "6:00 PM";
+
+export type TRole = ["doctor" | "nurse" | "admin" | "staff" | "patient"];

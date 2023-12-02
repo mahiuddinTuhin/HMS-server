@@ -1,15 +1,21 @@
 import { Schema, model } from "mongoose";
+import { utilsSchema } from "../utils/CommonSchema";
+import { TAdmin } from "./admin.interface";
 
-const adminSchema = new Schema({
-    userId: String,
-    user_id: { type: Schema.Types.ObjectId, required: true },
-    role: String,
-    schedule: [String],
-    contactInfo: Tcontacts,
-    education: [TEducation],
-    date_of_birth: String,
-    gender: String,
-    needs_password_change: Boolean,
-   });
-   
-   export const Admin = model("Admin", adminSchema);
+const adminSchema = new Schema<TAdmin>({
+  adminId: {
+    type: String,
+    ref: "User",
+    unique: true,
+    index: true,
+    required: [true, "User id is required!"],
+  },
+
+  contactInfo: utilsSchema.nonPatientContactSchema,
+
+  education: utilsSchema.nonPatientEducationSchema,
+
+  personalInfo: utilsSchema.NonPatientPersonalInfo,
+});
+
+export const Admin = model("Admin", adminSchema);

@@ -7,11 +7,27 @@ exports.userControllers = void 0;
 const ResponseToServer_1 = require("../../util/ResponseToServer");
 const catchAsync_1 = __importDefault(require("../../util/catchAsync"));
 const users_services_1 = require("./users.services");
+/* 1. creating admin */
+const createAdmin = (0, catchAsync_1.default)(async (req, res) => {
+    const data = req.body;
+    const newAdmin = await users_services_1.userServices.createDocService(data);
+    if (newAdmin) {
+        (0, ResponseToServer_1.ResponseToServer)(req, res, true, 200, "successfully created doctor's data.", newAdmin);
+    }
+    else {
+        throw new Error("Failed to create doc!");
+    }
+});
 /* creating doctor */
 const createDoctor = (0, catchAsync_1.default)(async (req, res) => {
     const data = req.body;
-    const newDoc = users_services_1.userServices.createDocService(data);
-    (0, ResponseToServer_1.ResponseToServer)(req, res, true, 200, "successfully created doctor's data.", newDoc);
+    const newDoc = await users_services_1.userServices.createDocService(data);
+    if (newDoc) {
+        (0, ResponseToServer_1.ResponseToServer)(req, res, true, 200, "successfully created doctor's data.", newDoc);
+    }
+    else {
+        throw new Error("Failed to create doc!");
+    }
 });
 /* creating patient */
 const createPatient = (0, catchAsync_1.default)(async (req, res) => {
@@ -60,8 +76,9 @@ const updateUserById = (0, catchAsync_1.default)(async (req, res) => {
     });
 });
 exports.userControllers = {
-    createPatient,
+    createAdmin,
     createDoctor,
+    createPatient,
     getUserById,
     deleteUserById,
     updateUserById,

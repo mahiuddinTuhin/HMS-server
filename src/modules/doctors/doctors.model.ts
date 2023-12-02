@@ -1,36 +1,27 @@
 import { Schema, model } from "mongoose";
-import { TDoctor, TMedicalHistory, Tcontacts } from "./doctors.interface";
+import { Tcontacts } from "../utils/TCommon.interface";
+import { TDoctor } from "./doctors.interface";
 
 const contactSchema = new Schema<Tcontacts>({
-  home: String,
-  office: String,
+  homeMobile: String,
+  officeMobile: String,
   email: String,
-});
-
-export const medicalHistorySchema = new Schema<TMedicalHistory>({
-  medical_id: Number,
 });
 
 export const doctorSchema = new Schema<TDoctor>(
   {
-    userId: {
+    doctorId: {
       type: String,
       index: true,
     },
-    user_id: {
-      type: Schema.Types.ObjectId,
-      ref: "Users",
-    },
+
     schedule: [String],
-    medicalHistory: [medicalHistorySchema],
+    allMedicalHistory: [String],
     contactInfo: contactSchema,
-    specialization: String,
+    departmentId: String,
     education: [String],
     license_info: String,
-    present_address: String,
-    permanent_address: String,
-    date_of_birth: String,
-    gender: String,
+    personalInfo: String,
   },
   {
     timestamps: true,

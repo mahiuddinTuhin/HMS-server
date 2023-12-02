@@ -3,5 +3,5 @@ export type TDepartment = {
   departmentName: string;
   allDoctors: string[];
   licences: string;
-  allMedicalHistoryId: string[];
+  allMedicalHistory: string[];
 };

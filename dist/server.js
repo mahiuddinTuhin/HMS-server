@@ -10,14 +10,22 @@ const app_1 = __importDefault(require("./app"));
 const port = process.env.PORT;
 async function main() {
     try {
-        await (0, mongoose_1.connect)(process.env.DB_URL);
-        app_1.default.listen(port, () => {
-            console.log(chalk_1.default.bgGreenBright.bold(`              server is runnign in port: ${port} and Connected to db               `));
+        const db = await (0, mongoose_1.connect)(process.env.DB_URL, {
+            serverSelectionTimeoutMS: 10000, // Increase timeout to 30 seconds
         });
+        // Check if the connection is successful
+        if (db) {
+            app_1.default.listen(port, () => {
+                console.log(chalk_1.default.bgGreenBright.bold(`Server is running on port: ${port} and connected to the database`));
+            });
+        }
+        else {
+            throw new Error("Failed to establish a database connection.");
+        }
     }
     catch (error) {
-        console.log(error);
+        console.error(chalk_1.default.bgRed.bold("Error connecting to the database:\n", error));
+        process.exit(1); // Exit the process with a non-zero status code indicating failure
     }
 }
 main();
-// export default app;

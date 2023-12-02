@@ -1,11 +1,31 @@
 import { z } from "zod";
+const passwordPattern =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@~`#^()-_=+$!%*?&])[A-Za-z\d@~`#^()-_=+$!%*?&]{8,}$/;
 
-export const userZValidation = z.object({
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export const userValidation = z.object({
+  needsPasswordChange: z.boolean().default(true),
+
+  /* either user will give a password otherwise default password will be set */
   password: z
-    .string({
-      invalid_type_error: "Password must be string.   ",
-    })
-    .max(20, { message: "Password should not be longer than 20 characters." })
-    .optional(),
-  needsPasswordChange: z.boolean().optional(),
+    .string()
+    .optional()
+    .refine(
+      (password) => {
+        const newPassword: string =
+          password || (process.env.DEFAULT_PASSWORD as string);
+        passwordPattern.test(newPassword);
+      },
+      {
+        message:
+          "Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.",
+      },
+    ),
+  email: z
+    .string()
+    .optional()
+    .refine((email) => emailPattern.test(email as string), {
+      message: "Invalid email!",
+    }),
 });
