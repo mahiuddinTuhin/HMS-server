@@ -1,15 +1,16 @@
 import { Schema, model } from "mongoose";
+import { utilsSchema } from "../utils/CommonSchema";
+import { TStaff } from "./staff.interface";
 
-const staffSchema = new Schema({
-  userId: String,
-  user_id: { type: Schema.Types.ObjectId, required: true },
-  role: String,
-  schedule: [String],
-  contactInfo: [String],
-  education: [String],
-  date_of_birth: String,
-  gender: String,
-  needs_password_change: Boolean,
+const staffSchema = new Schema<TStaff>({
+  staffId: {
+    type: String,
+    required: [true, "Staff id is required"],
+  },
+  shift: String,
+  contactInfo: utilsSchema.nonPatientContactSchema,
+  education: [utilsSchema.nonPatientEducationSchema],
+  personalInfo: utilsSchema.NonPatientPersonalInfo,
 });
 
 export const Staff = model("Staff", staffSchema);

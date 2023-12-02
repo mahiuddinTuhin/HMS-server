@@ -1,27 +1,43 @@
 import { Schema, model } from "mongoose";
-import { Tcontacts } from "../utils/TCommon.interface";
+import { utilsSchema } from "../utils/CommonSchema";
+import { schedules } from "./doctor.constant";
 import { TDoctor } from "./doctors.interface";
-
-const contactSchema = new Schema<Tcontacts>({
-  homeMobile: String,
-  officeMobile: String,
-  email: String,
-});
 
 export const doctorSchema = new Schema<TDoctor>(
   {
     doctorId: {
       type: String,
       index: true,
+      unique: true,
+      ref: "User",
+      required: [true, "Doctor id is required!"],
     },
 
-    schedule: [String],
-    allMedicalHistory: [String],
-    contactInfo: contactSchema,
-    departmentId: String,
-    education: [String],
+    schedule: [
+      {
+        values: {
+          enum: schedules,
+          message: "{VALUE} is not accepted as schedule!",
+        },
+      },
+    ],
+    allMedicalHistory: [
+      {
+        type: String,
+        unique: true,
+        ref: "MedicalHistory",
+      },
+    ],
+    contactInfo: utilsSchema.nonPatientContactSchema,
+    departmentId: {
+      type: String,
+      unique: true,
+      ref: "Department",
+      required: [true, "Department id is required!"],
+    },
+    education: [utilsSchema.nonPatientEducationSchema],
     license_info: String,
-    personalInfo: String,
+    personalInfo: utilsSchema.NonPatientPersonalInfo,
   },
   {
     timestamps: true,

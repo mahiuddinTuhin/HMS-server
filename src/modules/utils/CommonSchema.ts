@@ -129,24 +129,6 @@ const patientContactSchema = new Schema<Tcontacts>(
   },
   { _id: false },
 );
-// const nonPatientGuardianSchema = new Schema<TGuardian>({
-//   relation: {
-//     type: String,
-//     required: [true, "Relation with guardian is required!"],
-//   },
-//   name: {
-//     type: String,
-//     required: [true, "Name of guardian is required!"],
-//   },
-//   contactNumber: {
-//     type: String,
-//     required: [true, "Contact Number of guardian is required!"],
-//   },
-//   address: {
-//     type: String,
-//     required: [true, "Guardian address is required!"],
-//   },
-// });
 
 const patientGuardianSchema = new Schema<TGuardian>(
   {

@@ -1,11 +1,32 @@
 import { Schema, model } from "mongoose";
-import { TNurse } from "./nurse.interface";
+import { TNurse } from "../nurse/nurse.interface";
+import { utilsSchema } from "../utils/CommonSchema";
 
-const nurseSchema = new Schema<TNurse>({
-  nurseId: String,
-  shift: String,
-  contactInfo: String,
-  education: [String],
-  personalInfo: [String],
-});
-export const Nurse = model("Nurse", nurseSchema);
+export const nurseSchema = new Schema<TNurse>(
+  {
+    nurseId: {
+      type: String,
+      index: true,
+      unique: true,
+      ref: "User",
+      required: [true, "Nurse id is required!"],
+    },
+
+    shift: [
+      {
+        values: {
+          enum: ["day", "night"],
+          message: "{VALUE} is not accepted as schedule!",
+        },
+      },
+    ],
+    contactInfo: utilsSchema.nonPatientContactSchema,
+    education: [utilsSchema.nonPatientEducationSchema],
+    personalInfo: utilsSchema.NonPatientPersonalInfo,
+  },
+  {
+    timestamps: true,
+  },
+);
+
+export const Nurse = model<TNurse>("Nurse", nurseSchema);
