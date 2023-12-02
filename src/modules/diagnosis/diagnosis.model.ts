@@ -12,38 +12,32 @@ const diagnosisSchema = new Schema<TDiagnosis>({
     type: String,
     ref: "Patients",
     unique: true,
+    required: [true, "patient id is required!"],
   },
 
   doctorId: {
     type: String,
     ref: "Doctors",
     unique: true,
+    required: [true, "Doctor id is required!"],
   },
 
   labStaffId: {
     type: String,
     ref: "Staff",
     unique: true,
+    required: [true, "Lab staff id is required!"],
   },
 
-  adminId: {
+  diagnosisName: {
     type: String,
-    ref: "Admin",
-    unique: true,
+    required: [true, "Diagnosis name is required!"],
   },
 
-  diagnosisName: [
-    {
-      type: String,
-      required: [true, "Diagnosis name is required!"],
-    },
-  ],
-  diagnosisDetails: [
-    {
-      type: String,
-      required: [true, "Diagnosis details is required!"],
-    },
-  ],
+  diagnosisDetails: {
+    type: String,
+    required: [true, "Diagnosis details is required!"],
+  },
   costs: {
     type: Number,
     required: [true, "Cost amount is required!"],

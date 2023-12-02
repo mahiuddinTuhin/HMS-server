@@ -3,11 +3,10 @@ export type TDiagnosis = {
   labStaffId: string;
   patientId: string;
   diagnosisName: string;
-  diagnosisDetails: string[];
+  diagnosisDetails: string;
   costs: number;
   doctorId: string;
   isPaid: boolean;
   testTime: string;
   reportTime: string;
-  adminId: string;
 };

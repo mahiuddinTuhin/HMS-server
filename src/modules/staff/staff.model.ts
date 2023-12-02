@@ -6,6 +6,7 @@ const staffSchema = new Schema<TStaff>({
   staffId: {
     type: String,
     required: [true, "Staff id is required"],
+    unique: true,
   },
   shift: {
     type: String,

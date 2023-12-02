@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../util/customError";
+import { TMedicalHistory } from "../MedicalHistory/medicalHistory.ineterface";
+import { MedicalHistory } from "../MedicalHistory/medicalHistory.model";
 import { TAppointments } from "../appointment/appointment.interface";
 import { Appointment } from "../appointment/appointment.model";
 import { TDoctor } from "./doctors.interface";
@@ -20,6 +22,25 @@ const createAppointment = async (data: TAppointments) => {
   } catch (error) {
     throw new AppError(
       `Creating department failed from services!: ${error}`,
+      StatusCodes.INTERNAL_SERVER_ERROR,
+    );
+  }
+};
+
+/* creating a medical history by doctor */
+const createMedicalHistory = async (data: TMedicalHistory) => {
+  try {
+    const newMedicalHistory: any = await MedicalHistory.create(data);
+    if (!newMedicalHistory) {
+      throw new AppError(
+        "Creating Medical History failed! from doctor services.",
+        StatusCodes.BAD_REQUEST,
+      );
+    }
+    return newMedicalHistory;
+  } catch (error) {
+    throw new AppError(
+      `Creating Medical History  failed from doctor services!: ${error}`,
       StatusCodes.INTERNAL_SERVER_ERROR,
     );
   }
@@ -51,4 +72,5 @@ export const doctorServices = {
   getAllDocService,
   deleteDocByIdService,
   createAppointment,
+  createMedicalHistory,
 };

@@ -20,6 +20,21 @@ const createAppointment: RequestHandler = catchAsync(async (req, res) => {
   }
 });
 
+/* creating a medical history controller by doctor */
+const createMedicalHistory: RequestHandler = catchAsync(async (req, res) => {
+  const medicalHistoryData = req.body;
+  const newMedicalHistory =
+    await doctorServices.createMedicalHistory(medicalHistoryData);
+  if (newMedicalHistory) {
+    ResponseToServer(req, res, true, StatusCodes.OK, newMedicalHistory);
+  } else {
+    throw new AppError(
+      "Creating new Medical History failed from doctor controller!",
+      StatusCodes.BAD_REQUEST,
+    );
+  }
+});
+
 const getAllDocController: RequestHandler = catchAsync(async (req, res) => {
   const newDoc = doctorServices.getAllDocService();
 
@@ -82,4 +97,5 @@ export const doctorsController = {
   deleteDocByIdController,
   getAllDocController,
   createAppointment,
+  createMedicalHistory,
 };

@@ -108,7 +108,6 @@ Diagnosis   [icon: azure-load-test, color: gray] {
   patientId string fk
   doctorId string fk
   labStaffId string fk
-  adminId string fk
   diagnosisName string
   diagnosisDetails string[]
   costs number
