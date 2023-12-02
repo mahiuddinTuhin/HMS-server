@@ -6,8 +6,6 @@ import { userControllers } from "./user.controllers";
 
 const router = Router();
 
-router.post("/create-patient", userControllers.createPatient);
-
 /* 1. creating admin */
 router.post(
   "/create-admin",

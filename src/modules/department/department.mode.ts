@@ -19,9 +19,6 @@ const DepartmentSchema = new Schema<TDepartment>({
 });
 
 // Create and export the Mongoose model based on the schema
-const DepartmentModel = mongoose.model<TDepartment>(
-  "Department",
-  DepartmentSchema,
-);
+const Department = mongoose.model<TDepartment>("Department", DepartmentSchema);
 
-export default DepartmentModel;
+export default Department;

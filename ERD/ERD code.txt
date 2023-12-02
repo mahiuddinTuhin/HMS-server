@@ -21,6 +21,8 @@ Admin   [icon: gcp-administration, color: green] {
    }
 
 
+
+//admin will create the department
 Department   [icon: azure-groups, color: gray] {
   departmentId string pk
   departmentName string
