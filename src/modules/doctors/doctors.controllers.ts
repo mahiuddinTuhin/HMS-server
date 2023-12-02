@@ -1,7 +1,24 @@
 import { RequestHandler } from "express";
+import { StatusCodes } from "http-status-codes";
 import { ResponseToServer } from "../../util/ResponseToServer";
 import catchAsync from "../../util/catchAsync";
+import AppError from "../../util/customError";
 import { doctorServices } from "./doctors.services";
+
+/* creating appointment  controller by doctor */
+const createAppointment: RequestHandler = catchAsync(async (req, res) => {
+  const appointmentData = req.body;
+  const newAppointment =
+    await doctorServices.createAppointment(appointmentData);
+  if (newAppointment) {
+    ResponseToServer(req, res, true, StatusCodes.OK, newAppointment);
+  } else {
+    throw new AppError(
+      "Creating department failed from controller!",
+      StatusCodes.BAD_REQUEST,
+    );
+  }
+});
 
 const getAllDocController: RequestHandler = catchAsync(async (req, res) => {
   const newDoc = doctorServices.getAllDocService();
@@ -64,4 +81,5 @@ export const doctorsController = {
   updateDocByIdController,
   deleteDocByIdController,
   getAllDocController,
+  createAppointment,
 };

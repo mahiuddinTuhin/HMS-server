@@ -11,7 +11,7 @@ users   [icon: user, color: red] {
   isDeleted boolean
 }
 
-
+// Admin will create by user controller
 Admin   [icon: gcp-administration, color: green] {
     adminId string fk
     contactInfo Tcontacts
@@ -31,7 +31,7 @@ Department   [icon: azure-groups, color: gray] {
   licences string
 }
 
-//admin will create the department
+//admin will create the Laboratory
 Laboratory   [icon: azure-collaborative-service, color: gray] {
   labId string pk
   labName string
@@ -42,7 +42,7 @@ Laboratory   [icon: azure-collaborative-service, color: gray] {
   allDiagnosisHistory string[] fk
 }
 
-
+// staff will create by user controller
 Staff   [icon: gcp-web-security-scanner, color: yellow] {
   staffId string fk
   shift "day" | "night"
@@ -51,7 +51,7 @@ Staff   [icon: gcp-web-security-scanner, color: yellow] {
   personalInfo TPersonalInfo
 }
 
-
+// Doctor will create by user controller
 Doctor   [icon: gcp-security-health-advisor, color: violet] {
   doctorId string fk
   schedule string[]
@@ -63,7 +63,7 @@ Doctor   [icon: gcp-security-health-advisor, color: violet] {
   personalInfo TPersonalInfo
 }
 
-
+// nurse will create by user controller
 Nurse   [icon: gcp-support, color: purple] {
     nurseId string fk
     shift "day" | "night"
@@ -73,6 +73,7 @@ Nurse   [icon: gcp-support, color: purple] {
    }
 
 
+// doctor will create Appointments
 
 Appointments   [icon: gcp-asset-inventory, color: gray] {
   appointmentId string pk
@@ -84,7 +85,7 @@ Appointments   [icon: gcp-asset-inventory, color: gray] {
   schedule TSchedule
 }
 
-
+// Patient will be created by user controller
 Patient   [icon: aws-personal-health-dashboard, color: blue] {
   patientId string fk
   allMedicalHistory string[] fk
@@ -101,7 +102,7 @@ Patient   [icon: aws-personal-health-dashboard, color: blue] {
 }
 
 
-
+// lab staff will create diagnosis
 Diagnosis   [icon: azure-load-test, color: gray] {
   diagnosisId string pk
   patientId string fk
@@ -116,7 +117,7 @@ Diagnosis   [icon: azure-load-test, color: gray] {
   reportTime string
 }
 
-
+// doctor  will create MedicalHistory
 MedicalHistory   [icon: pie-chart, color: gray] {
   medicalHistoryId string pk
   doctorId string fk

@@ -1,5 +1,29 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { StatusCodes } from "http-status-codes";
+import AppError from "../../util/customError";
+import { TAppointments } from "../appointment/appointment.interface";
+import { Appointment } from "../appointment/appointment.model";
 import { TDoctor } from "./doctors.interface";
 import { Doctor } from "./doctors.model";
+
+/* creating an appointment by doctor */
+const createAppointment = async (data: TAppointments) => {
+  try {
+    const newDepartment: any = await Appointment.create(data);
+    if (!newDepartment) {
+      throw new AppError(
+        "Creating appointment failed! from doctor services.",
+        StatusCodes.BAD_REQUEST,
+      );
+    }
+    return newDepartment;
+  } catch (error) {
+    throw new AppError(
+      `Creating department failed from services!: ${error}`,
+      StatusCodes.INTERNAL_SERVER_ERROR,
+    );
+  }
+};
 
 const findDocByIdService = async (id: string) => {
   const doc = await Doctor.find({ doctorsId: id });
@@ -26,4 +50,5 @@ export const doctorServices = {
   updateDocByIdService,
   getAllDocService,
   deleteDocByIdService,
+  createAppointment,
 };
