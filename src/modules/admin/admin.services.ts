@@ -10,6 +10,7 @@ import Laboratory from "../labratory/labrotory.model";
 /* creating department */
 const createDepartment = async (data: TDepartment) => {
   try {
+    console.log(typeof data.departmentId);
     const newDepartment: any = await Department.create(data);
     if (!newDepartment) {
       throw new AppError(

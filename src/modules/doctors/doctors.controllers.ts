@@ -9,8 +9,11 @@ import { doctorServices } from "./doctors.services";
 /* creating appointment  controller by doctor */
 const createAppointment: RequestHandler = catchAsync(async (req, res) => {
   const appointmentData = req.body;
+
+  /* query to service */
   const newAppointment: any =
     await doctorServices.createAppointment(appointmentData);
+
   if (newAppointment) {
     ResponseToServer(req, res, true, StatusCodes.OK, newAppointment);
   } else {
@@ -24,6 +27,8 @@ const createAppointment: RequestHandler = catchAsync(async (req, res) => {
 /* creating a medical history controller by doctor */
 const createMedicalHistory: RequestHandler = catchAsync(async (req, res) => {
   const medicalHistoryData = req.body;
+
+  /* query to service */
   const newMedicalHistory =
     await doctorServices.createMedicalHistory(medicalHistoryData);
   if (newMedicalHistory) {

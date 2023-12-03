@@ -5,7 +5,9 @@ const passwordPattern =
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const userValidation = z.object({
-  needsPasswordChange: z.boolean().default(true),
+  needsPasswordChange: z.boolean().default(true).optional(),
+  userId: z.string().min(5),
+  username: z.string().min(5),
 
   /* either user will give a password otherwise default password will be set */
   password: z
