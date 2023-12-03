@@ -5,6 +5,7 @@ export type TPatient = {
   allDiagnosis: string[];
   allMedicalHistory: string[];
   allAppointmentHistory: string[];
+  pendingAppointments: string[];
   currentMedicalDepartment?: string;
   isAdmitted: boolean;
   bills: number;

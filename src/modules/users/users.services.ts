@@ -109,7 +109,11 @@ const createDocService = async (data: any) => {
       ...restOfData
     } = data;
 
-    const doctorData = { ...restOfData, doctorId: data?.userId };
+    const doctorData = {
+      ...restOfData,
+      doctorId: data?.userId,
+      allMedicalHistory: [],
+    };
 
     const newDoctor = await Doctor.create([doctorData], { session });
 

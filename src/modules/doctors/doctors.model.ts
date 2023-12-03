@@ -23,8 +23,19 @@ export const doctorSchema = new Schema<TDoctor>(
     allMedicalHistory: [
       {
         type: String,
-        unique: true,
         ref: "MedicalHistory",
+      },
+    ],
+    pendingAppointments: [
+      {
+        date: {
+          type: String,
+          required: true,
+        },
+        time: {
+          type: String,
+          required: true,
+        },
       },
     ],
     contactInfo: utilsSchema.nonPatientContactSchema,
@@ -40,6 +51,7 @@ export const doctorSchema = new Schema<TDoctor>(
   },
   {
     timestamps: true,
+    _id: false,
   },
 );
 

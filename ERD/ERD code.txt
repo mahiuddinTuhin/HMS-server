@@ -55,6 +55,7 @@ Staff   [icon: gcp-web-security-scanner, color: yellow] {
 Doctor   [icon: gcp-security-health-advisor, color: violet] {
   doctorId string fk
   schedule string[]
+  pendingAppointments string[] fk
   allMedicalHistory string[] fk
   contactInfo Tcontacts
   departmentId string fk
@@ -90,6 +91,7 @@ Patient   [icon: aws-personal-health-dashboard, color: blue] {
   patientId string fk
   allMedicalHistory string[] fk
   allAppointmentHistory string[] fk
+  pendingAppointments string[] fk
   allDiagnosis string[] fk
   isAdmitted boolean
   currentMedicalDepartmentId string fk

@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { schedules } from "../doctors/doctor.constant";
 import { TAppointments } from "./appointment.interface";
 
 export const appointmentSchema = new Schema<TAppointments>(
@@ -27,6 +28,11 @@ export const appointmentSchema = new Schema<TAppointments>(
     },
     schedule: {
       type: String,
+      enum: {
+        values: schedules,
+        message:
+          "{{VALUE}} is not acceptable as schedule. please enter any one of the following time. 9:00 AM, 10:00 AM,  11:00 AM,  12:00 PM,  1:00 PM,  2:00 PM,  3:00 PM, 4:00 PM,  5:00 PM,  6:00 PM,",
+      },
       required: [true, "Schedule is required!"],
     },
     isClosed: {

@@ -2,56 +2,73 @@ import { Schema, model } from "mongoose";
 import { utilsSchema } from "../utils/CommonSchema";
 import { TPatient } from "./patient.interface";
 
-const patientSchema = new Schema<TPatient>({
-  patientId: {
-    type: String,
-    required: [true, "User id is required!"],
-    ref: "User",
-    unique: true,
-  },
-
-  allMedicalHistory: [
-    {
+const patientSchema = new Schema<TPatient>(
+  {
+    patientId: {
       type: String,
-      ref: "MedicalHistory",
+      required: [true, "User id is required!"],
+      ref: "User",
       unique: true,
     },
-  ],
-  allAppointmentHistory: [
-    {
+
+    allMedicalHistory: [
+      {
+        type: String,
+        ref: "MedicalHistory",
+        unique: true,
+      },
+    ],
+
+    pendingAppointments: [
+      {
+        date: {
+          type: String,
+        },
+        time: {
+          type: String,
+        },
+      },
+    ],
+    allAppointmentHistory: [
+      {
+        type: String,
+        ref: "Appointment",
+        unique: true,
+      },
+    ],
+    allDiagnosis: [
+      {
+        type: String,
+        ref: "Diagnosis",
+        unique: true,
+      },
+    ],
+    isAdmitted: {
+      type: Boolean,
+      default: false,
+    },
+    currentMedicalDepartment: {
       type: String,
-      ref: "Appointment",
+      ref: "Department",
       unique: true,
     },
-  ],
-  allDiagnosis: [
-    {
-      type: String,
-      ref: "Diagnosis",
-      unique: true,
-    },
-  ],
-  isAdmitted: {
-    type: Boolean,
-    default: false,
+
+    bills: Number,
+
+    contactNumber: String,
+
+    emergencyContact: String,
+
+    insuranceInfo: String,
+
+    guardian: utilsSchema.patientGuardianSchema,
+
+    personalInfo: utilsSchema.patientPersonalInfo,
   },
-  currentMedicalDepartment: {
-    type: String,
-    ref: "Department",
-    unique: true,
+  {
+    timestamps: true,
+    _id: false,
   },
-
-  bills: Number,
-
-  contactNumber: String,
-
-  emergencyContact: String,
-
-  insuranceInfo: String,
-
-  guardian: utilsSchema.patientGuardianSchema,
-
-  personalInfo: utilsSchema.patientPersonalInfo,
-});
+);
 
 export const Patient = model<TPatient>("Patients", patientSchema);

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ResponseToServer } from "../../util/ResponseToServer";
@@ -8,13 +9,13 @@ import { doctorServices } from "./doctors.services";
 /* creating appointment  controller by doctor */
 const createAppointment: RequestHandler = catchAsync(async (req, res) => {
   const appointmentData = req.body;
-  const newAppointment =
+  const newAppointment: any =
     await doctorServices.createAppointment(appointmentData);
   if (newAppointment) {
     ResponseToServer(req, res, true, StatusCodes.OK, newAppointment);
   } else {
     throw new AppError(
-      "Creating department failed from controller!",
+      "Creating appointment failed from doctor controller!",
       StatusCodes.BAD_REQUEST,
     );
   }

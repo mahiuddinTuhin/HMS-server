@@ -10,6 +10,7 @@ export type TDoctor = {
   departmentId: string;
   schedule: TSchedule[];
   allMedicalHistory: string[];
+  pendingAppointments: string[];
   contactInfo: Tcontacts;
   education: TEducation[];
   license_info: string[];
