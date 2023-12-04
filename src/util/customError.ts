@@ -6,7 +6,6 @@ class AppError extends Error implements CustomErrorProps {
   statusCode?: number;
 
   constructor(message: string, statusCode?: number) {
-    console.log(message);
     super(message);
     this.name = this.constructor.name;
     this.statusCode = statusCode || 500;

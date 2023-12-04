@@ -1,19 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusCodes } from "http-status-codes";
-import { startSession } from "mongoose";
 import AppError from "../../util/customError";
 import { TMedicalHistory } from "../MedicalHistory/medicalHistory.ineterface";
 import { MedicalHistory } from "../MedicalHistory/medicalHistory.model";
 import { TAppointments } from "../appointment/appointment.interface";
+import { Patient } from "../patients/patient.mdoel";
 import { TDoctor } from "./doctors.interface";
 import { Doctor } from "./doctors.model";
 
 /* creating an appointment by doctor */
 const createAppointment = async (data: TAppointments) => {
-  const session = await startSession();
   try {
-    session.startTransaction();
     /* checking whether doctor is available or not */
     const doesDoctorExist = await Doctor.findOne({
       doctorId: data?.doctorId,
@@ -26,9 +23,11 @@ const createAppointment = async (data: TAppointments) => {
       );
     }
 
+    console.log("doctor exists");
+
     if (doesDoctorExist) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const tookSchedule = await Doctor.findOne({
+      const canTakeSchedule = await Doctor.findOne({
         doctorId: data?.doctorId,
         pendingAppointments: {
           $elemMatch: {
@@ -38,7 +37,7 @@ const createAppointment = async (data: TAppointments) => {
         },
       });
 
-      if (tookSchedule) {
+      if (canTakeSchedule) {
         throw new AppError(
           "Doctor does not available on that time. Change time or date.",
           StatusCodes.BAD_REQUEST,
@@ -46,46 +45,48 @@ const createAppointment = async (data: TAppointments) => {
       }
     }
 
-    const newAppointment = new Doctor({
-      date: data?.date,
-      time: data?.time,
-      patientId: data?.patientId,
-      doctorId: data?.doctorId,
-    });
+    console.log("doctor available on that time");
 
-    const validationError = newAppointment.validateSync();
+    const newAppointMent = await Doctor.findOneAndUpdate(
+      {
+        doctorId: data?.doctorId,
+      },
+      {
+        $push: {
+          pendingAppointments: {
+            date: data?.date,
+            time: data?.time,
+          },
+        },
+      },
+      { new: true },
+    );
 
-    if (validationError) {
-      throw new AppError(
-        "Failed to create appointment!! date/time ",
-        StatusCodes.BAD_REQUEST,
-      );
-    } else {
-      // If validation passed, add the new appointment to the pendingAppointments array
-      const updatedDoctor = await Doctor.findOneAndUpdate(
-        { doctorId: data?.doctorId },
-        { $push: { pendingAppointments: newAppointment } },
-        { new: true },
-      );
-    }
+    const updatedPatient = await Patient.findOneAndUpdate(
+      {
+        patientId: data?.patientId,
+      },
+      {
+        $push: {
+          pendingAppointments: {
+            date: data?.date,
+            time: data?.time,
+          },
+        },
+      },
+    );
 
-    if (!newAppointment || !newAppointment) {
+    if (!newAppointMent || !updatedPatient) {
       throw new AppError(
         "Failed to create appointment!!",
         StatusCodes.INTERNAL_SERVER_ERROR,
       );
     }
-
-    await session.commitTransaction();
-    await session.endSession();
-
-    return newAppointment;
+    return newAppointMent;
   } catch (error) {
-    await session.abortTransaction();
-    await session.endSession();
     throw new AppError(
-      "Failed to create appointment!!",
-      StatusCodes.BAD_REQUEST,
+      `Creating appointment failed from doctor services!: ${error}`,
+      StatusCodes.INTERNAL_SERVER_ERROR,
     );
   }
 };

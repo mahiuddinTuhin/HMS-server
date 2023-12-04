@@ -1,24 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ErrorRequestHandler } from "express";
-import { ZodError, ZodIssue } from "zod";
-import { TErrorSources } from "../modules/utils/TCommon.interface";
 
-export const globalErrorHandler: ErrorRequestHandler = (
-  err,
-  req,
-  res,
-  next,
-) => {
-  console.log("I am in globalError handler");
+export const globalErrorHandler: ErrorRequestHandler = (err, req, res) => {
   let message = err.message || "Something went wring!";
   let statusCode = err.statusCode || 500;
+
   let errorSources: TErrorSources[] = [
     {
       path: "",
       message: "Something went wrong",
     },
   ];
+
   /* this function will organize each error message and will return */
   const handledZodError = (err: ZodError) => {
     statusCode = 400;
@@ -29,12 +22,14 @@ export const globalErrorHandler: ErrorRequestHandler = (
         message: issue?.message,
       };
     });
+
     return {
       statusCode,
       message: "Validation error!",
       errorSources,
     };
   };
+
   if (err instanceof ZodError) {
     const simplifiedErrors = handledZodError(err);
 

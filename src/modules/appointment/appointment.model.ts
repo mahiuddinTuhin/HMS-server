@@ -26,7 +26,7 @@ export const appointmentSchema = new Schema<TAppointments>(
       type: Boolean,
       default: false,
     },
-    time: {
+    schedule: {
       type: String,
       enum: {
         values: schedules,
@@ -34,10 +34,6 @@ export const appointmentSchema = new Schema<TAppointments>(
           "{{VALUE}} is not acceptable as schedule. please enter any one of the following time. 9:00 AM, 10:00 AM,  11:00 AM,  12:00 PM,  1:00 PM,  2:00 PM,  3:00 PM, 4:00 PM,  5:00 PM,  6:00 PM,",
       },
       required: [true, "Schedule is required!"],
-    },
-
-    date: {
-      type: String,
     },
     isClosed: {
       type: Boolean,

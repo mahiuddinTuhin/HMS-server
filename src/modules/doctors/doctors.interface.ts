@@ -1,12 +1,14 @@
 import {
   TEducation,
   TPersonalInfo,
+  TSchedule,
   Tcontacts,
 } from "../utils/TCommon.interface";
 
 export type TDoctor = {
   doctorId: string;
   departmentId: string;
+  schedule: TSchedule[];
   allMedicalHistory: string[];
   pendingAppointments: string[];
   contactInfo: Tcontacts;

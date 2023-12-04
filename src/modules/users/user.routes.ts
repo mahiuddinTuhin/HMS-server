@@ -3,14 +3,12 @@ import validateRequest from "../../middleware/ZodValidator";
 
 import { AdminValidation } from "../admin/admin.validation";
 import { userControllers } from "./user.controllers";
-import { userValidation } from "./users.Validation";
 
 const router = Router();
 
 /* 1. creating admin */
 router.post(
   "/create-admin",
-  validateRequest(userValidation),
   validateRequest(AdminValidation),
   userControllers.createAdmin,
 );

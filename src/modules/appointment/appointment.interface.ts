@@ -4,8 +4,9 @@ export type TAppointments = {
   appointmentId: string;
   doctorId: string;
   patientId: string;
-  time: TSchedule;
+  time: string;
   isPaid: boolean;
   date?: Date;
+  schedule: TSchedule;
   isClosed: boolean;
 };
