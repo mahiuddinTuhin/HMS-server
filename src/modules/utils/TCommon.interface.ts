@@ -45,3 +45,9 @@ export type TSchedule =
   | "6:00 PM";
 
 export type TRole = ["doctor" | "nurse" | "admin" | "staff" | "patient"];
+
+/* for global error handler */
+export type TErrorSources = {
+  path: string;
+  message: string;
+};
