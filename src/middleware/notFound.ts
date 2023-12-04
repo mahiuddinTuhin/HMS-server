@@ -1,10 +1,8 @@
-import { Request, Response } from "express";
-import { StatusCodes } from "http-status-codes";
+import { ErrorRequestHandler } from "express";
 
-const notFound = (req: Request, res: Response) => {
-  res
-    .status(StatusCodes.NOT_FOUND)
-    .json({ success: false, message: "Request not found!", error: "" });
+const notFound: ErrorRequestHandler = (err, req, res) => {
+  // Handle errors here and send a response
+  res.status(500).send("Internal Server Error");
 };
 
 export default notFound;

@@ -195,7 +195,8 @@ const createNurseService = async (data: any) => {
   } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();
-    throw error;
+    console.log("--error occured--");
+    throw new AppError("An error occured here......", 500);
   }
 };
 
