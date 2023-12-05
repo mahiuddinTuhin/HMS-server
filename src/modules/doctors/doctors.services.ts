@@ -23,8 +23,6 @@ const createAppointment = async (data: TAppointments) => {
       );
     }
 
-    console.log("doctor exists");
-
     if (doesDoctorExist) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const canTakeSchedule = await Doctor.findOne({
@@ -44,8 +42,6 @@ const createAppointment = async (data: TAppointments) => {
         );
       }
     }
-
-    console.log("doctor available on that time");
 
     const newAppointMent = await Doctor.findOneAndUpdate(
       {

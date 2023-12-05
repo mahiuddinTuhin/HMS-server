@@ -26,7 +26,6 @@ const createLabratory: RequestHandler = catchAsync(async (req, res) => {
  */
 const findAllAdmin: RequestHandler = catchAsync(async (req, res) => {
   const allAdmin = await adminServices.findAllAdmin();
-  console.log({ allAdmin });
 
   ResponseToServer(req, res, true, StatusCodes.OK, allAdmin);
 });

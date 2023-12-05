@@ -30,7 +30,7 @@ export const generateId = async (role: string) => {
   let lastUser;
   let lastThreeDigit: any;
   try {
-    lastUser = await findLastUser(role);
+    lastUser = (await findLastUser(role)) || { id: "" };
     const id = lastUser.id.toString();
     const lastUserDate = id.substring(3, 5);
 
@@ -49,12 +49,11 @@ export const generateId = async (role: string) => {
     // console.log(null);
   }
 
-  if (lastThreeDigit.length === 2) {
+  if (lastThreeDigit.toString().length === 2) {
     lastThreeDigit = `0${lastThreeDigit}`;
-  } else if (lastThreeDigit.length === 1) {
+  } else if (lastThreeDigit.toString().length === 1) {
     lastThreeDigit = `00${lastThreeDigit}`;
   }
-
   const newId: string =
     (role.substring(0, 3) || "Guest") +
     newDate +

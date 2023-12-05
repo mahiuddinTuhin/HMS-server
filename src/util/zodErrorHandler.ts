@@ -10,7 +10,7 @@ const handledZodError = (err: ZodError): TGenericErrorResponse => {
   /* it will have an array of string */
   const errorSources: TErrorSources[] = err.issues.map((issue: ZodIssue) => {
     return {
-      path: issue?.path[issue?.path?.length - 1] as string,
+      path: issue?.path[Number(issue?.path?.length) - 1] as string,
       message: issue?.message,
     };
   });

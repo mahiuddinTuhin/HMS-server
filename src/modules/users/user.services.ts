@@ -28,16 +28,8 @@ const createAdminService = async (data: any) => {
 
   try {
     session.startTransaction();
-
     const newUser: any = await User.create([userData], { session });
 
-    if (!newUser.length) {
-      throw new AppError(
-        "Error occured in creating user transactions.",
-        StatusCodes.BAD_REQUEST,
-      );
-    }
-    // console.log({ newId: newUser[0]?._id });
     const {
       password,
       email,
@@ -55,10 +47,6 @@ const createAdminService = async (data: any) => {
     };
 
     const newAdmin = await Admin.create([adminData], { session });
-
-    if (!newAdmin.length) {
-      throw new Error("Doctor data creation failed!");
-    }
 
     await session.commitTransaction();
     await session.endSession();
@@ -185,7 +173,7 @@ const createNurseService = async (data: any) => {
   } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();
-    console.log("--error occured--");
+    // console.log("--error occured--");
     // console.log(`\n\n${error}\n\n`);
     throw new Error(error);
   }
@@ -327,7 +315,7 @@ const getAllUser = async (query: Record<string, any>) => {
 };
 
 const updateUserById = (id: number, body: any) => {
-  console.log(id, body);
+  // console.log(id, body);
 };
 
 export const userServices = {

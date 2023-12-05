@@ -9,23 +9,17 @@ import { userServices } from "./user.services";
 /* 1. creating admin */
 const createAdmin: RequestHandler = catchAsync(async (req, res) => {
   const data = req.body;
+
   const newAdmin: any = await userServices.createAdminService(data);
 
-  if (newAdmin) {
-    ResponseToServer(
-      req,
-      res,
-      true,
-      200,
-      "successfully created admin's data.",
-      newAdmin,
-    );
-  } else {
-    throw new AppError(
-      "Failed to create admin!",
-      StatusCodes.INTERNAL_SERVER_ERROR,
-    );
-  }
+  ResponseToServer(
+    req,
+    res,
+    true,
+    200,
+    "successfully created admin's data.",
+    newAdmin,
+  );
 });
 
 /* 2. creating doctor */
