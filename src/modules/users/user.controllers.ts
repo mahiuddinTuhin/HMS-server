@@ -56,22 +56,14 @@ const createNurse: RequestHandler = catchAsync(async (req, res) => {
   const data = req.body;
 
   const newNurse: any = await userServices.createNurseService(data);
-
-  if (newNurse) {
-    ResponseToServer(
-      req,
-      res,
-      true,
-      200,
-      "successfully created nurse's data.",
-      newNurse,
-    );
-  } else {
-    throw new AppError(
-      "Failed to create doc!",
-      StatusCodes.INTERNAL_SERVER_ERROR,
-    );
-  }
+  ResponseToServer(
+    req,
+    res,
+    true,
+    200,
+    "successfully created nurse's data.",
+    newNurse,
+  );
 });
 
 /* 4. creating patient */

@@ -9,21 +9,8 @@ import Laboratory from "../labratory/labrotory.model";
 
 /* creating department */
 const createDepartment = async (data: TDepartment) => {
-  try {
-    const newDepartment: any = await Department.create(data);
-    if (!newDepartment) {
-      throw new AppError(
-        "Creating department failed! from data model.",
-        StatusCodes.BAD_REQUEST,
-      );
-    }
-    return newDepartment;
-  } catch (error) {
-    throw new AppError(
-      `Creating department failed from services!: ${error}`,
-      StatusCodes.INTERNAL_SERVER_ERROR,
-    );
-  }
+  const newDepartment: any = await Department.create(data);
+  return newDepartment;
 };
 
 /* creating labratory */

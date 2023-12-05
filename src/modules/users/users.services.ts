@@ -159,13 +159,6 @@ const createNurseService = async (data: any) => {
 
     const newUser = await Users.create([userData], { session });
 
-    if (!newUser.length) {
-      throw new AppError(
-        "Error occured in creating user transactions.",
-        StatusCodes.BAD_REQUEST,
-      );
-    }
-
     const {
       password,
       email,
@@ -196,7 +189,8 @@ const createNurseService = async (data: any) => {
     await session.abortTransaction();
     await session.endSession();
     console.log("--error occured--");
-    throw new AppError("An error occured here......", 500);
+    // console.log(`\n\n${error}\n\n`);
+    throw new Error(error);
   }
 };
 
@@ -223,7 +217,7 @@ const createPatientService = async (data: any) => {
 
     const newUser = await Users.create([userData], { session });
 
-    if (!newUser.length) {
+    if (!Object.keys(newUser).length) {
       throw new AppError(
         "Error occured in creating user transactions.",
         StatusCodes.BAD_REQUEST,

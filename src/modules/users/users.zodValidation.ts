@@ -15,7 +15,7 @@ export const userValidation = z.object({
       (password) => {
         const newPassword: string =
           password || (process.env.DEFAULT_PASSWORD as string);
-        passwordPattern.test(newPassword);
+        return passwordPattern.test(newPassword);
       },
       {
         message:

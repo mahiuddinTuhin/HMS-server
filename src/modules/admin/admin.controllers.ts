@@ -8,15 +8,10 @@ import { adminServices } from "./admin.services";
 /* creating department controller */
 const createDepartment: RequestHandler = catchAsync(async (req, res) => {
   const departmentData = req.body;
+
   const newDepartment = await adminServices.createDepartment(departmentData);
-  if (newDepartment) {
-    ResponseToServer(req, res, true, StatusCodes.OK, newDepartment);
-  } else {
-    throw new AppError(
-      "Creating department failed from controller!",
-      StatusCodes.BAD_REQUEST,
-    );
-  }
+
+  ResponseToServer(req, res, true, StatusCodes.OK, newDepartment);
 });
 
 /* creating Labratory controller */
