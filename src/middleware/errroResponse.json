@@ -1,0 +1,48 @@
+{
+  "success": false,
+  "message": "Validation error!",
+  "err": {
+    "errors": {
+      "departmentId": {
+        "stringValue": "\"ssd\"",
+        "valueType": "string",
+        "kind": "Number",
+        "value": "ssd",
+        "path": "departmentId",
+        "reason": {
+          "generatedMessage": true,
+          "code": "ERR_ASSERTION",
+          "actual": false,
+          "expected": true,
+          "operator": "=="
+        },
+        "name": "CastError",
+        "message": "Cast to Number failed for value \"ssd\" (type string) at path \"departmentId\""
+      },
+      "departmentName": {
+        "name": "ValidatorError",
+        "message": "Department name is required!",
+        "properties": {
+          "message": "Department name is required!",
+          "type": "required",
+          "path": "departmentName"
+        },
+        "kind": "required",
+        "path": "departmentName"
+      }
+    },
+    "_message": "Department validation failed",
+    "name": "ValidationError",
+    "message": "Department validation failed: departmentId: Cast to Number failed for value \"ssd\" (type string) at path \"departmentId\", departmentName: Department name is required!"
+  },
+  "errors": [
+    {
+      "path": "departmentId",
+      "message": "Cast to Number failed for value \"ssd\" (type string) at path \"departmentId\""
+    },
+    {
+      "path": "departmentName",
+      "message": "Department name is required!"
+    }
+  ]
+}

@@ -5,6 +5,7 @@ import { Error } from "mongoose";
 import { ZodError } from "zod";
 import handleValidationError from "../errors/handleValidationError";
 import { TErrorSources } from "../modules/utils/TCommon.interface";
+import AppError from "../util/customError";
 import handledZodError from "../util/zodErrorHandler";
 
 export const globalErrorHandler: ErrorRequestHandler = (
@@ -23,6 +24,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
     },
   ];
 
+  /* handling zod validation error  */
   if (err instanceof ZodError) {
     const simplifiedErrors = handledZodError(err);
 
@@ -30,15 +32,25 @@ export const globalErrorHandler: ErrorRequestHandler = (
     message = simplifiedErrors?.message;
     errorSources = simplifiedErrors?.errorSources;
   } else if (err instanceof Error.ValidationError) {
+    /* handling schema validation error */
     const simplifiedErrors = handleValidationError(err);
 
     statusCode = simplifiedErrors?.statusCode;
     message = simplifiedErrors?.message;
     errorSources = simplifiedErrors?.errorSources;
   } else if ((err as MongoError).code === 11000) {
-    statusCode = 400;
-    message = err;
-    // errorSources = simplifiedErrors?.errorSources;
+    /* handling duplicate error comes from mongodb index */
+    statusCode = 409;
+    const firstKey = Object.keys(err.keyValue)[0];
+    const value = err.keyValue[firstKey];
+    message = `Duplication occurs!`;
+    errorSources[0].message = `'${value}' is already created in ${firstKey}`;
+    errorSources[0].path = `${firstKey}`;
+  } else if (err instanceof AppError) {
+    /* handling AppError class message */
+    message = err.message;
+    errorSources[0].message = err.message;
+    errorSources[0].path = "";
   }
 
   return res

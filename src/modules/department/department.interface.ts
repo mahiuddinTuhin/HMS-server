@@ -1,5 +1,5 @@
 export type TDepartment = {
-  departmentId: string;
+  departmentId: number;
   departmentName: string;
   allDoctors: string[];
   licences: string;

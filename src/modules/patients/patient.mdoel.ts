@@ -67,7 +67,7 @@ const patientSchema = new Schema<TPatient>(
   },
   {
     timestamps: true,
-    _id: false,
+   
   },
 );
 

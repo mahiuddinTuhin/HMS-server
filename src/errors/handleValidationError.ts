@@ -8,6 +8,12 @@ const handleValidationError = (
   err: Error.ValidationError,
 ): TGenericErrorResponse => {
   const message: TErrorSources[] = Object.values(err.errors).map((err) => {
+    if (err instanceof Error.CastError) {
+      return {
+        path: err.path,
+        message: `'${err.value}' is not accectable as ${err.path}. Please Enter a ${err.kind} type value.`,
+      };
+    }
     return {
       path: err.path,
       message: err.message,

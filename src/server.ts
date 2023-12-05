@@ -1,9 +1,11 @@
 import chalk from "chalk";
 import "dotenv/config";
+import { Server } from "http";
 import { connect } from "mongoose";
 import app from "./app";
 const port = process.env.PORT;
 
+let server: Server;
 async function main() {
   try {
     const db = await connect(process.env.DB_URL as string, {
@@ -12,7 +14,7 @@ async function main() {
 
     // Check if the connection is successful
     if (db) {
-      app.listen(port, () => {
+      server = app.listen(port, () => {
         console.log(
           chalk.bgGreenBright.bold(
             `Server is running on port: ${port} and connected to the database`,
@@ -31,3 +33,26 @@ async function main() {
 }
 
 main();
+
+/* caught and handle unhandledRejection for async request*/
+
+process.on("unhandledRejection", () => {
+  console.log(
+    `[ unhandledRejection is detected. Server is shutting down . . . ]`,
+  );
+  if (server) {
+    server.close(() => {
+      process.exit(1);
+    });
+    process.exit(1);
+  }
+});
+
+/*  caught and handle uncaughtException for sync request*/
+process.on("uncaughtException", () => {
+  console.log(
+    `[ uncaughtException is detected. Server is shutting down . . . ]`,
+  );
+
+  process.exit(1);
+});
