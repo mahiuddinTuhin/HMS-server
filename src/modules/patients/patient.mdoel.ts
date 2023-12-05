@@ -4,18 +4,22 @@ import { TPatient } from "./patient.interface";
 
 const patientSchema = new Schema<TPatient>(
   {
-    patientId: {
-      type: String,
-      required: [true, "User id is required!"],
-      ref: "User",
+    user: {
+      type: Schema.Types.ObjectId,
+      required: [true, "User _id is required!"],
       unique: true,
+      ref: "User",
+    },
+    id: {
+      type: String,
+      required: [true, "Id is required!"],
     },
 
     allMedicalHistory: [
       {
         type: String,
         ref: "MedicalHistory",
-        unique: true,
+        // unique: true,
       },
     ],
 
@@ -33,7 +37,7 @@ const patientSchema = new Schema<TPatient>(
       {
         type: String,
         ref: "Appointment",
-        unique: true,
+        // unique: true,
       },
     ],
     allDiagnosis: [
@@ -67,7 +71,6 @@ const patientSchema = new Schema<TPatient>(
   },
   {
     timestamps: true,
-   
   },
 );
 

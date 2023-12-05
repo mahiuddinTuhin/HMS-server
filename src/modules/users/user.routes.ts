@@ -29,7 +29,7 @@ router.post("/create-staff", userControllers.createStaff);
 
 router.get("/", userControllers.getAllUser);
 router.get("/:userId", userControllers.getUserById);
-router.delete("/:userId", userControllers.deleteUserById);
-router.put("/", userControllers.updateUserById);
+// router.delete("/:userId", userControllers.deleteUserById);
+router.put("/:userId", userControllers.updateUserById);
 
 export const userRoutes = router;

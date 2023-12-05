@@ -3,12 +3,15 @@ import { utilsSchema } from "../utils/CommonSchema";
 import { TAdmin } from "./admin.interface";
 
 const adminSchema = new Schema<TAdmin>({
-  adminId: {
-    type: String,
-    ref: "User",
+  user: {
+    type: Schema.Types.ObjectId,
+    required: [true, "User id is required in admin !"],
     unique: true,
-    index: true,
-    required: [true, "User id is required!"],
+    ref: "User",
+  },
+  id: {
+    type: String,
+    required: [true, "id is required in admin!"],
   },
 
   contactInfo: utilsSchema.nonPatientContactSchema,

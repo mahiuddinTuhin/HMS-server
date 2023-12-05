@@ -8,7 +8,7 @@ export const nurseSchema = new Schema<TNurse>(
       type: String,
       index: true,
       unique: true,
-      ref: "User",
+      ref: "Users",
       required: [true, "Nurse id is required!"],
     },
 

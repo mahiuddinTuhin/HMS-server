@@ -3,21 +3,20 @@
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import AppError from "../../util/customError";
+import { generateId } from "../../util/idGenerator";
 import { Admin } from "../admin/admin.mode";
 import { Doctor } from "../doctors/doctors.model";
 import { Nurse } from "../nurse/nurse.model";
 import { Patient } from "../patients/patient.mdoel";
 import { Staff } from "../staff/staff.model";
-import { TUsers } from "./users.interface";
-import { Users } from "./users.model";
+import { TUser } from "./user.interface";
+import { User } from "./user.model";
 
 /* 1. creating admin service */
 const createAdminService = async (data: any) => {
   /* taking necessary data for common user */
-  const userData: Partial<TUsers> = {
-    userId: data?.userId,
-    username:
-      data?.username || data?.personalInfo?.fullName?.firstName + "2023" || "",
+  const userData: Partial<TUser> = {
+    id: await generateId("admin"),
     password: data?.password || process.env.DEFAULT_PASSWORD,
     needsPasswordChange: true,
     email: data?.email,
@@ -30,7 +29,7 @@ const createAdminService = async (data: any) => {
   try {
     session.startTransaction();
 
-    const newUser = await Users.create([userData], { session });
+    const newUser: any = await User.create([userData], { session });
 
     if (!newUser.length) {
       throw new AppError(
@@ -38,18 +37,22 @@ const createAdminService = async (data: any) => {
         StatusCodes.BAD_REQUEST,
       );
     }
-
+    // console.log({ newId: newUser[0]?._id });
     const {
       password,
       email,
       needsPasswordChange,
       role,
       isDeleted,
-      userId,
+      _id,
       ...restOfData
     } = data;
 
-    const adminData = { ...restOfData, adminId: data?.userId };
+    const adminData: any = {
+      ...restOfData,
+      id: userData?.id,
+      user: newUser[0]?._id,
+    };
 
     const newAdmin = await Admin.create([adminData], { session });
 
@@ -69,15 +72,14 @@ const createAdminService = async (data: any) => {
   }
 };
 
-/* 2. creating doctor service*/
+/**
+ * @function creating Doctor Services
+ *
+ */
+
 const createDocService = async (data: any) => {
   /* taking necessary data for user */
-  const userData: Partial<TUsers> = {
-    userId: data?.userId,
-    username:
-      data?.username ||
-      data.personalInfo.fullName.firstName + "2023" ||
-      "D" + new Date().getTime(),
+  const userData: Partial<TUser> = {
     password: data?.password || process.env.DEFAULT_PASSWORD,
     needsPasswordChange: true,
     email: data?.email,
@@ -90,7 +92,7 @@ const createDocService = async (data: any) => {
   try {
     session.startTransaction();
 
-    const newUser = await Users.create([userData], { session });
+    const newUser = await User.create([userData], { session });
 
     if (!newUser.length) {
       throw new AppError(
@@ -139,12 +141,7 @@ const createDocService = async (data: any) => {
 /*  3. create nurse service */
 const createNurseService = async (data: any) => {
   /* taking necessary data for common user */
-  const userData: Partial<TUsers> = {
-    userId: data?.userId,
-    username:
-      data?.username ||
-      data.personalInfo.fullName.firstName + "2023" ||
-      "N" + new Date().getTime(),
+  const userData: Partial<TUser> = {
     password: data?.password || process.env.DEFAULT_PASSWORD,
     needsPasswordChange: true,
     email: data?.email,
@@ -157,7 +154,7 @@ const createNurseService = async (data: any) => {
   try {
     session.startTransaction();
 
-    const newUser = await Users.create([userData], { session });
+    const newUser = await User.create([userData], { session });
 
     const {
       password,
@@ -197,12 +194,8 @@ const createNurseService = async (data: any) => {
 /* 4. creating patient */
 const createPatientService = async (data: any) => {
   /* taking necessary data for common user */
-  const userData: Partial<TUsers> = {
-    userId: data?.userId,
-    username:
-      data?.username ||
-      data.personalInfo.fullName.firstName + "2023" ||
-      "P" + new Date().getTime(),
+  const userData: Partial<TUser> = {
+    id: data.id,
     password: data?.password || process.env.DEFAULT_PASSWORD,
     needsPasswordChange: true,
     email: data?.email,
@@ -215,7 +208,7 @@ const createPatientService = async (data: any) => {
   try {
     session.startTransaction();
 
-    const newUser = await Users.create([userData], { session });
+    const newUser: any = await User.create([userData], { session });
 
     if (!Object.keys(newUser).length) {
       throw new AppError(
@@ -230,11 +223,10 @@ const createPatientService = async (data: any) => {
       needsPasswordChange,
       role,
       isDeleted,
-      userId,
       ...restOfData
     } = data;
 
-    const patientData = { ...restOfData, patientId: data?.userId };
+    const patientData = { ...restOfData, id: data?.id, user: newUser[0]?._id };
 
     const newPatient = await Patient.create([patientData], { session });
 
@@ -260,12 +252,7 @@ const createPatientService = async (data: any) => {
 /* 5. creating staff */
 const createStaffService = async (data: any) => {
   /* taking necessary data for common user */
-  const userData: Partial<TUsers> = {
-    userId: data?.userId,
-    username:
-      data?.username ||
-      data.personalInfo.fullName.firstName + "2023" ||
-      "S" + new Date().getTime(),
+  const userData: Partial<TUser> = {
     password: data?.password || process.env.DEFAULT_PASSWORD,
     needsPasswordChange: true,
     email: data?.email,
@@ -278,7 +265,7 @@ const createStaffService = async (data: any) => {
   try {
     session.startTransaction();
 
-    const newUser = await Users.create([userData], { session });
+    const newUser = await User.create([userData], { session });
 
     if (!newUser.length) {
       throw new AppError(
@@ -321,35 +308,26 @@ const createStaffService = async (data: any) => {
 };
 
 const getUserById = async (id: number) => {
-  const result = await Users.findOne({ userId: id });
+  const result = await User.findOne({ userId: id });
   if (!result) {
     throw new Error("User retrieve failed.");
   }
   return result;
 };
 
-const getAllUser = async () => {
-  const result = await Users.find();
-  if (!result) {
-    throw new Error("User retrieve failed.");
+const getAllUser = async (query: Record<string, any>) => {
+  let searchTerm = "";
+
+  if (query?.searchTerm as string) {
+    searchTerm = query?.searchTerm;
   }
+  const result = await User.find();
+
   return result;
 };
 
-const deleteUserById = async (id: number) => {
-  const result = await Users.deleteOne({ userId: id });
-  if (!result) {
-    throw new Error("User deletion failed.");
-  }
-  return result;
-};
-
-const updateUserById = async (id: number, data: TUsers) => {
-  const result = await Users.updateOne({ userId: id }, { data });
-  if (!result) {
-    throw new Error("User update failed.");
-  }
-  return result;
+const updateUserById = (id: number, body: any) => {
+  console.log(id, body);
 };
 
 export const userServices = {
@@ -359,7 +337,6 @@ export const userServices = {
   createStaffService,
   createPatientService,
   getUserById,
-  deleteUserById,
   updateUserById,
   getAllUser,
 };

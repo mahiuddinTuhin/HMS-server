@@ -1,7 +1,9 @@
+import { Types } from "mongoose";
 import { TGuardian, TPersonalInfo } from "../utils/TCommon.interface";
 
 export type TPatient = {
-  patientId: string;
+  id: string;
+  user: Types.ObjectId;
   allDiagnosis: string[];
   allMedicalHistory: string[];
   allAppointmentHistory: string[];

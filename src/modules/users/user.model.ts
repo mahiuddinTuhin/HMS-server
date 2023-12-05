@@ -1,18 +1,12 @@
 import mongoose from "mongoose";
-import { TUsers } from "./users.interface";
+import { TUser } from "./user.interface";
 
-const userSchema = new mongoose.Schema<TUsers>(
+const userSchema = new mongoose.Schema<TUser>(
   {
-    userId: {
+    id: {
       type: String,
+      required: [true, "id is required!"],
       unique: true,
-      index: true,
-      required: [true, "User id is required!"],
-    },
-    username: {
-      type: String,
-      unique: true,
-      required: [true, "User name is required!"],
     },
 
     password: {
@@ -20,7 +14,6 @@ const userSchema = new mongoose.Schema<TUsers>(
       default: process.env.DEFAULT_PASSWORD,
       validate: {
         validator: (value: string) => {
-          // Password should be at least 8 characters long, containing at least one uppercase letter, one lowercase letter, one number, and one special character
           const passwordPattern =
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@~`#^()-_=+$!%*?&])[A-Za-z\d@~`#^()-_=+$!%*?&]{8,}$/;
 
@@ -86,4 +79,4 @@ const userSchema = new mongoose.Schema<TUsers>(
   { timestamps: true },
 );
 
-export const Users = mongoose.model<TUsers>("Users", userSchema);
+export const User = mongoose.model<TUser>("User", userSchema);

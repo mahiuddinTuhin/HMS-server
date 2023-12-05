@@ -9,7 +9,7 @@ export const doctorSchema = new Schema<TDoctor>(
       type: String,
       index: true,
       unique: true,
-      ref: "User",
+      ref: "Users",
       required: [true, "Doctor id is required!"],
     },
 

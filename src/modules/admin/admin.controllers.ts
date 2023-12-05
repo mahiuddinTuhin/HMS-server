@@ -21,4 +21,18 @@ const createLabratory: RequestHandler = catchAsync(async (req, res) => {
   ResponseToServer(req, res, true, StatusCodes.OK, newLab);
 });
 
-export const adminController = { createDepartment, createLabratory };
+/**
+ *  @find all admin router
+ */
+const findAllAdmin: RequestHandler = catchAsync(async (req, res) => {
+  const allAdmin = await adminServices.findAllAdmin();
+  console.log({ allAdmin });
+
+  ResponseToServer(req, res, true, StatusCodes.OK, allAdmin);
+});
+
+export const adminController = {
+  createDepartment,
+  createLabratory,
+  findAllAdmin,
+};

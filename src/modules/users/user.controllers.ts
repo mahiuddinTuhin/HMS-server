@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import { ResponseToServer } from "../../util/ResponseToServer";
 import catchAsync from "../../util/catchAsync";
 import AppError from "../../util/customError";
-import { userServices } from "./users.services";
+import { userServices } from "./user.services";
 
 /* 1. creating admin */
 const createAdmin: RequestHandler = catchAsync(async (req, res) => {
@@ -56,6 +56,7 @@ const createNurse: RequestHandler = catchAsync(async (req, res) => {
   const data = req.body;
 
   const newNurse: any = await userServices.createNurseService(data);
+
   ResponseToServer(
     req,
     res,
@@ -126,7 +127,8 @@ const getUserById: RequestHandler = catchAsync(async (req, res) => {
 
 const getAllUser: RequestHandler = catchAsync(async (req, res) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const result: any = await userServices.getAllUser();
+  const result: any = await userServices.getAllUser(req.query);
+
   ResponseToServer(
     req,
     res,
@@ -139,15 +141,15 @@ const getAllUser: RequestHandler = catchAsync(async (req, res) => {
   );
 });
 
-const deleteUserById: RequestHandler = catchAsync(async (req, res) => {
-  const id: number = Number(req.params.userId);
+// const deleteUserById: RequestHandler = catchAsync(async (req, res) => {
+//   const id: number = Number(req.params.userId);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const result: any = await userServices.deleteUserById(id);
-  ResponseToServer(req, res, true, 200, "Successfyully deleted the users!", {
-    data: result,
-  });
-});
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   const result: any = await userServices.deleteUserById(id);
+//   ResponseToServer(req, res, true, 200, "Successfyully deleted the users!", {
+//     data: result,
+//   });
+// });
 
 const updateUserById: RequestHandler = catchAsync(async (req, res) => {
   const id: number = Number(req.params.userId);
@@ -165,7 +167,6 @@ export const userControllers = {
   createDoctor,
   createPatient,
   getUserById,
-  deleteUserById,
   updateUserById,
   getAllUser,
   createNurse,

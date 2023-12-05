@@ -1,6 +1,6 @@
-export type TUsers = {
-  username: string;
-  userId: string;
+export type TUser = {
+  // _id: Schema.Types.ObjectId;
+  id: string;
   password: string;
   needsPasswordChange: boolean;
   email?: string;
