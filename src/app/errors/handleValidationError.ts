@@ -2,7 +2,7 @@ import { Error } from "mongoose";
 import {
   TErrorSources,
   TGenericErrorResponse,
-} from "../../modules/utils/TCommon.interface";
+} from "../interfaces/TCommon.interface";
 
 const handleValidationError = (
   err: Error.ValidationError,

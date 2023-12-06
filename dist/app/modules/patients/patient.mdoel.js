@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Patient = void 0;
 const mongoose_1 = require("mongoose");
-const CommonSchema_1 = require("../utils/CommonSchema");
+const CommonSchema_1 = require("../../schema/CommonSchema");
 const patientSchema = new mongoose_1.Schema({
     user: {
         type: mongoose_1.Schema.Types.ObjectId,
@@ -59,7 +59,6 @@ const patientSchema = new mongoose_1.Schema({
     emergencyContact: String,
     insuranceInfo: String,
     guardian: CommonSchema_1.utilsSchema.patientGuardianSchema,
-    personalInfo: CommonSchema_1.utilsSchema.patientPersonalInfo,
 }, {
     timestamps: true,
 });

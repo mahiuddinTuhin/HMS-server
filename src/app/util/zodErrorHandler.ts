@@ -2,7 +2,7 @@ import { ZodError, ZodIssue } from "zod";
 import {
   TErrorSources,
   TGenericErrorResponse,
-} from "../../modules/utils/TCommon.interface";
+} from "../interfaces/TCommon.interface";
 
 /* this function will organize each error message and will return */
 const handledZodError = (err: ZodError): TGenericErrorResponse => {

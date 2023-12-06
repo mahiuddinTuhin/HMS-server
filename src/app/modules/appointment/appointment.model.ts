@@ -4,20 +4,20 @@ import { TAppointments } from "./appointment.interface";
 
 export const appointmentSchema = new Schema<TAppointments>(
   {
-    appointmentId: {
+    id: {
       type: String,
       unique: true,
       required: [true, "Appointment id is required!"],
     },
 
-    doctorId: {
-      type: String,
+    doctor: {
+      type: Schema.Types.ObjectId,
       unique: true,
       ref: "Doctors",
       required: [true, "Doctor id is required!"],
     },
-    patientId: {
-      type: String,
+    patient: {
+      type: Schema.Types.ObjectId,
       unique: true,
       ref: "Patient",
       required: [true, "Patient id is required!"],

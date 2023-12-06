@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { TEducation, TGuardian } from "../utils/TCommon.interface";
+import { TEducation, TGuardian } from "../../interfaces/TCommon.interface";
 
 export type TPatient = {
   user: Types.ObjectId;

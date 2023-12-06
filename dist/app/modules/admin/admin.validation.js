@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminValidation = void 0;
 const zod_1 = require("zod");
-const Common_Validation_1 = require("../utils/Common.Validation");
+const Common_Validation_1 = require("../../validation/Common.Validation");
 // Define Zod schemas for the different parts of the Admin schema
 // Define the Admin schema using Zod
 exports.AdminValidation = zod_1.z.object({

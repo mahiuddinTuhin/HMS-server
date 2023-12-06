@@ -1,5 +1,4 @@
 import { Schema, model } from "mongoose";
-import { utilsSchema } from "../utils/CommonSchema";
 import { TAdmin } from "./admin.interface";
 
 const adminSchema = new Schema<TAdmin>({
@@ -13,12 +12,6 @@ const adminSchema = new Schema<TAdmin>({
     type: String,
     required: [true, "id is required in admin!"],
   },
-
-  contactInfo: utilsSchema.nonPatientContactSchema,
-
-  education: utilsSchema.nonPatientEducationSchema,
-
-  personalInfo: utilsSchema.NonPatientPersonalInfo,
 });
 
 export const Admin = model("Admin", adminSchema);

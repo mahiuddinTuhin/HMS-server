@@ -1,10 +1,10 @@
 import { Types } from "mongoose";
-import { TEducation, TSchedule } from "../utils/TCommon.interface";
+import { TEducation, TSchedule } from "../../interfaces/TCommon.interface";
 
 export type TDoctor = {
   user: Types.ObjectId;
   id: string;
-  departmentId: string;
+  department: Types.ObjectId;
   schedule: TSchedule[];
   allMedicalHistory: Types.ObjectId[];
   pendingAppointments: Types.ObjectId[];

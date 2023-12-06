@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Doctor = exports.doctorSchema = void 0;
 const mongoose_1 = require("mongoose");
-const CommonSchema_1 = require("../utils/CommonSchema");
+const CommonSchema_1 = require("../../schema/CommonSchema");
 const doctor_constant_1 = require("./doctor.constant");
 exports.doctorSchema = new mongoose_1.Schema({
-    doctorId: {
+    id: {
         type: String,
         index: true,
         unique: true,
@@ -21,7 +21,7 @@ exports.doctorSchema = new mongoose_1.Schema({
     ],
     allMedicalHistory: [
         {
-            type: String,
+            type: mongoose_1.Schema.Types.ObjectId,
             ref: "MedicalHistory",
         },
     ],
@@ -37,16 +37,14 @@ exports.doctorSchema = new mongoose_1.Schema({
             },
         },
     ],
-    contactInfo: CommonSchema_1.utilsSchema.nonPatientContactSchema,
-    departmentId: {
-        type: String,
+    department: {
+        type: mongoose_1.Schema.Types.ObjectId,
         unique: true,
         ref: "Department",
         required: [true, "Department id is required!"],
     },
     education: [CommonSchema_1.utilsSchema.nonPatientEducationSchema],
     license_info: String,
-    personalInfo: CommonSchema_1.utilsSchema.NonPatientPersonalInfo,
 }, {
     timestamps: true,
     _id: false,

@@ -2,28 +2,28 @@ import { Schema, model } from "mongoose";
 import { TDiagnosis } from "./diagnosis.interface";
 
 const diagnosisSchema = new Schema<TDiagnosis>({
-  diagnosisId: {
+  id: {
     type: String,
     required: [true, "Diagnosis id is required!"],
     unique: true,
   },
 
-  patientId: {
-    type: String,
+  patient: {
+    type: Schema.Types.ObjectId,
     ref: "Patients",
     unique: true,
     required: [true, "patient id is required!"],
   },
 
-  doctorId: {
-    type: String,
+  doctor: {
+    type: Schema.Types.ObjectId,
     ref: "Doctors",
     unique: true,
     required: [true, "Doctor id is required!"],
   },
 
-  labStaffId: {
-    type: String,
+  labStaff: {
+    type: Schema.Types.ObjectId,
     ref: "Staff",
     unique: true,
     required: [true, "Lab staff id is required!"],

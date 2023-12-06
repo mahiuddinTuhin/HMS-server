@@ -26,8 +26,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 // Define a Mongoose schema for TDepartment
 const DepartmentSchema = new mongoose_1.Schema({
-    departmentId: {
-        type: Number,
+    id: {
+        type: String,
         required: [true, "Department id is required!"],
         unique: true,
     },
@@ -36,9 +36,11 @@ const DepartmentSchema = new mongoose_1.Schema({
         required: [true, "Department name is required!"],
         unique: true,
     },
-    allDoctors: [{ type: String, ref: "Doctors", unique: true }],
+    allDoctors: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "doctor", unique: true }],
     licences: { type: String, required: true, unique: true },
-    allMedicalHistory: [{ type: String, ref: "MedicalHistory", unique: true }],
+    allMedicalHistory: [
+        { type: mongoose_1.Schema.Types.ObjectId, ref: "MedicalHistory", unique: true },
+    ],
 }, { strict: true });
 // Create and export the Mongoose model based on the schema
 const Department = mongoose_1.default.model("Department", DepartmentSchema);

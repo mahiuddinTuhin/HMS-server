@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.adminController = void 0;
 const http_status_codes_1 = require("http-status-codes");
-const ResponseToServer_1 = require("../../app/util/ResponseToServer");
-const catchAsync_1 = __importDefault(require("../../app/util/catchAsync"));
+const ResponseToServer_1 = require("../../util/ResponseToServer");
+const catchAsync_1 = __importDefault(require("../../util/catchAsync"));
 const admin_services_1 = require("./admin.services");
 /* creating department controller */
 const createDepartment = (0, catchAsync_1.default)(async (req, res) => {

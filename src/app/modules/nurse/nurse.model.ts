@@ -1,10 +1,9 @@
 import { Schema, model } from "mongoose";
 import { TNurse } from "../nurse/nurse.interface";
-import { utilsSchema } from "../utils/CommonSchema";
 
 export const nurseSchema = new Schema<TNurse>(
   {
-    nurseId: {
+    id: {
       type: String,
       index: true,
       unique: true,
@@ -18,10 +17,6 @@ export const nurseSchema = new Schema<TNurse>(
       enum: ["day", "night"],
       message: "{VALUE} is not accepted as schedule!",
     },
-
-    contactInfo: utilsSchema.nonPatientContactSchema,
-    education: [utilsSchema.nonPatientEducationSchema],
-    personalInfo: utilsSchema.NonPatientPersonalInfo,
   },
   {
     timestamps: true,

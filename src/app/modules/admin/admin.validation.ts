@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { utilsValidation } from "../utils/Common.Validation";
+import { utilsValidation } from "../../validation/Common.Validation";
 
 // Define Zod schemas for the different parts of the Admin schema
 

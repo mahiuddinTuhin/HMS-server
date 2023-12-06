@@ -3,25 +3,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Diagnosis = void 0;
 const mongoose_1 = require("mongoose");
 const diagnosisSchema = new mongoose_1.Schema({
-    diagnosisId: {
+    id: {
         type: String,
         required: [true, "Diagnosis id is required!"],
         unique: true,
     },
-    patientId: {
-        type: String,
+    patient: {
+        type: mongoose_1.Schema.Types.ObjectId,
         ref: "Patients",
         unique: true,
         required: [true, "patient id is required!"],
     },
-    doctorId: {
-        type: String,
+    doctor: {
+        type: mongoose_1.Schema.Types.ObjectId,
         ref: "Doctors",
         unique: true,
         required: [true, "Doctor id is required!"],
     },
-    labStaffId: {
-        type: String,
+    labStaff: {
+        type: mongoose_1.Schema.Types.ObjectId,
         ref: "Staff",
         unique: true,
         required: [true, "Lab staff id is required!"],

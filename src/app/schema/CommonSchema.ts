@@ -4,7 +4,7 @@ import {
   TGuardian,
   TPersonalInfo,
   Tcontacts,
-} from "./TCommon.interface";
+} from "../interfaces/TCommon.interface";
 
 const nonPatientContactSchema = new Schema<Tcontacts>({
   homeMobile: {

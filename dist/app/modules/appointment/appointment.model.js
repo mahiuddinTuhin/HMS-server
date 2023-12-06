@@ -4,19 +4,19 @@ exports.Appointment = exports.appointmentSchema = void 0;
 const mongoose_1 = require("mongoose");
 const doctor_constant_1 = require("../doctors/doctor.constant");
 exports.appointmentSchema = new mongoose_1.Schema({
-    appointmentId: {
+    id: {
         type: String,
         unique: true,
         required: [true, "Appointment id is required!"],
     },
-    doctorId: {
-        type: String,
+    doctor: {
+        type: mongoose_1.Schema.Types.ObjectId,
         unique: true,
         ref: "Doctors",
         required: [true, "Doctor id is required!"],
     },
-    patientId: {
-        type: String,
+    patient: {
+        type: mongoose_1.Schema.Types.ObjectId,
         unique: true,
         ref: "Patient",
         required: [true, "Patient id is required!"],

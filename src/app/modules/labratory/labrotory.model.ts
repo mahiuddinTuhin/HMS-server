@@ -3,7 +3,7 @@ import { TLaboratory } from "./labratory.interface";
 
 // Define a Mongoose schema for Laboratory
 const LaboratorySchema = new Schema<TLaboratory & Document>({
-  labId: { type: String, required: true, unique: true },
+  id: { type: String, required: true, unique: true },
   labName: { type: String, required: true, unique: true },
   equipments: [{ type: String }],
   allStaff: [{ type: String, ref: "Staff", unique: true }],

@@ -1,11 +1,11 @@
 import { Schema, model } from "mongoose";
-import { utilsSchema } from "../utils/CommonSchema";
+import { utilsSchema } from "../../schema/CommonSchema";
 import { schedules } from "./doctor.constant";
 import { TDoctor } from "./doctors.interface";
 
 export const doctorSchema = new Schema<TDoctor>(
   {
-    doctorId: {
+    id: {
       type: String,
       index: true,
       unique: true,
@@ -22,7 +22,7 @@ export const doctorSchema = new Schema<TDoctor>(
     ],
     allMedicalHistory: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "MedicalHistory",
       },
     ],
@@ -38,16 +38,14 @@ export const doctorSchema = new Schema<TDoctor>(
         },
       },
     ],
-    contactInfo: utilsSchema.nonPatientContactSchema,
-    departmentId: {
-      type: String,
+    department: {
+      type: Schema.Types.ObjectId,
       unique: true,
       ref: "Department",
       required: [true, "Department id is required!"],
     },
     education: [utilsSchema.nonPatientEducationSchema],
     license_info: String,
-    personalInfo: utilsSchema.NonPatientPersonalInfo,
   },
   {
     timestamps: true,

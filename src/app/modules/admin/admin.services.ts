@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import FindQueryBuilder from "../../app/builder/FindQueryBuilder";
+import FindQueryBuilder from "../../builder/FindQueryBuilder";
 import { TDepartment } from "../department/department.interface";
 import Department from "../department/department.mode";
 import { TLaboratory } from "../labratory/labratory.interface";

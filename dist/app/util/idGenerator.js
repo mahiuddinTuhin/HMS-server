@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateId = void 0;
-const user_model_1 = require("../../modules/users/user.model");
+const user_model_1 = require("../modules/users/user.model");
 /**
  *    id: pattern
  *    Role_first_three_letter+year's last 2 digit(23)+monnth(12)+date(30)+(quantity+1)

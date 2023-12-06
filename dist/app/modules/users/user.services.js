@@ -8,8 +8,8 @@ exports.userServices = void 0;
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const http_status_codes_1 = require("http-status-codes");
 const mongoose_1 = __importDefault(require("mongoose"));
-const customError_1 = __importDefault(require("../../app/util/customError"));
-const idGenerator_1 = require("../../app/util/idGenerator");
+const customError_1 = __importDefault(require("../../util/customError"));
+const idGenerator_1 = require("../../util/idGenerator");
 const admin_mode_1 = require("../admin/admin.mode");
 const doctors_model_1 = require("../doctors/doctors.model");
 const nurse_model_1 = require("../nurse/nurse.model");

@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userControllers = void 0;
-const ResponseToServer_1 = require("../../app/util/ResponseToServer");
-const catchAsync_1 = __importDefault(require("../../app/util/catchAsync"));
+const ResponseToServer_1 = require("../../util/ResponseToServer");
+const catchAsync_1 = __importDefault(require("../../util/catchAsync"));
 const patient_services_1 = require("./patient.services");
 const getAllPatient = (0, catchAsync_1.default)(async (req, res) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

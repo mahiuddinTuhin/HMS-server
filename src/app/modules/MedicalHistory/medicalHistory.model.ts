@@ -2,26 +2,26 @@ import { Schema, model } from "mongoose";
 import { TMedicalHistory } from "./medicalHistory.ineterface";
 
 const medicalHistorySchema = new Schema<TMedicalHistory>({
-  medicalHistoryId: {
+  id: {
     type: String,
     required: [true, "Medical History Id is required."],
     unique: true,
   },
-  doctorId: {
-    type: String,
+  doctor: {
+    type: Schema.Types.ObjectId,
     required: [true, "Doctor Id is required."],
     ref: "Doctors",
     unique: true,
   },
-  patientId: {
-    type: String,
+  patient: {
+    type: Schema.Types.ObjectId,
     ref: "Patients",
     unique: true,
     required: [true, "Patient Id is required."],
   },
-  diagonosisId: [
+  diagonosis: [
     {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Diagnosis",
       unique: true,
       required: [true, "Diagnosis Id is required."],

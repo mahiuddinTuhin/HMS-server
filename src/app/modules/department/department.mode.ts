@@ -4,8 +4,8 @@ import { TDepartment } from "./department.interface";
 // Define a Mongoose schema for TDepartment
 const DepartmentSchema = new Schema<TDepartment>(
   {
-    departmentId: {
-      type: Number,
+    id: {
+      type: String,
       required: [true, "Department id is required!"],
       unique: true,
     },
@@ -14,9 +14,11 @@ const DepartmentSchema = new Schema<TDepartment>(
       required: [true, "Department name is required!"],
       unique: true,
     },
-    allDoctors: [{ type: String, ref: "Doctors", unique: true }],
+    allDoctors: [{ type: Schema.Types.ObjectId, ref: "doctor", unique: true }],
     licences: { type: String, required: true, unique: true },
-    allMedicalHistory: [{ type: String, ref: "MedicalHistory", unique: true }],
+    allMedicalHistory: [
+      { type: Schema.Types.ObjectId, ref: "MedicalHistory", unique: true },
+    ],
   },
   { strict: true },
 );

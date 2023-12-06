@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Staff = void 0;
 const mongoose_1 = require("mongoose");
-const CommonSchema_1 = require("../utils/CommonSchema");
+const CommonSchema_1 = require("../../schema/CommonSchema");
 const staffSchema = new mongoose_1.Schema({
     id: {
         type: String,

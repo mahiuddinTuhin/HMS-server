@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.adminServices = void 0;
-const FindQueryBuilder_1 = __importDefault(require("../../app/builder/FindQueryBuilder"));
+const FindQueryBuilder_1 = __importDefault(require("../../builder/FindQueryBuilder"));
 const department_mode_1 = __importDefault(require("../department/department.mode"));
 const labrotory_model_1 = __importDefault(require("../labratory/labrotory.model"));
 const admin_constant_1 = require("./admin.constant");

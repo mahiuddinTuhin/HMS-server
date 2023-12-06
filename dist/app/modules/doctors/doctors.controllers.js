@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.doctorsController = void 0;
 const http_status_codes_1 = require("http-status-codes");
-const ResponseToServer_1 = require("../../app/util/ResponseToServer");
-const catchAsync_1 = __importDefault(require("../../app/util/catchAsync"));
-const customError_1 = __importDefault(require("../../app/util/customError"));
+const ResponseToServer_1 = require("../../util/ResponseToServer");
+const catchAsync_1 = __importDefault(require("../../util/catchAsync"));
+const customError_1 = __importDefault(require("../../util/customError"));
 const doctors_services_1 = require("./doctors.services");
 /* creating appointment  controller by doctor */
 const createAppointment = (0, catchAsync_1.default)(async (req, res) => {

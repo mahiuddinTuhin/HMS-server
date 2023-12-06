@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.doctorServices = void 0;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const http_status_codes_1 = require("http-status-codes");
-const customError_1 = __importDefault(require("../../app/util/customError"));
+const customError_1 = __importDefault(require("../../util/customError"));
 const medicalHistory_model_1 = require("../MedicalHistory/medicalHistory.model");
 const patient_mdoel_1 = require("../patients/patient.mdoel");
 const doctors_model_1 = require("./doctors.model");
@@ -15,7 +15,7 @@ const createAppointment = async (data) => {
     try {
         /* checking whether doctor is available or not */
         const doesDoctorExist = await doctors_model_1.Doctor.findOne({
-            doctorId: data?.doctorId,
+            id: data?.id,
         });
         if (!doesDoctorExist) {
             throw new customError_1.default("Doctor does not exist. Enter doctor id properly.", http_status_codes_1.StatusCodes.BAD_REQUEST);
@@ -23,7 +23,7 @@ const createAppointment = async (data) => {
         if (doesDoctorExist) {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const canTakeSchedule = await doctors_model_1.Doctor.findOne({
-                doctorId: data?.doctorId,
+                id: data?.id,
                 pendingAppointments: {
                     $elemMatch: {
                         date: data?.date,
@@ -36,7 +36,7 @@ const createAppointment = async (data) => {
             }
         }
         const newAppointMent = await doctors_model_1.Doctor.findOneAndUpdate({
-            doctorId: data?.doctorId,
+            id: data?.id,
         }, {
             $push: {
                 pendingAppointments: {
@@ -46,7 +46,7 @@ const createAppointment = async (data) => {
             },
         }, { new: true });
         const updatedPatient = await patient_mdoel_1.Patient.findOneAndUpdate({
-            patientId: data?.patientId,
+            id: data?.id,
         }, {
             $push: {
                 pendingAppointments: {

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusCodes } from "http-status-codes";
-import AppError from "../../app/util/customError";
+import AppError from "../../util/customError";
 import { TMedicalHistory } from "../MedicalHistory/medicalHistory.ineterface";
 import { MedicalHistory } from "../MedicalHistory/medicalHistory.model";
 import { TAppointments } from "../appointment/appointment.interface";
@@ -13,7 +13,7 @@ const createAppointment = async (data: TAppointments) => {
   try {
     /* checking whether doctor is available or not */
     const doesDoctorExist = await Doctor.findOne({
-      doctorId: data?.doctorId,
+      id: data?.id,
     });
 
     if (!doesDoctorExist) {
@@ -25,8 +25,8 @@ const createAppointment = async (data: TAppointments) => {
 
     if (doesDoctorExist) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const canTakeSchedule = await Doctor.findOne({
-        doctorId: data?.doctorId,
+      const canTakeSchedule: any = await Doctor.findOne({
+        id: data?.id,
         pendingAppointments: {
           $elemMatch: {
             date: data?.date,
@@ -45,7 +45,7 @@ const createAppointment = async (data: TAppointments) => {
 
     const newAppointMent = await Doctor.findOneAndUpdate(
       {
-        doctorId: data?.doctorId,
+        id: data?.id,
       },
       {
         $push: {
@@ -60,7 +60,7 @@ const createAppointment = async (data: TAppointments) => {
 
     const updatedPatient = await Patient.findOneAndUpdate(
       {
-        patientId: data?.patientId,
+        id: data?.id,
       },
       {
         $push: {

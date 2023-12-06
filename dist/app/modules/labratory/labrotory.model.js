@@ -26,7 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 // Define a Mongoose schema for Laboratory
 const LaboratorySchema = new mongoose_1.Schema({
-    labId: { type: String, required: true, unique: true },
+    id: { type: String, required: true, unique: true },
     labName: { type: String, required: true, unique: true },
     equipments: [{ type: String }],
     allStaff: [{ type: String, ref: "Staff", unique: true }],

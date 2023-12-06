@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { TEducation } from "../utils/TCommon.interface";
+import { TEducation } from "../../interfaces/TCommon.interface";
 
 export type TStaff = {
   user: Types.ObjectId;

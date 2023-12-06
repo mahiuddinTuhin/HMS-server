@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { utilsSchema } from "../utils/CommonSchema";
+import { utilsSchema } from "../../schema/CommonSchema";
 import { TStaff } from "./staff.interface";
 
 const staffSchema = new Schema<TStaff>({

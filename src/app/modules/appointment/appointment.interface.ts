@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { TSchedule } from "../utils/TCommon.interface";
+import { TSchedule } from "../../interfaces/TCommon.interface";
 
 export type TAppointments = {
   id: string;

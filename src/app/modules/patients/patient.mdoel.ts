@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { utilsSchema } from "../utils/CommonSchema";
+import { utilsSchema } from "../../schema/CommonSchema";
 import { TPatient } from "./patient.interface";
 
 const patientSchema = new Schema<TPatient>(
@@ -66,8 +66,6 @@ const patientSchema = new Schema<TPatient>(
     insuranceInfo: String,
 
     guardian: utilsSchema.patientGuardianSchema,
-
-    personalInfo: utilsSchema.patientPersonalInfo,
   },
   {
     timestamps: true,

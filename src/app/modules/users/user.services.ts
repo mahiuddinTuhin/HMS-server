@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
-import AppError from "../../app/util/customError";
-import { generateId } from "../../app/util/idGenerator";
+import AppError from "../../util/customError";
+import { generateId } from "../../util/idGenerator";
 import { Admin } from "../admin/admin.mode";
 import { Doctor } from "../doctors/doctors.model";
 import { Nurse } from "../nurse/nurse.model";
@@ -11,7 +11,6 @@ import { Patient } from "../patients/patient.mdoel";
 import { Staff } from "../staff/staff.model";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
-
 /* 1. creating admin service */
 const createAdminService = async (data: any) => {
   /* taking necessary data for common user */
