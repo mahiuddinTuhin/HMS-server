@@ -3,7 +3,7 @@ import { utilsSchema } from "../utils/CommonSchema";
 import { TStaff } from "./staff.interface";
 
 const staffSchema = new Schema<TStaff>({
-  staffId: {
+  id: {
     type: String,
     required: [true, "Staff id is required"],
     unique: true,
@@ -14,9 +14,8 @@ const staffSchema = new Schema<TStaff>({
     message: "Staff's shift should be night or day!",
     required: [true, "Shift is required"],
   },
-  contactInfo: utilsSchema.nonPatientContactSchema,
+
   education: [utilsSchema.nonPatientEducationSchema],
-  personalInfo: utilsSchema.NonPatientPersonalInfo,
 });
 
 export const Staff = model("Staff", staffSchema);

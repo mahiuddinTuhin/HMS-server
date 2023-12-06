@@ -1,7 +1,9 @@
+import { Types } from "mongoose";
+
 export type TDepartment = {
-  departmentId: number;
+  id: string;
   departmentName: string;
-  allDoctors: string[];
+  allDoctors: Types.ObjectId[];
   licences: string;
-  allMedicalHistory: string[];
+  allMedicalHistory: Types.ObjectId[];
 };

@@ -1,11 +1,13 @@
+import { Types } from "mongoose";
+
 export type TLaboratory = {
-  labId: string;
+  id: string;
   labName: string;
   equipments: string[];
-  allStaff: string[];
+  allStaff: Types.ObjectId[];
   testsOffers: string[];
   contactInfo: string;
-  allDiagnosisHistory: string[];
+  allDiagnosisHistory: Types.ObjectId[];
 };
 
 export type diagnosisId = string;

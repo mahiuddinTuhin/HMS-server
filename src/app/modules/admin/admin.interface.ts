@@ -1,15 +1,22 @@
 import { Types } from "mongoose";
-import {
-  TEducation,
-  TPersonalInfo,
-  Tcontacts,
-} from "../utils/TCommon.interface";
+import { TEducation } from "../utils/TCommon.interface";
 
 export type TAdmin = {
   id: string;
   user: Types.ObjectId;
-  adminId: string;
-  contactInfo: Tcontacts;
+  email: string;
+  phone: string;
   education: TEducation[];
-  personalInfo: TPersonalInfo;
+  fullName: {
+    firstName: string;
+    middleName: string;
+    lastName: string;
+  };
+  address: {
+    presentAddress: string;
+    permanentAddress: string;
+  };
+  date_of_birth: string;
+  gender: string;
+  profile_image: string;
 };

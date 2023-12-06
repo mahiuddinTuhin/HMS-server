@@ -1,8 +1,10 @@
+import { Types } from "mongoose";
+
 export type TMedicalHistory = {
-  medicalHistoryId: string;
-  doctorId: string;
-  patientId: string;
-  diagonosisId: string[];
+  id: string;
+  doctor: Types.ObjectId;
+  patient: Types.ObjectId;
+  diagonosis: Types.ObjectId[];
   medications: string[];
   releasedOn?: string;
   bill?: number;

@@ -8,6 +8,7 @@ require("dotenv/config");
 const mongoose_1 = require("mongoose");
 const app_1 = __importDefault(require("./app"));
 const port = process.env.PORT;
+let server;
 async function main() {
     try {
         const db = await (0, mongoose_1.connect)(process.env.DB_URL, {
@@ -15,7 +16,7 @@ async function main() {
         });
         // Check if the connection is successful
         if (db) {
-            app_1.default.listen(port, () => {
+            server = app_1.default.listen(port, () => {
                 console.log(chalk_1.default.bgGreenBright.bold(`Server is running on port: ${port} and connected to the database`));
             });
         }
@@ -29,3 +30,18 @@ async function main() {
     }
 }
 main();
+/* caught and handle unhandledRejection for async request*/
+process.on("unhandledRejection", () => {
+    console.log(`[ unhandledRejection is detected. Server is shutting down . . . ]`);
+    if (server) {
+        server.close(() => {
+            process.exit(1);
+        });
+        process.exit(1);
+    }
+});
+/*  caught and handle uncaughtException for sync request*/
+process.on("uncaughtException", () => {
+    console.log(`[ uncaughtException is detected. Server is shutting down . . . ]`);
+    process.exit(1);
+});

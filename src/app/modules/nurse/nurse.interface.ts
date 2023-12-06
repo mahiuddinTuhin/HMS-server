@@ -1,13 +1,23 @@
-import {
-  TEducation,
-  TPersonalInfo,
-  Tcontacts,
-} from "../utils/TCommon.interface";
+import { Types } from "mongoose";
+import { TEducation } from "../utils/TCommon.interface";
 
 export type TNurse = {
-  nurseId: string;
+  user: Types.ObjectId;
+  id: string;
   shift: "day" | "night";
-  contactInfo: Tcontacts;
+  email: string;
+  phone: string;
   education: TEducation[];
-  personalInfo: TPersonalInfo;
+  fullName: {
+    firstName: string;
+    middleName: string;
+    lastName: string;
+  };
+  address: {
+    presentAddress: string;
+    permanentAddress: string;
+  };
+  date_of_birth: string;
+  gender: string;
+  profile_image: string;
 };
