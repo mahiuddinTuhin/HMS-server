@@ -25,7 +25,7 @@ const createLabratory: RequestHandler = catchAsync(async (req, res) => {
  *  @find all admin router
  */
 const findAllAdmin: RequestHandler = catchAsync(async (req, res) => {
-  const allAdmin = await adminServices.findAllAdmin();
+  const allAdmin = await adminServices.findAllAdmin(req.query);
 
   ResponseToServer(req, res, true, StatusCodes.OK, allAdmin);
 });
