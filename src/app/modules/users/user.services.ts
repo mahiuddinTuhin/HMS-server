@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
-import AppError from "../../util/customError";
-import { generateId } from "../../util/idGenerator";
+import AppError from "../../app/util/customError";
+import { generateId } from "../../app/util/idGenerator";
 import { Admin } from "../admin/admin.mode";
 import { Doctor } from "../doctors/doctors.model";
 import { Nurse } from "../nurse/nurse.model";

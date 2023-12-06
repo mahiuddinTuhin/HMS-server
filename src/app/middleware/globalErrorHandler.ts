@@ -3,8 +3,8 @@ import { ErrorRequestHandler } from "express";
 import { MongoError } from "mongodb";
 import { Error } from "mongoose";
 import { ZodError } from "zod";
+import { TErrorSources } from "../../modules/utils/TCommon.interface";
 import handleValidationError from "../errors/handleValidationError";
-import { TErrorSources } from "../modules/utils/TCommon.interface";
 import AppError from "../util/customError";
 import handledZodError from "../util/zodErrorHandler";
 

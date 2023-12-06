@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
-import { ResponseToServer } from "../../util/ResponseToServer";
-import catchAsync from "../../util/catchAsync";
-import AppError from "../../util/customError";
+import { ResponseToServer } from "../../app/util/ResponseToServer";
+import catchAsync from "../../app/util/catchAsync";
+import AppError from "../../app/util/customError";
 import { doctorServices } from "./doctors.services";
 
 /* creating appointment  controller by doctor */

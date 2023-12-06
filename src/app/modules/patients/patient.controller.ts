@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
-import { ResponseToServer } from "../../util/ResponseToServer";
-import catchAsync from "../../util/catchAsync";
+import { ResponseToServer } from "../../app/util/ResponseToServer";
+import catchAsync from "../../app/util/catchAsync";
 import { patientServices } from "./patient.services";
 
 const getAllPatient: RequestHandler = catchAsync(async (req, res) => {

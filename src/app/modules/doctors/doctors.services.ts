@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusCodes } from "http-status-codes";
-import AppError from "../../util/customError";
+import AppError from "../../app/util/customError";
 import { TMedicalHistory } from "../MedicalHistory/medicalHistory.ineterface";
 import { MedicalHistory } from "../MedicalHistory/medicalHistory.model";
 import { TAppointments } from "../appointment/appointment.interface";

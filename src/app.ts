@@ -3,9 +3,9 @@ import express, { Request, Response } from "express";
 const app = express();
 
 import cors from "cors";
-import { globalErrorHandler } from "./middleware/globalErrorHandler";
-import notFound from "./middleware/notFound";
-import router from "./routes";
+import { globalErrorHandler } from "./app/middleware/globalErrorHandler";
+import notFound from "./app/middleware/notFound";
+import router from "./app/routes";
 
 app.use(express.json());
 app.use(cors());

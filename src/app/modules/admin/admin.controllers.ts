@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
-import { ResponseToServer } from "../../util/ResponseToServer";
-import catchAsync from "../../util/catchAsync";
+import { ResponseToServer } from "../../app/util/ResponseToServer";
+import catchAsync from "../../app/util/catchAsync";
 import { adminServices } from "./admin.services";
 
 /* creating department controller */
