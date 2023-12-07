@@ -64,7 +64,7 @@ const NonPatientPersonalInfo = new Schema<TPersonalInfo>({
       required: [true, "FullName is required!"],
     },
   },
-  date_of_birth: {
+  dateOfBirth: {
     type: String,
     required: [true, "Date of birth is required!"],
   },
@@ -72,7 +72,7 @@ const NonPatientPersonalInfo = new Schema<TPersonalInfo>({
     type: String,
     required: [true, "Gender is required!"],
   },
-  profile_image: {
+  profileImage: {
     type: String,
     required: [true, "Profile image is required!"],
   },
@@ -93,9 +93,9 @@ const patientPersonalInfo = new Schema<TPersonalInfo>({
     firstName: String,
     lastName: String,
   },
-  date_of_birth: String,
+  dateOfBirth: String,
   gender: String,
-  profile_image: String,
+  profileImage: String,
 });
 const patientContactSchema = new Schema<Tcontacts>({
   homeMobile: String,

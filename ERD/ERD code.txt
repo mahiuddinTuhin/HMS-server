@@ -16,7 +16,7 @@ Admin   [icon: gcp-administration, color: green] {
     adminId string fk
     contactInfo Tcontacts
     education TEducation[]
-    profile_image string
+    profileImage string
     personalInfo TPersonalInfo
    }
 

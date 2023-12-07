@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userServices = void 0;
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const http_status_codes_1 = require("http-status-codes");
@@ -16,12 +17,20 @@ const nurse_model_1 = require("../nurse/nurse.model");
 const patient_mdoel_1 = require("../patients/patient.mdoel");
 const staff_model_1 = require("../staff/staff.model");
 const user_model_1 = require("./user.model");
-/* 1. creating admin service */
+const bcrypt = require("bcrypt");
+/**
+ *
+ * @creating_admin_service
+ *
+ * @returns_new_admin
+ */
 const createAdminService = async (data) => {
     /* taking necessary data for common user */
+    const salt = bcrypt.genSaltSync(Number(process.env.SALTROUNDS));
+    const hashPass = bcrypt.hashSync(data?.password, salt) || process.env.DEFAULT_PASSWORD;
     const userData = {
         id: await (0, idGenerator_1.generateId)("admin"),
-        password: data?.password || process.env.DEFAULT_PASSWORD,
+        password: hashPass,
         needsPasswordChange: true,
         email: data?.email,
         role: "admin",
@@ -31,7 +40,7 @@ const createAdminService = async (data) => {
     try {
         session.startTransaction();
         const newUser = await user_model_1.User.create([userData], { session });
-        const { password, email, needsPasswordChange, role, isDeleted, _id, ...restOfData } = data;
+        const { password, needsPasswordChange, role, isDeleted, _id, ...restOfData } = data;
         const adminData = {
             ...restOfData,
             id: userData?.id,

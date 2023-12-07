@@ -1,13 +1,13 @@
 import { z } from "zod";
-import { utilsValidation } from "../../validation/Common.Validation";
+import validators from "../../validation/Common.Validation";
 
-// Define Zod schemas for the different parts of the Admin schema
-
-// Define the Admin schema using Zod
-export const AdminValidation = z.object({
-  contactInfo: utilsValidation.contactValidation,
-
-  education: utilsValidation.educationValidation,
-
-  personalInfo: utilsValidation.personalInfoValidation,
+export const adminValidation = z.object({
+  email: validators.emailValidation,
+  phone: validators.phoneValidation,
+  education: z.array(validators.educationValidation),
+  fullName: validators.fullNameValidation,
+  address: validators.addressValidation,
+  dateOfBirth: z.string(),
+  gender: z.string(),
+  profileImage: z.string().url(),
 });

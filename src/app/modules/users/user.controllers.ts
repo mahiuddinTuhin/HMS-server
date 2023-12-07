@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { RequestHandler } from "express";
+import httpStatus from "http-status";
 import { StatusCodes } from "http-status-codes";
-
-import { ResponseToServer } from "../../util/ResponseToServer";
+import {
+  ResponseToServer,
+  responseToRequest,
+} from "../../util/ResponseToServer";
 import catchAsync from "../../util/catchAsync";
 import AppError from "../../util/customError";
 import { userServices } from "./user.services";
@@ -13,14 +16,12 @@ const createAdmin: RequestHandler = catchAsync(async (req, res) => {
 
   const newAdmin: any = await userServices.createAdminService(data);
 
-  ResponseToServer(
-    req,
-    res,
-    true,
-    200,
-    "successfully created admin's data.",
-    newAdmin,
-  );
+  responseToRequest(res, {
+    success: true,
+    status: httpStatus.OK as number,
+    message: "Student is created succesfully",
+    data: newAdmin,
+  });
 });
 
 /* 2. creating doctor */

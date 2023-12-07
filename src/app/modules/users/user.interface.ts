@@ -4,7 +4,7 @@ export type TUser = {
   needsPasswordChange: boolean;
   email?: string;
   role: "patient" | "doctor" | "admin" | "nurse" | "staff";
-  status: "active" | "deactivate";
+  status?: "active" | "deactivate";
   failed_login_attempts?: number;
   last_login?: Date;
   last_failed_login?: Date;

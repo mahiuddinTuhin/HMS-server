@@ -17,7 +17,7 @@ export type TNurse = {
     presentAddress: string;
     permanentAddress: string;
   };
-  date_of_birth: string;
+  dateOfBirth: string;
   gender: string;
-  profile_image: string;
+  profileImage: string;
 };

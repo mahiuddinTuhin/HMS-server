@@ -84,7 +84,7 @@ export const ZDoctors = z.object({
     })
     .trim()
     .min(5, { message: "permanent address must be 5 or more characters long" }),
-  date_of_birth: z
+  dateOfBirth: z
     .string({
       required_error: "date of birth is required",
       invalid_type_error: "date of birth must be a string",

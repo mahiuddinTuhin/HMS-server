@@ -58,7 +58,7 @@ const NonPatientPersonalInfo = new mongoose_1.Schema({
             required: [true, "FullName is required!"],
         },
     },
-    date_of_birth: {
+    dateOfBirth: {
         type: String,
         required: [true, "Date of birth is required!"],
     },
@@ -66,7 +66,7 @@ const NonPatientPersonalInfo = new mongoose_1.Schema({
         type: String,
         required: [true, "Gender is required!"],
     },
-    profile_image: {
+    profileImage: {
         type: String,
         required: [true, "Profile image is required!"],
     },
@@ -85,9 +85,9 @@ const patientPersonalInfo = new mongoose_1.Schema({
         firstName: String,
         lastName: String,
     },
-    date_of_birth: String,
+    dateOfBirth: String,
     gender: String,
-    profile_image: String,
+    profileImage: String,
 });
 const patientContactSchema = new mongoose_1.Schema({
     homeMobile: String,

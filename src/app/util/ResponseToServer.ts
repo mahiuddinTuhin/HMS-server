@@ -17,3 +17,18 @@ export const ResponseToServer = (
     data,
   });
 };
+
+type TResponse<T> = {
+  success: boolean;
+  status: number;
+  message: string;
+  data: T;
+};
+
+export const responseToRequest = <T>(res: Response, data: TResponse<T>) => {
+  return res.status(data?.status).json({
+    success: data?.success,
+    message: data?.message,
+    data: data?.data,
+  });
+};

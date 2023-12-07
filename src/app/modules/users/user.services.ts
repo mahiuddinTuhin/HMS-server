@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import AppError from "../../util/customError";
 import { generateId } from "../../util/idGenerator";
+import { TAdmin } from "../admin/admin.interface";
 import { Admin } from "../admin/admin.mode";
 import { Doctor } from "../doctors/doctors.model";
 import { Nurse } from "../nurse/nurse.model";
@@ -11,16 +13,25 @@ import { Patient } from "../patients/patient.mdoel";
 import { Staff } from "../staff/staff.model";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
-/* 1. creating admin service */
+const bcrypt = require("bcrypt");
+
+/**
+ *
+ * @creating_admin_service
+ *
+ * @returns_new_admin
+ */
 const createAdminService = async (data: any) => {
   /* taking necessary data for common user */
+
   const userData: Partial<TUser> = {
     id: await generateId("admin"),
-    password: data?.password || process.env.DEFAULT_PASSWORD,
+    password: data?.password,
     needsPasswordChange: true,
     email: data?.email,
     role: "admin",
     isDeleted: false,
+    status: "active",
   };
 
   const session = await mongoose.startSession();
@@ -29,9 +40,12 @@ const createAdminService = async (data: any) => {
     session.startTransaction();
     const newUser: any = await User.create([userData], { session });
 
+    if (!newUser.length) {
+      throw new AppError("Failed to create user from service.", 400);
+    }
+
     const {
       password,
-      email,
       needsPasswordChange,
       role,
       isDeleted,
@@ -39,13 +53,17 @@ const createAdminService = async (data: any) => {
       ...restOfData
     } = data;
 
-    const adminData: any = {
+    const adminData: Partial<TAdmin> = {
       ...restOfData,
       id: userData?.id,
       user: newUser[0]?._id,
     };
 
     const newAdmin = await Admin.create([adminData], { session });
+
+    if (!newAdmin.length) {
+      throw new AppError("Failed to create admin from service.", 400);
+    }
 
     await session.commitTransaction();
     await session.endSession();

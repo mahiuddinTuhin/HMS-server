@@ -1,34 +1,59 @@
 import { z } from "zod";
 
-const contactValidation = z.object({
-  homeMobile: z.string().min(11),
-  officeMobile: z.string().min(11),
-  email: z.string().email(),
-});
+export const passwordPattern =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@~`#^()-_=+$!%*?&])[A-Za-z\d@~`#^()-_=+$!%*?&]{8,}$/;
+export const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const phonePattern = /^\+?\d{13}$/;
 
 const educationValidation = z.object({
-  institute: z.string().min(3),
-  degree: z.string().min(3),
-  year: z.number().int(),
+  institute: z.string().min(4),
+  degree: z.string().min(2),
+  year: z.number(),
 });
 
-const personalInfoValidation = z.object({
-  address: z.object({
-    present_address: z.string().min(10),
-    permanent_address: z.string().min(10),
-  }),
-  fullName: z.object({
-    firstName: z.string().min(3),
-    middleName: z.string().optional(),
-    lastName: z.string().min(3),
-  }),
-  date_of_birth: z.string().min(6),
-  gender: z.string().min(4),
-  profile_image: z.string().min(5),
+const fullNameValidation = z.object({
+  firstName: z.string().min(3).max(20),
+  middleName: z.string().optional(),
+  lastName: z.string().min(3).max(20),
 });
 
-export const utilsValidation = {
-  contactValidation,
+const addressValidation = z.object({
+  presentAddress: z.string().min(5),
+  permanentAddress: z.string().min(5),
+});
+
+// Basic email regex pattern
+
+const phoneValidation = z.string().min(11).regex(phonePattern);
+
+const passwordValidation = z
+  .string()
+  .optional()
+  .refine(
+    (password) => {
+      const newPassword: string =
+        password || (process.env.DEFAULT_PASSWORD as string);
+      return passwordPattern.test(newPassword);
+    },
+    {
+      message:
+        "Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.",
+    },
+  );
+
+const emailValidation = z
+  .string()
+  .optional()
+  .refine((email) => emailPattern.test(email as string), {
+    message: "Invalid email!",
+  });
+
+const globalValidators = {
   educationValidation,
-  personalInfoValidation,
+  fullNameValidation,
+  addressValidation,
+  emailValidation,
+  phoneValidation,
+  passwordValidation,
 };
+export default globalValidators;

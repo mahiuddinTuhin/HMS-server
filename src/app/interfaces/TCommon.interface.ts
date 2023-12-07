@@ -20,9 +20,9 @@ export type TPersonalInfo = {
     present_address: string;
     permanent_address: string;
   };
-  date_of_birth: string;
+  dateOfBirth: string;
   gender: string;
-  profile_image: string;
+  profileImage: string;
 };
 
 export type TGuardian = {

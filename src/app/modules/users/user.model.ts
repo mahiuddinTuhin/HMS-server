@@ -1,5 +1,11 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import mongoose from "mongoose";
+import {
+  emailPattern,
+  passwordPattern,
+} from "../../validation/Common.Validation";
 import { TUser } from "./user.interface";
+const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema<TUser>(
   {
@@ -14,9 +20,6 @@ const userSchema = new mongoose.Schema<TUser>(
       default: process.env.DEFAULT_PASSWORD,
       validate: {
         validator: (value: string) => {
-          const passwordPattern =
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@~`#^()-_=+$!%*?&])[A-Za-z\d@~`#^()-_=+$!%*?&]{8,}$/;
-
           return passwordPattern.test(value);
         },
         message:
@@ -33,7 +36,7 @@ const userSchema = new mongoose.Schema<TUser>(
       type: String,
       validate: {
         validator: (value: string) => {
-          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          // const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           return emailPattern.test(value);
         },
         message: "Invalid email address format!",
@@ -78,5 +81,25 @@ const userSchema = new mongoose.Schema<TUser>(
   },
   { timestamps: true },
 );
+
+/**
+ * @hash_the_pass_before_saving
+ */
+userSchema.pre("save", async function (next) {
+  const salt = bcrypt.genSaltSync(Number(process.env.SALTROUNDS));
+  const hashPass =
+    bcrypt.hashSync(this?.password, salt) || process.env.DEFAULT_PASSWORD;
+
+  this.password = hashPass;
+  next();
+});
+
+/**
+ * @hiding_the_password
+ */
+userSchema.post("save", function (doc, next) {
+  doc.password = "";
+  next();
+});
 
 export const User = mongoose.model<TUser>("User", userSchema);

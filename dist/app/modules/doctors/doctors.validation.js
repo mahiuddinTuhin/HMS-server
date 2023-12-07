@@ -73,7 +73,7 @@ exports.ZDoctors = zod_1.z.object({
     })
         .trim()
         .min(5, { message: "permanent address must be 5 or more characters long" }),
-    date_of_birth: zod_1.z
+    dateOfBirth: zod_1.z
         .string({
         required_error: "date of birth is required",
         invalid_type_error: "date of birth must be a string",
