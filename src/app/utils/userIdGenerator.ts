@@ -17,7 +17,7 @@ const findLastUser = async (role: string) => {
   return lastUser;
 };
 
-export const generateId = async (role: string) => {
+const generateUserId = async (role: string) => {
   const date = new Date();
   const currentYear = date.getFullYear().toString().substring(2, 4);
   const currentMonth = (date.getMonth() + 1).toString();
@@ -63,3 +63,5 @@ export const generateId = async (role: string) => {
 
   return newId;
 };
+
+export default generateUserId;

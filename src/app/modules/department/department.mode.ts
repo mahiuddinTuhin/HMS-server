@@ -12,19 +12,18 @@ const DepartmentSchema = new Schema<TDepartment>(
     departmentName: {
       type: String,
       required: [true, "Department name is required!"],
-      unique: true,
     },
     details: {
       type: String,
       required: [true, "Details of department is required!"],
     },
-    allDoctors: [{ type: Schema.Types.ObjectId, ref: "doctor", unique: true }],
-    licences: { type: String, required: true, unique: true },
-    allMedicalHistory: [
-      { type: Schema.Types.ObjectId, ref: "MedicalHistory", unique: true },
-    ],
+    allDoctors: [{ type: Schema.Types.ObjectId, ref: "Doctor" }],
+    licences: { type: String, required: true },
+    allMedicalHistory: [{ type: Schema.Types.ObjectId, ref: "MedicalHistory" }],
   },
-  { strict: true },
+  {
+    timestamps: true,
+  },
 );
 
 // Create and export the Mongoose model based on the schema

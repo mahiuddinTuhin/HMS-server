@@ -1,7 +1,11 @@
 import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 
-import { ResponseToServer } from "../../utils/ResponseToServer";
+import httpStatus from "http-status";
+import {
+  ResponseToServer,
+  responseToRequest,
+} from "../../utils/ResponseToServer";
 import catchAsync from "../../utils/catchAsync";
 import { adminServices } from "./admin.services";
 
@@ -11,7 +15,14 @@ const createDepartment: RequestHandler = catchAsync(async (req, res) => {
 
   const newDepartment = await adminServices.createDepartment(departmentData);
 
-  ResponseToServer(req, res, true, StatusCodes.OK, newDepartment);
+
+  const response = {
+    status: httpStatus?.OK,
+    success: true,
+    message: "Department Created Successfully!",
+    data: newDepartment,
+  };
+  return responseToRequest(res, response);
 });
 
 /* creating Labratory controller */

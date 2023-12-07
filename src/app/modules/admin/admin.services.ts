@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import FindQueryBuilder from "../../builder/FindQueryBuilder";
+import AppError from "../../errors/customError";
+import generateServiceId from "../../utils/otherIdgenerator";
 import { TDepartment } from "../department/department.interface";
 import Department from "../department/department.mode";
 import { TLaboratory } from "../labratory/labratory.interface";
@@ -10,8 +12,23 @@ import { Admin } from "./admin.mode";
 
 /* creating department */
 const createDepartment = async (data: TDepartment) => {
-  const newDepartment: any = await Department.create(data);
-  return newDepartment;
+  try {
+    data.id = (await generateServiceId(Department)) || `Dep001`;
+
+    if (data?.id) {
+      const newDepartment: any = await Department.create(data);
+
+      if (!newDepartment) {
+        throw new AppError("Failed to create department by admin!", 400);
+      }
+
+      return newDepartment;
+    }
+
+    throw new AppError("Failed to create department by admin!", 400);
+  } catch (error) {
+    throw new AppError("Failed to create department by admin!", 400);
+  }
 };
 
 /* creating labratory */

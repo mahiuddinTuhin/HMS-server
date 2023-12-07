@@ -4,7 +4,7 @@
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import AppError from "../../errors/customError";
-import { generateId } from "../../utils/idGenerator";
+import generateUserId from "../../utils/userIdGenerator";
 import { TAdmin } from "../admin/admin.interface";
 import { Admin } from "../admin/admin.mode";
 import { Doctor } from "../doctors/doctors.model";
@@ -25,7 +25,7 @@ const createAdminService = async (data: any) => {
   /* taking necessary data for common user */
 
   const userData: Partial<TUser> = {
-    id: await generateId("admin"),
+    id: await generateUserId("admin"),
     password: data?.password,
     needsPasswordChange: true,
     email: data?.email,
