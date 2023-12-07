@@ -15,8 +15,6 @@ const findLastUser = async (Collection: any) => {
       .sort({ createdAt: -1 })
       .lean();
 
-    console.log({ lastUser });
-
     if (lastUser) {
       return lastUser;
     } else

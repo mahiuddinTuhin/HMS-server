@@ -15,22 +15,28 @@ const createDepartment: RequestHandler = catchAsync(async (req, res) => {
 
   const newDepartment = await adminServices.createDepartment(departmentData);
 
-
-  const response = {
+  return responseToRequest(res, {
     status: httpStatus?.OK,
     success: true,
     message: "Department Created Successfully!",
     data: newDepartment,
-  };
-  return responseToRequest(res, response);
+  });
 });
 
 /* creating Labratory controller */
 const createLabratory: RequestHandler = catchAsync(async (req, res) => {
   const labratoryData = req.body;
+
+
+
   const newLab = await adminServices.createLabratory(labratoryData);
 
-  ResponseToServer(req, res, true, StatusCodes.OK, newLab);
+  return responseToRequest(res, {
+    status: httpStatus?.OK,
+    success: true,
+    message: "Labratory Data Created Successfully!",
+    data: newLab,
+  });
 });
 
 /**

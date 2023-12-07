@@ -1,6 +1,7 @@
 import { Router } from "express";
 import validateRequest from "../../middleware/ZodValidator";
 import DepartmentValidation from "../department/departmentValidation";
+import LaboratoryValidation from "../labratory/labratory.validation";
 import { adminController } from "./admin.controllers";
 
 const router = Router();
@@ -13,7 +14,11 @@ router.post(
 );
 
 /* creating labratory routes */
-router.post("/create-labratory", adminController.createLabratory);
+router.post(
+  "/create-labratory",
+  validateRequest(LaboratoryValidation),
+  adminController.createLabratory,
+);
 
 /**
  * @routes get all admin

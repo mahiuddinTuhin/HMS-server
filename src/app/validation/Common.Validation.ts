@@ -5,6 +5,9 @@ export const passwordPattern =
 export const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const phonePattern = /^\+?\d{13}$/;
 
+export const birthDatePattern =
+  /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+
 const educationValidation = z.object({
   institute: z.string().min(4),
   degree: z.string().min(2),

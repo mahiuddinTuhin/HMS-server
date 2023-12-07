@@ -15,17 +15,9 @@ const createDepartment = async (data: TDepartment) => {
   try {
     data.id = (await generateServiceId(Department)) || `Dep001`;
 
-    if (data?.id) {
-      const newDepartment: any = await Department.create(data);
+    const newDepartment: any = await Department.create(data);
 
-      if (!newDepartment) {
-        throw new AppError("Failed to create department by admin!", 400);
-      }
-
-      return newDepartment;
-    }
-
-    throw new AppError("Failed to create department by admin!", 400);
+    return newDepartment;
   } catch (error) {
     throw new AppError("Failed to create department by admin!", 400);
   }
@@ -33,8 +25,14 @@ const createDepartment = async (data: TDepartment) => {
 
 /* creating labratory */
 const createLabratory = async (data: TLaboratory) => {
-  const newLabratory: any = await Laboratory.create(data);
-  return newLabratory;
+  try {
+    data.id = (await generateServiceId(Laboratory)) || `Lab001.01`;
+    console.log({ labratoryData: data });
+    const newLabratory: any = await Laboratory.create(data);
+    return newLabratory;
+  } catch (error) {
+    throw new AppError("Failed to create new Lab data!", 400);
+  }
 };
 
 /**
