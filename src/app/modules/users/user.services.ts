@@ -55,7 +55,7 @@ const createAdminService = async (data: any) => {
 
     const adminData: Partial<TAdmin> = {
       ...restOfData,
-      id: userData?.id,
+      id: newUser[0]?.id,
       user: newUser[0]?._id,
     };
 
