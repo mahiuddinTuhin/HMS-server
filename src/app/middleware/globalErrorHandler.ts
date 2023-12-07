@@ -4,10 +4,10 @@ import { MongoError } from "mongodb";
 import { Error } from "mongoose";
 import { ZodError } from "zod";
 
+import AppError from "../errors/customError";
 import handleValidationError from "../errors/handleValidationError";
 import { TErrorSources } from "../interfaces/TCommon.interface";
-import AppError from "../util/customError";
-import handledZodError from "../util/zodErrorHandler";
+import handledZodError from "../utils/zodErrorHandler";
 
 export const globalErrorHandler: ErrorRequestHandler = (
   err,

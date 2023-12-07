@@ -14,6 +14,10 @@ const DepartmentSchema = new Schema<TDepartment>(
       required: [true, "Department name is required!"],
       unique: true,
     },
+    details: {
+      type: String,
+      required: [true, "Details of department is required!"],
+    },
     allDoctors: [{ type: Schema.Types.ObjectId, ref: "doctor", unique: true }],
     licences: { type: String, required: true, unique: true },
     allMedicalHistory: [

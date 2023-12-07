@@ -3,6 +3,7 @@ export type TUser = {
   password: string;
   needsPasswordChange: boolean;
   email?: string;
+  phone?: string;
   role: "patient" | "doctor" | "admin" | "nurse" | "staff";
   status?: "active" | "deactivate";
   failed_login_attempts?: number;

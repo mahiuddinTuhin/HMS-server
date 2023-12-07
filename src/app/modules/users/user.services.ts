@@ -3,8 +3,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
-import AppError from "../../util/customError";
-import { generateId } from "../../util/idGenerator";
+import AppError from "../../errors/customError";
+import { generateId } from "../../utils/idGenerator";
 import { TAdmin } from "../admin/admin.interface";
 import { Admin } from "../admin/admin.mode";
 import { Doctor } from "../doctors/doctors.model";
@@ -29,6 +29,7 @@ const createAdminService = async (data: any) => {
     password: data?.password,
     needsPasswordChange: true,
     email: data?.email,
+    phone: data?.phone,
     role: "admin",
     isDeleted: false,
     status: "active",
@@ -38,6 +39,7 @@ const createAdminService = async (data: any) => {
 
   try {
     session.startTransaction();
+
     const newUser: any = await User.create([userData], { session });
 
     if (!newUser.length) {

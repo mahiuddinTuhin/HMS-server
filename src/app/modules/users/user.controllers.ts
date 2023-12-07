@@ -2,12 +2,12 @@
 import { RequestHandler } from "express";
 import httpStatus from "http-status";
 import { StatusCodes } from "http-status-codes";
+import AppError from "../../errors/customError";
 import {
   ResponseToServer,
   responseToRequest,
-} from "../../util/ResponseToServer";
-import catchAsync from "../../util/catchAsync";
-import AppError from "../../util/customError";
+} from "../../utils/ResponseToServer";
+import catchAsync from "../../utils/catchAsync";
 import { userServices } from "./user.services";
 
 /* 1. creating admin */

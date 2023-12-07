@@ -2,9 +2,9 @@
 import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 
-import { ResponseToServer } from "../../util/ResponseToServer";
-import catchAsync from "../../util/catchAsync";
-import AppError from "../../util/customError";
+import AppError from "../../errors/customError";
+import { ResponseToServer } from "../../utils/ResponseToServer";
+import catchAsync from "../../utils/catchAsync";
 import { doctorServices } from "./doctors.services";
 
 /* creating appointment  controller by doctor */

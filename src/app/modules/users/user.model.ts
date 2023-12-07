@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import {
   emailPattern,
   passwordPattern,
+  phonePattern,
 } from "../../validation/Common.Validation";
 import { TUser } from "./user.interface";
 const bcrypt = require("bcrypt");
@@ -38,6 +39,15 @@ const userSchema = new mongoose.Schema<TUser>(
         validator: (value: string) => {
           // const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           return emailPattern.test(value);
+        },
+        message: "Invalid email address format!",
+      },
+    },
+    phone: {
+      type: String,
+      validate: {
+        validator: (value: string) => {
+          return phonePattern.test(value);
         },
         message: "Invalid email address format!",
       },

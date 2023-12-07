@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import validateRequest from "../../middleware/ZodValidator";
+import isUserExisted from "../../utils/isUserExisted";
 import { adminValidation } from "../admin/admin.validation";
 import { userControllers } from "./user.controllers";
 import { userValidation } from "./users.zodValidation";
@@ -10,6 +11,7 @@ const router = Router();
 /* 1. creating admin */
 router.post(
   "/create-admin",
+  isUserExisted(),
   validateRequest(userValidation),
   validateRequest(adminValidation),
   userControllers.createAdmin,

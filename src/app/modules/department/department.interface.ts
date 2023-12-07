@@ -5,5 +5,6 @@ export type TDepartment = {
   departmentName: string;
   allDoctors: Types.ObjectId[];
   licences: string;
+  details: string;
   allMedicalHistory: Types.ObjectId[];
 };
