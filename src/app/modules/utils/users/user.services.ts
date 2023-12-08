@@ -3,14 +3,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
-import AppError from "../../errors/customError";
-import generateUserId from "../../utils/userIdGenerator";
-import { TAdmin } from "../admin/admin.interface";
-import { Admin } from "../admin/admin.mode";
-import { Doctor } from "../doctors/doctors.model";
-import { Nurse } from "../nurse/nurse.model";
-import { Patient } from "../patients/patient.mdoel";
-import { Staff } from "../staff/staff.model";
+import AppError from "../../../errors/customError";
+import generateUserId from "../../../utils/userIdGenerator";
+import { TAdmin } from "../../admin/admin.interface";
+import { Admin } from "../../admin/admin.mode";
+import { Doctor } from "../../doctors/doctors.model";
+import { Nurse } from "../../nurse/nurse.model";
+import { Patient } from "../../patients/patient.mdoel";
+import { Staff } from "../../staff/staff.model";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
 const bcrypt = require("bcrypt");

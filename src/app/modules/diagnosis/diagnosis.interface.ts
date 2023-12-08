@@ -6,7 +6,7 @@ export type TDiagnosis = {
   patient: Types.ObjectId;
   diagnosisName: string;
   diagnosisDetails: string;
-  costs: number;
+  charge: number;
   doctor: Types.ObjectId;
   isPaid: boolean;
   testTime: string;

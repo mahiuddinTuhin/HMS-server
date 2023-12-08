@@ -11,13 +11,13 @@ const diagnosisSchema = new Schema<TDiagnosis>(
 
     patient: {
       type: Schema.Types.ObjectId,
-      ref: "Patients",
+      ref: "Patient",
       required: [true, "patient id is required!"],
     },
 
     doctor: {
       type: Schema.Types.ObjectId,
-      ref: "Doctors",
+      ref: "Doctor",
       required: [true, "Doctor id is required!"],
     },
 
@@ -36,9 +36,9 @@ const diagnosisSchema = new Schema<TDiagnosis>(
       type: String,
       required: [true, "Diagnosis details is required!"],
     },
-    costs: {
+    charge: {
       type: Number,
-      required: [true, "Cost amount is required!"],
+      required: [true, "Charge amount is required!"],
     },
     isPaid: {
       type: Boolean,

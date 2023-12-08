@@ -1,8 +1,8 @@
 import { Router } from "express";
 
-import validateRequest from "../../middleware/ZodValidator";
-import isUserExisted from "../../utils/isUserExisted";
-import { adminValidation } from "../admin/admin.validation";
+import validateRequest from "../../../middleware/ZodValidator";
+import isUserExisted from "../../../utils/isUserExisted";
+import { adminValidation } from "../../admin/admin.validation";
 import { userControllers } from "./user.controllers";
 import { userValidation } from "./users.zodValidation";
 

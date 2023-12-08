@@ -1,5 +1,4 @@
 import { Schema, model } from "mongoose";
-import { utilsSchema } from "../../schema/CommonSchema";
 import { TPatient } from "./patient.interface";
 
 const patientSchema = new Schema<TPatient>(
@@ -7,7 +6,6 @@ const patientSchema = new Schema<TPatient>(
     user: {
       type: Schema.Types.ObjectId,
       required: [true, "User _id is required!"],
-      unique: true,
       ref: "User",
     },
     id: {
@@ -17,7 +15,7 @@ const patientSchema = new Schema<TPatient>(
 
     allMedicalHistory: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "MedicalHistory",
         // unique: true,
       },
@@ -25,6 +23,10 @@ const patientSchema = new Schema<TPatient>(
 
     pendingAppointments: [
       {
+        doctor: {
+          type: Schema.Types.ObjectId,
+          ref: "Doctor",
+        },
         date: {
           type: String,
         },
@@ -35,16 +37,22 @@ const patientSchema = new Schema<TPatient>(
     ],
     allAppointmentHistory: [
       {
-        type: String,
-        ref: "Appointment",
-        // unique: true,
+        doctor: {
+          type: Schema.Types.ObjectId,
+          ref: "Doctor",
+        },
+        date: {
+          type: String,
+        },
+        time: {
+          type: String,
+        },
       },
     ],
     allDiagnosis: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: "Diagnosis",
-        unique: true,
       },
     ],
     isAdmitted: {
@@ -52,9 +60,8 @@ const patientSchema = new Schema<TPatient>(
       default: false,
     },
     currentMedicalDepartment: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "Department",
-      unique: true,
     },
 
     bills: Number,
@@ -65,7 +72,7 @@ const patientSchema = new Schema<TPatient>(
 
     insuranceInfo: String,
 
-    guardian: utilsSchema.patientGuardianSchema,
+    guardian: String,
   },
   {
     timestamps: true,

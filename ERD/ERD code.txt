@@ -112,7 +112,7 @@ Diagnosis   [icon: azure-load-test, color: gray] {
   labStaffId string fk
   diagnosisName string
   diagnosisDetails string[]
-  costs number
+  charge number
   isPaid boolean
   testTime string
   reportTime string

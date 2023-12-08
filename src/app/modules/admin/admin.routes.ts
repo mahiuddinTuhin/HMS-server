@@ -1,7 +1,7 @@
 import { Router } from "express";
 import validateRequest from "../../middleware/ZodValidator";
 import DepartmentValidation from "../department/departmentValidation";
-import LaboratoryValidation from "../labratory/labratory.validation";
+import LaboratoryValidation from "../medicalTest/medicalTest.validation";
 import { adminController } from "./admin.controllers";
 
 const router = Router();

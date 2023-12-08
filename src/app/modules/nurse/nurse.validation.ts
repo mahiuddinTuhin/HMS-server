@@ -13,14 +13,13 @@ const NurseValidation = z.object({
       required_error: "Email is required",
       invalid_type_error: "Email must be a string",
     })
-    .min(1, "Email is required")
     .email(),
   phone: z
     .string({
       required_error: "Phone number is required",
       invalid_type_error: "Phone number must be a string",
     })
-    .min(1, "Phone number is required"),
+    .min(11, "Phone number should be minimum 11 digit long."),
   // .refine(phonePattern, "Invalid phone number format"),
   education: z
     .array(z.object({}))
@@ -31,19 +30,20 @@ const NurseValidation = z.object({
         required_error: "First name is required",
         invalid_type_error: "First name must be a string",
       })
-      .min(1, "First name is required"),
+      .min(3, "First name shoulbd be minimum 3 character long!"),
     middleName: z
       .string({
         required_error: "Middle name is required",
         invalid_type_error: "Middle name must be a string",
       })
-      .min(1, "Middle name is required"),
+      .min(3, "Middle name shoulbd be minimum 3 character long!")
+      .optional(),
     lastName: z
       .string({
         required_error: "Last name is required",
         invalid_type_error: "Last name must be a string",
       })
-      .min(1, "Last name is required"),
+      .min(3, "Last name shoulbd be minimum 3 character long!"),
   }),
   address: z.object({
     presentAddress: z
@@ -51,33 +51,33 @@ const NurseValidation = z.object({
         required_error: "Present address is required",
         invalid_type_error: "Present address must be a string",
       })
-      .min(1, "Present address is required"),
+      .min(5, "Present address shoulbd be minimum 5 character long!"),
     permanentAddress: z
       .string({
         required_error: "Permanent address is required",
         invalid_type_error: "Permanent address must be a string",
       })
-      .min(1, "Permanent address is required"),
+      .min(5, "Permanent address shoulbd be minimum 5 character long!"),
   }),
   dateOfBirth: z
     .string({
       required_error: "Date of birth is required",
       invalid_type_error: "Date of birth must be a string",
     })
-    .min(1, "Date of birth is required"),
+    .min(6, "Date of birth shoulbd be minimum 5 character long!"),
   // .refine(birthDatePattern, "Invalid date format (YYYY-MM-DD)"),
   gender: z
     .string({
       required_error: "Gender is required",
       invalid_type_error: "Gender must be a string",
     })
-    .min(1, "Gender is required"),
+    .min(4, "Gender shoulbd be minimum 4 character long!"),
   profileImage: z
     .string({
       required_error: "Profile image URL is required",
       invalid_type_error: "Profile image URL must be a string",
     })
-    .min(1, "Profile image URL is required"),
+    .min(5, "Profile image URL shoulbd be minimum 5 character long!"),
 });
 
 export default NurseValidation;

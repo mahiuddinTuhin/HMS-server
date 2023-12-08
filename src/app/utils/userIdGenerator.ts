@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { User } from "../modules/users/user.model";
+import { User } from "../modules/utils/users/user.model";
 
 /**
  *    id: pattern

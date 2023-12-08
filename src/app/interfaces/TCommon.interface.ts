@@ -32,17 +32,23 @@ export type TGuardian = {
   address?: string;
 };
 
-export type TSchedule =
-  | "9:00 AM"
-  | "10:00 AM"
-  | "11:00 AM"
-  | "12:00 PM"
-  | "1:00 PM"
-  | "2:00 PM"
-  | "3:00 PM"
-  | "4:00 PM"
-  | "5:00 PM"
-  | "6:00 PM";
+export type Tschedules =
+  | "9:00am"
+  | "9.30am"
+  | "10:00am"
+  | "10:30am"
+  | "11:00am"
+  | "11:30am"
+  | "12:00pm"
+  | "12:30pm"
+  | "2:00pm"
+  | "2:30pm"
+  | "3:00pm"
+  | "3:30pm"
+  | "4:00pm"
+  | "4:30pm"
+  | "5:00pm"
+  | "5:30pm";
 
 export type TRole = ["doctor" | "nurse" | "admin" | "staff" | "patient"];
 

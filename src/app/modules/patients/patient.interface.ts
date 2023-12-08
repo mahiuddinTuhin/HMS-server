@@ -1,20 +1,20 @@
 import { Types } from "mongoose";
-import { TEducation, TGuardian } from "../../interfaces/TCommon.interface";
+import { TEducation } from "../../interfaces/TCommon.interface";
 
 export type TPatient = {
   user: Types.ObjectId;
   id: string;
   allDiagnosis: Types.ObjectId[];
   allMedicalHistory: Types.ObjectId[];
-  allAppointmentHistory: Types.ObjectId[];
-  pendingAppointments: Types.ObjectId[];
-  currentMedicalDepartment: string;
+  allAppointmentHistory: object[];
+  pendingAppointments: object[];
+  currentMedicalDepartment: Types.ObjectId;
   isAdmitted: boolean;
   bills: number;
   contactNumber: string;
   emergencyContact: string;
   insuranceInfo: string;
-  guardian: TGuardian;
+  guardian: string;
   email: string;
   phone: string;
   education: TEducation[];

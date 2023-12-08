@@ -4,7 +4,7 @@ import {
   emailPattern,
   passwordPattern,
   phonePattern,
-} from "../../validation/Common.Validation";
+} from "../../../validation/Common.Validation";
 import { TUser } from "./user.interface";
 const bcrypt = require("bcrypt");
 
