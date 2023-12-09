@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ObjectId } from "mongodb";
 import { startSession } from "mongoose";
 import AppError from "../../errors/customError";
 import generateServiceId from "../../utils/generateServiceId";
@@ -8,7 +7,7 @@ import { TAppointments } from "../appointment/appointment.interface";
 import { Appointment } from "../appointment/appointment.model";
 import { Doctor } from "../doctors/doctors.model";
 import { TPatient } from "./patient.interface";
-import { Patient } from "./patient.mdoel";
+import { Patient } from "./patient.model";
 
 /**
  *
@@ -27,22 +26,24 @@ const ceateAppointment = async (data: TAppointments) => {
       .select("pendingAppointments")
       .populate("pendingAppointments");
 
-    const Booked = doctor?.pendingAppointments?.find(
+    const isBooked = doctor?.pendingAppointments?.find(
       (appointment: any) =>
         appointment?.time === data?.time && appointment?.date === data?.date,
     );
 
-    if (Booked) {
-      console.log("doctor is not available");
+    if (isBooked) {
       throw new AppError(
         "Doctor is not available on this time or date, Change date,time or both.",
         409,
       );
     }
 
+    /* if doctor will be available on the specific time and date then creating appointment and modify doctor and patient collections. */
+
     const newAppointment: any = await Appointment.create([data], { session });
 
-    const updatedDoctor = await Doctor.findByIdAndUpdate(
+    /* modify doctor */
+    await Doctor.findByIdAndUpdate(
       data?.doctor,
       {
         $push: {
@@ -54,7 +55,8 @@ const ceateAppointment = async (data: TAppointments) => {
       },
     );
 
-    const updatedPatient = await Patient.findByIdAndUpdate(
+    /* modify patient */
+    await Patient.findByIdAndUpdate(
       data?.patient,
       {
         $push: {
@@ -116,13 +118,15 @@ const deleteAppointmentById = async (id: string) => {
       throw new AppError("Appointment does not found to delete.", 400);
     }
 
-    const deleted = await Appointment.deleteOne(
-      { _id: new ObjectId(appointment?._id) },
+    const isClosed = await Appointment.findByIdAndUpdate(
+      appointment?._id,
+      {
+        isClosed: true,
+      },
       {
         session,
       },
     );
-    console.log({ deleted });
 
     await Doctor.findByIdAndUpdate(
       appointment?.doctor,
@@ -150,7 +154,7 @@ const deleteAppointmentById = async (id: string) => {
 
     await session.commitTransaction();
     await session.endSession();
-    return deleted;
+    return isClosed;
   } catch (error) {
     if (
       error instanceof AppError &&

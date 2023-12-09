@@ -40,6 +40,7 @@ const appointmentValidation = z.object({
     invalid_type_error: "Date id must be a string",
   }),
   isClosed: z.boolean().default(false),
+  isCompleted: z.boolean().default(false),
 });
 
 export default appointmentValidation;

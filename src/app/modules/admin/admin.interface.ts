@@ -19,4 +19,5 @@ export type TAdmin = {
   dateOfBirth: string;
   gender: string;
   profileImage: string;
+  isDeleted: boolean;
 };

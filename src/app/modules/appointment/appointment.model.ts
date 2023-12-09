@@ -41,6 +41,10 @@ export const appointmentSchema = new Schema<TAppointments>(
       type: Boolean,
       default: false,
     },
+    isCompleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

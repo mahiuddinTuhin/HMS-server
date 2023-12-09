@@ -26,4 +26,5 @@ export type TDoctor = {
   license_info: string;
   createdAt: Date;
   updatedAt: Date;
+  isDeleted: boolean;
 };

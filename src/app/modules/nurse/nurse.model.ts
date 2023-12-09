@@ -65,6 +65,10 @@ const NurseSchema = new Schema<TNurse>(
       type: String,
       required: [true, "Profile image URL is required"],
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true },
 );

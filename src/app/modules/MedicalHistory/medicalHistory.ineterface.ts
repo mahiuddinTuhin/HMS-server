@@ -10,4 +10,5 @@ export type TMedicalHistory = {
   bill?: number;
   doctorComments: string;
   patientComments: string;
+  isDeleted: boolean;
 };

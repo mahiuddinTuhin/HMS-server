@@ -20,4 +20,5 @@ export type TNurse = {
   dateOfBirth: string;
   gender: string;
   profileImage: string;
+  isDeleted: boolean;
 };

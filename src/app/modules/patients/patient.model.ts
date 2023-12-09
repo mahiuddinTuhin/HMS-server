@@ -46,6 +46,10 @@ const patientSchema = new Schema<TPatient>(
     insuranceInfo: String,
 
     guardian: String,
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

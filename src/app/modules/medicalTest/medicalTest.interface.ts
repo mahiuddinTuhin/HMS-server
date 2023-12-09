@@ -5,6 +5,7 @@ export type TMedicalTest = {
   patient: Types.ObjectId;
   doctor: Types.ObjectId;
   name: string;
+  details: string;
   charge: number;
   isPaid: boolean;
   reports: object[];
@@ -12,5 +13,6 @@ export type TMedicalTest = {
   equipments: string[];
   staff: Types.ObjectId;
   contactInfo: string;
-  delivery: string;
+  reportAvailableDate: string;
+  isDeleted: boolean;
 };

@@ -7,4 +7,5 @@ export type TDepartment = {
   licences: string;
   details: string;
   allMedicalHistory: Types.ObjectId[];
+  isDeleted: boolean;
 };

@@ -4,7 +4,7 @@ import AppError from "../../errors/customError";
 import { TMedicalHistory } from "../MedicalHistory/medicalHistory.ineterface";
 import { MedicalHistory } from "../MedicalHistory/medicalHistory.model";
 import { TAppointments } from "../appointment/appointment.interface";
-import { Patient } from "../patients/patient.mdoel";
+import { Patient } from "../patients/patient.model";
 import { TDoctor } from "./doctors.interface";
 import { Doctor } from "./doctors.model";
 

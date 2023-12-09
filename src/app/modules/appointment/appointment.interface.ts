@@ -9,4 +9,5 @@ export type TAppointments = {
   date: string;
   time: Tschedules;
   isClosed: boolean;
+  isCompleted: boolean;
 };

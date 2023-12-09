@@ -10,7 +10,7 @@ import { Admin } from "../admin/admin.mode";
 import { TDoctor } from "../doctors/doctors.interface";
 import { Doctor } from "../doctors/doctors.model";
 import Nurse from "../nurse/nurse.model";
-import { Patient } from "../patients/patient.mdoel";
+import { Patient } from "../patients/patient.model";
 import Staff from "../staff/staff.model";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";

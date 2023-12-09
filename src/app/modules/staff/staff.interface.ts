@@ -20,4 +20,5 @@ export type TStaff = {
   dateOfBirth: string;
   gender: string;
   profileImage: string;
+  isDeleted: boolean;
 };

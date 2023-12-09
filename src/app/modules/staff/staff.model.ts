@@ -21,6 +21,10 @@ const staffSchema = new Schema<TStaff>({
   dateOfBirth: { type: String, required: [true, "Date of birth is required"] },
   gender: { type: String, required: [true, "Gender is required"] },
   profileImage: { type: String, required: [true, "Profile image is required"] },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Staff = model("Staff", staffSchema);
