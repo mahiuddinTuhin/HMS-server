@@ -10,6 +10,8 @@ const isUserExisted_1 = __importDefault(require("../../utils/isUserExisted"));
 const admin_validation_1 = require("../admin/admin.validation");
 const doctors_validation_1 = __importDefault(require("../doctors/doctors.validation"));
 const nurse_validation_1 = __importDefault(require("../nurse/nurse.validation"));
+const patient_validation_1 = require("../patients/patient.validation");
+const staff_validation_1 = __importDefault(require("../staff/staff.validation"));
 const user_controllers_1 = require("./user.controllers");
 const users_zodValidation_1 = require("./users.zodValidation");
 const router = (0, express_1.Router)();
@@ -20,9 +22,9 @@ router.post("/create-doctor", (0, ZodValidator_1.default)(users_zodValidation_1.
 /* 3. create Nurse */
 router.post("/create-nurse", (0, ZodValidator_1.default)(users_zodValidation_1.userValidation), (0, ZodValidator_1.default)(nurse_validation_1.default), user_controllers_1.userControllers.createNurse);
 /* 4. create patient */
-router.post("/create-patient", (0, ZodValidator_1.default)(users_zodValidation_1.userValidation), (0, ZodValidator_1.default)(admin_validation_1.adminValidation), user_controllers_1.userControllers.createPatient);
+router.post("/create-patient", (0, ZodValidator_1.default)(users_zodValidation_1.userValidation), (0, ZodValidator_1.default)(patient_validation_1.patientValidation), user_controllers_1.userControllers.createPatient);
 /* 5. create staff */
-router.post("/create-staff", (0, ZodValidator_1.default)(users_zodValidation_1.userValidation), (0, ZodValidator_1.default)(admin_validation_1.adminValidation), user_controllers_1.userControllers.createStaff);
+router.post("/create-staff", (0, ZodValidator_1.default)(users_zodValidation_1.userValidation), (0, ZodValidator_1.default)(staff_validation_1.default), user_controllers_1.userControllers.createStaff);
 router.get("/", user_controllers_1.userControllers.getAllUser);
 router.get("/:userId", user_controllers_1.userControllers.getUserById);
 // router.delete("/:userId", userControllers.deleteUserById);

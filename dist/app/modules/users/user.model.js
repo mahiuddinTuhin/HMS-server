@@ -33,7 +33,6 @@ const userSchema = new mongoose_1.default.Schema({
         validate: {
             validator: (value) => {
                 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                // console.log(emailPattern.test(value));
                 return emailPattern.test(value);
             },
             message: "Invalid email address format!",
@@ -42,10 +41,10 @@ const userSchema = new mongoose_1.default.Schema({
     phone: {
         type: String,
         validate: {
-            validator: (value) => {
+            validator: function (value) {
                 return Common_Validation_1.phonePattern.test(value);
             },
-            message: "Invalid email address format!",
+            message: "Invalid phone address format!",
         },
     },
     role: {

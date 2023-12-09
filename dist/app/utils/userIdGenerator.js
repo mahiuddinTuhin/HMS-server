@@ -1,7 +1,12 @@
 "use strict";
+/* eslint-disable no-empty */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const customError_1 = __importDefault(require("../errors/customError"));
 const user_model_1 = require("../modules/users/user.model");
 /**
  *    id: pattern
@@ -25,33 +30,33 @@ const generateUserId = async (role) => {
     let lastUser;
     let lastThreeDigit;
     try {
-        lastUser = (await findLastUser(role)) || { id: "" };
-        const id = lastUser.id.toString();
-        const lastUserDate = id.substring(3, 5);
-        lastThreeDigit = id.substring(9, 12);
-        if (lastUserDate === newDate &&
-            lastThreeDigit &&
-            Number(lastThreeDigit) < 1000) {
-            lastThreeDigit = (Number(lastThreeDigit) + 1).toString();
+        lastUser = (await findLastUser(role)) || {};
+        if (lastUser?.id) {
+            const lastUserDate = lastUser?.id?.toString()?.substring(3, 5);
+            lastThreeDigit = lastUser?.id?.substring(9, 12);
+            if (lastUserDate === newDate &&
+                lastThreeDigit &&
+                Number(lastThreeDigit) < 1000) {
+                lastThreeDigit = (Number(lastThreeDigit) + 1).toString();
+            }
+            else {
+                lastThreeDigit = "001";
+            }
+            if (lastThreeDigit.length === 2) {
+                lastThreeDigit = `0${lastThreeDigit}`;
+            }
+            else if (lastThreeDigit.length === 1) {
+                lastThreeDigit = `00${lastThreeDigit}`;
+            }
+            const newId = (role.substring(0, 3) || "Guest") +
+                newDate +
+                newMonth +
+                currentYear +
+                lastThreeDigit;
+            return newId;
         }
-        else {
-            lastThreeDigit = "001";
-        }
+        throw new customError_1.default("Failed to create id!", 400);
     }
-    catch (error) {
-        // console.log(null);
-    }
-    if (lastThreeDigit.toString().length === 2) {
-        lastThreeDigit = `0${lastThreeDigit}`;
-    }
-    else if (lastThreeDigit.toString().length === 1) {
-        lastThreeDigit = `00${lastThreeDigit}`;
-    }
-    const newId = (role.substring(0, 3) || "Guest") +
-        newDate +
-        newMonth +
-        currentYear +
-        lastThreeDigit;
-    return newId;
+    catch (error) { }
 };
 exports.default = generateUserId;

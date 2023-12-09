@@ -37,10 +37,13 @@ const patientSchema = new mongoose_1.Schema({
         ref: "Department",
     },
     bills: Number,
-    contactNumber: String,
     emergencyContact: String,
     insuranceInfo: String,
     guardian: String,
+    isDeleted: {
+        type: Boolean,
+        default: false,
+    },
 }, {
     timestamps: true,
 });

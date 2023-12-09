@@ -4,7 +4,8 @@ exports.birthDatePattern = exports.phonePattern = exports.emailPattern = exports
 const zod_1 = require("zod");
 exports.passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@~`#^()-_=+$!%*?&])[A-Za-z\d@~`#^()-_=+$!%*?&]{8,}$/;
 exports.emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-exports.phonePattern = /^\+?\d{13}$/;
+exports.phonePattern = /^\+?\d{11,15}$/;
+// export const phonePattern = /^\+?\d{15}$/;
 exports.birthDatePattern = /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 const educationValidation = zod_1.z.object({
     institute: zod_1.z.string().min(4),
@@ -27,7 +28,6 @@ const passwordValidation = zod_1.z
     .optional()
     .refine((password) => {
     const newPassword = password || process.env.DEFAULT_PASSWORD;
-    console.log(exports.passwordPattern.test(newPassword));
     return exports.passwordPattern.test(newPassword);
 }, {
     message: "Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.",

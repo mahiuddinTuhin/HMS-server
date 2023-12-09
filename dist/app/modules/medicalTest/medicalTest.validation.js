@@ -10,6 +10,10 @@ const medicalTestValidation = zod_1.z.object({
         required_error: "Name is required",
         invalid_type_error: "Name must be a string",
     }),
+    details: zod_1.z.string({
+        required_error: "Name is required",
+        invalid_type_error: "Name must be a string",
+    }),
     charge: zod_1.z.number({
         required_error: "Charge is required",
         invalid_type_error: "Charge must be a number",
@@ -28,9 +32,9 @@ const medicalTestValidation = zod_1.z.object({
     equipments: zod_1.z.array(zod_1.z.string()).min(1, "Equipments array cannot be empty"),
     doctor: zod_1.z.string(),
     staff: zod_1.z.string(),
-    delivery: zod_1.z.string({
-        required_error: "Delivery date is required",
-        invalid_type_error: "Delivery date must be a string",
+    reportAvailableDate: zod_1.z.string({
+        required_error: "Report Available date is required",
+        invalid_type_error: "Report Available date must be a string",
     }),
 });
 exports.default = medicalTestValidation;

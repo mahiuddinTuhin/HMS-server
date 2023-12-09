@@ -2,10 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const zod_1 = require("zod");
 const appointmentValidation = zod_1.z.object({
-    id: zod_1.z.string({
+    id: zod_1.z
+        .string({
         required_error: "Appointment id is required!",
         invalid_type_error: "Appointment id must be a string",
-    }),
+    })
+        .optional(),
     doctor: zod_1.z.string(),
     patient: zod_1.z.string(),
     isPaid: zod_1.z.boolean().default(false),
@@ -35,5 +37,6 @@ const appointmentValidation = zod_1.z.object({
         invalid_type_error: "Date id must be a string",
     }),
     isClosed: zod_1.z.boolean().default(false),
+    isCompleted: zod_1.z.boolean().default(false),
 });
 exports.default = appointmentValidation;

@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.adminServices = void 0;
 const FindQueryBuilder_1 = __importDefault(require("../../builder/FindQueryBuilder"));
 const customError_1 = __importDefault(require("../../errors/customError"));
-const otherIdgenerator_1 = __importDefault(require("../../utils/otherIdgenerator"));
+const generateServiceId_1 = __importDefault(require("../../utils/generateServiceId"));
 const department_mode_1 = __importDefault(require("../department/department.mode"));
 const medicalTest_model_1 = require("../medicalTest/medicalTest.model");
 const admin_constant_1 = require("./admin.constant");
@@ -15,7 +15,7 @@ const admin_mode_1 = require("./admin.mode");
 /* creating department */
 const createDepartment = async (data) => {
     try {
-        data.id = (await (0, otherIdgenerator_1.default)(department_mode_1.default)) || `Dep001`;
+        data.id = (await (0, generateServiceId_1.default)(department_mode_1.default)) || `Dep001`;
         const newDepartment = await department_mode_1.default.create(data);
         return newDepartment;
     }
@@ -26,8 +26,7 @@ const createDepartment = async (data) => {
 /* creating labratory */
 const createLabratory = async (data) => {
     try {
-        data.id = (await (0, otherIdgenerator_1.default)(medicalTest_model_1.MedicalTest)) || `Lab001.01`;
-        console.log({ labratoryData: data });
+        data.id = (await (0, generateServiceId_1.default)(medicalTest_model_1.MedicalTest)) || `Lab001.01`;
         const newLabratory = await medicalTest_model_1.MedicalTest.create(data);
         return newLabratory;
     }

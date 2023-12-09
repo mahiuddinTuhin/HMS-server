@@ -82,6 +82,10 @@ const NurseSchema = new mongoose_1.Schema({
         type: String,
         required: [true, "Profile image URL is required"],
     },
+    isDeleted: {
+        type: Boolean,
+        default: false,
+    },
 }, { timestamps: true });
 const Nurse = mongoose_1.default.model("Nurse", NurseSchema);
 exports.default = Nurse;

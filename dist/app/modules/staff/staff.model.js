@@ -13,7 +13,7 @@ const staffSchema = new mongoose_1.Schema({
         enum: ["day", "night"],
         required: [true, "Shift is required"],
     },
-    education: CommonSchema_1.utilsSchema.nonPatientEducationSchema,
+    education: [CommonSchema_1.utilsSchema.nonPatientEducationSchema],
     email: { type: String, required: [true, "Email is required"] },
     phone: { type: String, required: [true, "Phone is required"] },
     fullName: CommonSchema_1.utilsSchema.fullNameSchema,
@@ -21,6 +21,10 @@ const staffSchema = new mongoose_1.Schema({
     dateOfBirth: { type: String, required: [true, "Date of birth is required"] },
     gender: { type: String, required: [true, "Gender is required"] },
     profileImage: { type: String, required: [true, "Profile image is required"] },
+    isDeleted: {
+        type: Boolean,
+        default: false,
+    },
 });
 const Staff = (0, mongoose_1.model)("Staff", staffSchema);
 exports.default = Staff;

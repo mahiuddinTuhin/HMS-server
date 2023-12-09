@@ -8,7 +8,7 @@ exports.doctorServices = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const customError_1 = __importDefault(require("../../errors/customError"));
 const medicalHistory_model_1 = require("../MedicalHistory/medicalHistory.model");
-const patient_mdoel_1 = require("../patients/patient.mdoel");
+const patient_model_1 = require("../patients/patient.model");
 const doctors_model_1 = require("./doctors.model");
 /* creating an appointment by doctor */
 const createAppointment = async (data) => {
@@ -45,7 +45,7 @@ const createAppointment = async (data) => {
                 },
             },
         }, { new: true });
-        const updatedPatient = await patient_mdoel_1.Patient.findOneAndUpdate({
+        const updatedPatient = await patient_model_1.Patient.findOneAndUpdate({
             id: data?.id,
         }, {
             $push: {

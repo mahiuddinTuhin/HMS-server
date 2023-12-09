@@ -29,6 +29,7 @@ const { Schema } = mongoose_1.default;
 const MedicalTestSchema = new Schema({
     id: { type: String, required: [true, "Medical Test Id is required."] },
     name: { type: String, required: [true, "Name is required."] },
+    details: { type: String, required: [true, "Name is required."] },
     charge: { type: Number, required: [true, "Charge is required."] },
     isPaid: { type: Boolean, default: true },
     reports: [{ type: Object, required: [true, "Reports is required."] }],
@@ -49,6 +50,13 @@ const MedicalTestSchema = new Schema({
         ref: "Staff",
         required: [true, "Staff is required."],
     },
-    delivery: { type: String, required: [true, "Delivery date is required."] },
+    reportAvailableDate: {
+        type: String,
+        required: [true, "Report Available date is required."],
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false,
+    },
 });
 exports.MedicalTest = (0, mongoose_1.model)("MedicalTest", MedicalTestSchema);

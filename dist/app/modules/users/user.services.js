@@ -14,7 +14,7 @@ const userIdGenerator_1 = __importDefault(require("../../utils/userIdGenerator")
 const admin_mode_1 = require("../admin/admin.mode");
 const doctors_model_1 = require("../doctors/doctors.model");
 const nurse_model_1 = __importDefault(require("../nurse/nurse.model"));
-const patient_mdoel_1 = require("../patients/patient.mdoel");
+const patient_model_1 = require("../patients/patient.model");
 const staff_model_1 = __importDefault(require("../staff/staff.model"));
 const user_model_1 = require("./user.model");
 const bcrypt = require("bcrypt");
@@ -143,8 +143,6 @@ const createNurseService = async (data) => {
     catch (error) {
         await session.abortTransaction();
         await session.endSession();
-        // console.log("--error occured--");
-        // console.log(`\n\n${error}\n\n`);
         throw new Error(error);
     }
 };
@@ -152,23 +150,29 @@ const createNurseService = async (data) => {
 const createPatientService = async (data) => {
     /* taking necessary data for common user */
     const userData = {
-        id: data.id,
-        password: data?.password || process.env.DEFAULT_PASSWORD,
+        id: await (0, userIdGenerator_1.default)("Patient"),
+        password: data?.password,
         needsPasswordChange: true,
         email: data?.email,
-        role: "patient",
+        phone: data?.phone,
         isDeleted: false,
+        role: "patient",
+        status: "active",
     };
     const session = await mongoose_1.default.startSession();
     try {
         session.startTransaction();
         const newUser = await user_model_1.User.create([userData], { session });
-        if (!Object.keys(newUser).length) {
+        if (!newUser) {
             throw new customError_1.default("Error occured in creating user transactions.", http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
         const { password, email, needsPasswordChange, role, isDeleted, ...restOfData } = data;
-        const patientData = { ...restOfData, id: data?.id, user: newUser[0]?._id };
-        const newPatient = await patient_mdoel_1.Patient.create([patientData], { session });
+        const patientData = {
+            ...restOfData,
+            id: newUser[0]?.id,
+            user: newUser[0]?._id,
+        };
+        const newPatient = await patient_model_1.Patient.create([patientData], { session });
         if (!newPatient.length) {
             throw new customError_1.default("Error occured in creating nurse model transactions.", http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
@@ -187,23 +191,30 @@ const createPatientService = async (data) => {
 const createStaffService = async (data) => {
     /* taking necessary data for common user */
     const userData = {
-        password: data?.password || process.env.DEFAULT_PASSWORD,
+        id: await (0, userIdGenerator_1.default)("staff"),
+        password: data?.password,
         needsPasswordChange: true,
         email: data?.email,
-        role: "staff",
+        phone: data?.phone,
         isDeleted: false,
+        role: "staff",
+        status: "active",
     };
     const session = await mongoose_1.default.startSession();
     try {
         session.startTransaction();
         const newUser = await user_model_1.User.create([userData], { session });
-        if (!newUser.length) {
+        if (!newUser) {
             throw new customError_1.default("Error occured in creating user transactions.", http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
-        const { password, email, needsPasswordChange, role, isDeleted, userId, ...restOfData } = data;
-        const staffData = { ...restOfData, staffId: data?.userId };
+        const { password, needsPasswordChange, role, isDeleted, userId, ...restOfData } = data;
+        const staffData = {
+            ...restOfData,
+            id: newUser[0]?.id,
+            user: newUser[0]?._id,
+        };
         const newStaff = await staff_model_1.default.create([staffData], { session });
-        if (!newStaff.length) {
+        if (!newStaff) {
             throw new customError_1.default("Error occured in creating staff model transactions.", http_status_codes_1.StatusCodes.BAD_REQUEST);
         }
         await session.commitTransaction();
@@ -232,9 +243,7 @@ const getAllUser = async (query) => {
     const result = await user_model_1.User.find();
     return result;
 };
-const updateUserById = (id, body) => {
-    // console.log(id, body);
-};
+const updateUserById = (id, body) => { };
 exports.userServices = {
     createAdminService,
     createDocService,
