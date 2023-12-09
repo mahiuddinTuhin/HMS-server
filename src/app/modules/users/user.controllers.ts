@@ -2,12 +2,12 @@
 import { RequestHandler } from "express";
 import httpStatus from "http-status";
 import { StatusCodes } from "http-status-codes";
-import AppError from "../../../errors/customError";
+import AppError from "../../errors/customError";
 import {
   ResponseToServer,
   responseToRequest,
-} from "../../../utils/ResponseToServer";
-import catchAsync from "../../../utils/catchAsync";
+} from "../../utils/ResponseToServer";
+import catchAsync from "../../utils/catchAsync";
 import { userServices } from "./user.services";
 
 /* 1. creating admin */
@@ -19,7 +19,7 @@ const createAdmin: RequestHandler = catchAsync(async (req, res) => {
   responseToRequest(res, {
     success: true,
     status: httpStatus.OK as number,
-    message: "Student is created succesfully",
+    message: "Admin is created succesfully",
     data: newAdmin,
   });
 });

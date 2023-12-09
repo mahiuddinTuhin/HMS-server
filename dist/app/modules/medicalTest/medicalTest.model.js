@@ -23,28 +23,32 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.MedicalTest = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-// Define a Mongoose schema for TDepartment
-const DepartmentSchema = new mongoose_1.Schema({
-    id: {
-        type: String,
-        required: [true, "Department id is required!"],
-        unique: true,
+const { Schema } = mongoose_1.default;
+const MedicalTestSchema = new Schema({
+    id: { type: String, required: [true, "Medical Test Id is required."] },
+    name: { type: String, required: [true, "Name is required."] },
+    charge: { type: Number, required: [true, "Charge is required."] },
+    isPaid: { type: Boolean, default: true },
+    reports: [{ type: Object, required: [true, "Reports is required."] }],
+    summary: { type: String, required: [true, "Summary is required."] },
+    equipments: { type: [String], required: [true, "Equipments is required."] },
+    doctor: {
+        type: Schema.Types.ObjectId,
+        ref: "Doctor",
+        required: [true, "Doctor is required."],
     },
-    departmentName: {
-        type: String,
-        required: [true, "Department name is required!"],
+    patient: {
+        type: Schema.Types.ObjectId,
+        ref: "Patient",
+        required: [true, "Patient is required."],
     },
-    details: {
-        type: String,
-        required: [true, "Details of department is required!"],
+    staff: {
+        type: Schema.Types.ObjectId,
+        ref: "Staff",
+        required: [true, "Staff is required."],
     },
-    allDoctors: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Doctor" }],
-    licences: { type: String, required: true },
-    allMedicalHistory: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "MedicalHistory" }],
-}, {
-    timestamps: true,
+    delivery: { type: String, required: [true, "Delivery date is required."] },
 });
-// Create and export the Mongoose model based on the schema
-const Department = mongoose_1.default.model("Department", DepartmentSchema);
-exports.default = Department;
+exports.MedicalTest = (0, mongoose_1.model)("MedicalTest", MedicalTestSchema);

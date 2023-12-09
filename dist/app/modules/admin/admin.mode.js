@@ -1,17 +1,44 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Admin = void 0;
+exports.Admin = exports.adminSchema = void 0;
 const mongoose_1 = require("mongoose");
-const adminSchema = new mongoose_1.Schema({
+const CommonSchema_1 = require("../../schema/CommonSchema");
+const Common_Validation_1 = require("../../validation/Common.Validation");
+exports.adminSchema = new mongoose_1.Schema({
     user: {
         type: mongoose_1.Schema.Types.ObjectId,
-        required: [true, "User id is required in admin !"],
-        unique: true,
-        ref: "User",
+        required: [true, "User ID is required"],
     },
-    id: {
+    id: { type: String, required: [true, "Nurse ID is required"] },
+    email: {
         type: String,
-        required: [true, "id is required in admin!"],
+        required: [true, "Email is required"],
+        match: [Common_Validation_1.emailPattern, "Invalid email format"],
+        unique: true,
     },
-});
-exports.Admin = (0, mongoose_1.model)("Admin", adminSchema);
+    phone: {
+        type: String,
+        required: [true, "Phone number is required"],
+        match: [Common_Validation_1.phonePattern, "Invalid phone number format"],
+    },
+    education: {
+        type: [{ type: Object }],
+        validate: {
+            validator: (eduArray) => eduArray.length > 0,
+            message: "At least one education entry is required",
+        },
+    },
+    fullName: CommonSchema_1.utilsSchema.fullNameSchema,
+    address: CommonSchema_1.utilsSchema.addressSchema,
+    dateOfBirth: {
+        type: String,
+        required: [true, "Date of birth is required"],
+        match: [Common_Validation_1.birthDatePattern, "Invalid date format (YYYY-MM-DD)"],
+    },
+    gender: { type: String, required: [true, "Gender is required"] },
+    profileImage: {
+        type: String,
+        required: [true, "Profile image URL is required"],
+    },
+}, { timestamps: true });
+exports.Admin = (0, mongoose_1.model)("Admin", exports.adminSchema);

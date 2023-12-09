@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.doctorServices = void 0;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const http_status_codes_1 = require("http-status-codes");
-const customError_1 = __importDefault(require("../../util/customError"));
+const customError_1 = __importDefault(require("../../errors/customError"));
 const medicalHistory_model_1 = require("../MedicalHistory/medicalHistory.model");
 const patient_mdoel_1 = require("../patients/patient.mdoel");
 const doctors_model_1 = require("./doctors.model");

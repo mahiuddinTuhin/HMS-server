@@ -11,7 +11,6 @@ export type TPatient = {
   currentMedicalDepartment: Types.ObjectId;
   isAdmitted: boolean;
   bills: number;
-  contactNumber: string;
   emergencyContact: string;
   insuranceInfo: string;
   guardian: string;

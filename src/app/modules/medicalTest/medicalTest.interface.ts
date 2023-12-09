@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 
 export type TMedicalTest = {
   id: string;
+  patient: Types.ObjectId;
   doctor: Types.ObjectId;
   name: string;
   charge: number;
@@ -13,5 +14,3 @@ export type TMedicalTest = {
   contactInfo: string;
   delivery: string;
 };
-
-export type diagnosisId = string;

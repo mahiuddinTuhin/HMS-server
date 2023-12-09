@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { model } from "mongoose";
 import { TMedicalTest } from "./medicalTest.interface";
 
 const { Schema } = mongoose;
@@ -16,6 +16,11 @@ const MedicalTestSchema = new Schema<TMedicalTest>({
     ref: "Doctor",
     required: [true, "Doctor is required."],
   },
+  patient: {
+    type: Schema.Types.ObjectId,
+    ref: "Patient",
+    required: [true, "Patient is required."],
+  },
   staff: {
     type: Schema.Types.ObjectId,
     ref: "Staff",
@@ -24,4 +29,7 @@ const MedicalTestSchema = new Schema<TMedicalTest>({
   delivery: { type: String, required: [true, "Delivery date is required."] },
 });
 
-export default MedicalTestSchema;
+export const MedicalTest = model<TMedicalTest>(
+  "MedicalTest",
+  MedicalTestSchema,
+);

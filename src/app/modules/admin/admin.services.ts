@@ -6,7 +6,7 @@ import generateServiceId from "../../utils/otherIdgenerator";
 import { TDepartment } from "../department/department.interface";
 import Department from "../department/department.mode";
 import { TMedicalTest } from "../medicalTest/medicalTest.interface";
-import Laboratory from "../medicalTest/medicalTest.model";
+import { MedicalTest } from "../medicalTest/medicalTest.model";
 import { nonPatientSearchableField } from "./admin.constant";
 import { Admin } from "./admin.mode";
 
@@ -26,9 +26,8 @@ const createDepartment = async (data: TDepartment) => {
 /* creating labratory */
 const createLabratory = async (data: TMedicalTest) => {
   try {
-    data.id = (await generateServiceId(Laboratory)) || `Lab001.01`;
-    console.log({ labratoryData: data });
-    const newLabratory: any = await Laboratory.create(data);
+    data.id = (await generateServiceId(MedicalTest)) || `Lab001.01`;
+    const newLabratory: any = await MedicalTest.create(data);
     return newLabratory;
   } catch (error) {
     throw new AppError("Failed to create new Lab data!", 400);

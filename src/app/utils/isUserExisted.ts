@@ -2,7 +2,7 @@
 
 import { NextFunction, Request, Response } from "express";
 import AppError from "../errors/customError";
-import { User } from "../modules/utils/users/user.model";
+import { User } from "../modules/users/user.model";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isUserExisted = () => {

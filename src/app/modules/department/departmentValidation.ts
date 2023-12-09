@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { z } from "zod";
 
 const DepartmentValidation = z.object({
@@ -14,14 +13,14 @@ const DepartmentValidation = z.object({
       invalid_type_error: "Detail of department must be a string",
     })
     .min(20),
-  allDoctors: z.array(z.instanceof(ObjectId).optional()),
+  allDoctors: z.array(z.string().optional()),
   licences: z
     .string({
       required_error: "Licences is required",
       invalid_type_error: "Licences must be a string",
     })
     .min(10),
-  allMedicalHistory: z.array(z.instanceof(ObjectId).optional()),
+  allMedicalHistory: z.array(z.string().optional()),
 });
 
 export default DepartmentValidation;

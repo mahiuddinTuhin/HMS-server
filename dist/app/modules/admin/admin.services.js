@@ -6,19 +6,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.adminServices = void 0;
 const FindQueryBuilder_1 = __importDefault(require("../../builder/FindQueryBuilder"));
+const customError_1 = __importDefault(require("../../errors/customError"));
+const otherIdgenerator_1 = __importDefault(require("../../utils/otherIdgenerator"));
 const department_mode_1 = __importDefault(require("../department/department.mode"));
-const labrotory_model_1 = __importDefault(require("../labratory/labrotory.model"));
+const medicalTest_model_1 = require("../medicalTest/medicalTest.model");
 const admin_constant_1 = require("./admin.constant");
 const admin_mode_1 = require("./admin.mode");
 /* creating department */
 const createDepartment = async (data) => {
-    const newDepartment = await department_mode_1.default.create(data);
-    return newDepartment;
+    try {
+        data.id = (await (0, otherIdgenerator_1.default)(department_mode_1.default)) || `Dep001`;
+        const newDepartment = await department_mode_1.default.create(data);
+        return newDepartment;
+    }
+    catch (error) {
+        throw new customError_1.default("Failed to create department by admin!", 400);
+    }
 };
 /* creating labratory */
 const createLabratory = async (data) => {
-    const newLabratory = await labrotory_model_1.default.create(data);
-    return newLabratory;
+    try {
+        data.id = (await (0, otherIdgenerator_1.default)(medicalTest_model_1.MedicalTest)) || `Lab001.01`;
+        console.log({ labratoryData: data });
+        const newLabratory = await medicalTest_model_1.MedicalTest.create(data);
+        return newLabratory;
+    }
+    catch (error) {
+        throw new customError_1.default("Failed to create new Lab data!", 400);
+    }
 };
 /**
  * @find_all_admin service

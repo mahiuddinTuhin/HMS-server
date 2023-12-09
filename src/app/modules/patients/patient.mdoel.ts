@@ -13,41 +13,16 @@ const patientSchema = new Schema<TPatient>(
       required: [true, "Id is required!"],
     },
 
-    allMedicalHistory: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "MedicalHistory",
-        // unique: true,
-      },
-    ],
+    allMedicalHistory: [{ type: Schema.Types.ObjectId, ref: "MedicalHistory" }],
 
     pendingAppointments: [
       {
-        doctor: {
-          type: Schema.Types.ObjectId,
-          ref: "Doctor",
-        },
-        date: {
-          type: String,
-        },
-        time: {
-          type: String,
-        },
+        type: Schema.Types.ObjectId,
+        ref: "Appointment",
       },
     ],
     allAppointmentHistory: [
-      {
-        doctor: {
-          type: Schema.Types.ObjectId,
-          ref: "Doctor",
-        },
-        date: {
-          type: String,
-        },
-        time: {
-          type: String,
-        },
-      },
+      { type: Schema.Types.ObjectId, ref: "Appointment" },
     ],
     allDiagnosis: [
       {
@@ -65,8 +40,6 @@ const patientSchema = new Schema<TPatient>(
     },
 
     bills: Number,
-
-    contactNumber: String,
 
     emergencyContact: String,
 

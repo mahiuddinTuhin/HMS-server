@@ -2,47 +2,30 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Patient = void 0;
 const mongoose_1 = require("mongoose");
-const CommonSchema_1 = require("../../schema/CommonSchema");
 const patientSchema = new mongoose_1.Schema({
     user: {
         type: mongoose_1.Schema.Types.ObjectId,
         required: [true, "User _id is required!"],
-        unique: true,
         ref: "User",
     },
     id: {
         type: String,
         required: [true, "Id is required!"],
     },
-    allMedicalHistory: [
-        {
-            type: String,
-            ref: "MedicalHistory",
-            // unique: true,
-        },
-    ],
+    allMedicalHistory: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "MedicalHistory" }],
     pendingAppointments: [
         {
-            date: {
-                type: String,
-            },
-            time: {
-                type: String,
-            },
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: "Appointment",
         },
     ],
     allAppointmentHistory: [
-        {
-            type: String,
-            ref: "Appointment",
-            // unique: true,
-        },
+        { type: mongoose_1.Schema.Types.ObjectId, ref: "Appointment" },
     ],
     allDiagnosis: [
         {
-            type: String,
+            type: mongoose_1.Schema.Types.ObjectId,
             ref: "Diagnosis",
-            unique: true,
         },
     ],
     isAdmitted: {
@@ -50,15 +33,14 @@ const patientSchema = new mongoose_1.Schema({
         default: false,
     },
     currentMedicalDepartment: {
-        type: String,
+        type: mongoose_1.Schema.Types.ObjectId,
         ref: "Department",
-        unique: true,
     },
     bills: Number,
     contactNumber: String,
     emergencyContact: String,
     insuranceInfo: String,
-    guardian: CommonSchema_1.utilsSchema.patientGuardianSchema,
+    guardian: String,
 }, {
     timestamps: true,
 });

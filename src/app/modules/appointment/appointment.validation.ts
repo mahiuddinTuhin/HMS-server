@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { z } from "zod";
 
 const appointmentValidation = z.object({
@@ -6,8 +5,8 @@ const appointmentValidation = z.object({
     required_error: "Appointment id is required!",
     invalid_type_error: "Appointment id must be a string",
   }),
-  doctor: z.instanceof(ObjectId),
-  patient: z.instanceof(ObjectId),
+  doctor: z.string(),
+  patient: z.string(),
   isPaid: z.boolean().default(false),
   time: z.enum(
     [

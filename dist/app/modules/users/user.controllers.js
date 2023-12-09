@@ -4,16 +4,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userControllers = void 0;
+const http_status_1 = __importDefault(require("http-status"));
 const http_status_codes_1 = require("http-status-codes");
-const ResponseToServer_1 = require("../../util/ResponseToServer");
-const catchAsync_1 = __importDefault(require("../../util/catchAsync"));
-const customError_1 = __importDefault(require("../../util/customError"));
+const customError_1 = __importDefault(require("../../errors/customError"));
+const ResponseToServer_1 = require("../../utils/ResponseToServer");
+const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const user_services_1 = require("./user.services");
 /* 1. creating admin */
 const createAdmin = (0, catchAsync_1.default)(async (req, res) => {
     const data = req.body;
     const newAdmin = await user_services_1.userServices.createAdminService(data);
-    (0, ResponseToServer_1.ResponseToServer)(req, res, true, 200, "successfully created admin's data.", newAdmin);
+    (0, ResponseToServer_1.responseToRequest)(res, {
+        success: true,
+        status: http_status_1.default.OK,
+        message: "Admin is created succesfully",
+        data: newAdmin,
+    });
 });
 /* 2. creating doctor */
 const createDoctor = (0, catchAsync_1.default)(async (req, res) => {

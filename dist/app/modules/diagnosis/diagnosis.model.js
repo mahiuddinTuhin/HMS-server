@@ -10,20 +10,17 @@ const diagnosisSchema = new mongoose_1.Schema({
     },
     patient: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: "Patients",
-        unique: true,
+        ref: "Patient",
         required: [true, "patient id is required!"],
     },
     doctor: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: "Doctors",
-        unique: true,
+        ref: "Doctor",
         required: [true, "Doctor id is required!"],
     },
     labStaff: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "Staff",
-        unique: true,
         required: [true, "Lab staff id is required!"],
     },
     diagnosisName: {
@@ -34,9 +31,9 @@ const diagnosisSchema = new mongoose_1.Schema({
         type: String,
         required: [true, "Diagnosis details is required!"],
     },
-    costs: {
+    charge: {
         type: Number,
-        required: [true, "Cost amount is required!"],
+        required: [true, "Charge amount is required!"],
     },
     isPaid: {
         type: Boolean,
@@ -47,5 +44,7 @@ const diagnosisSchema = new mongoose_1.Schema({
         required: [true, "Test time is required!"],
     },
     reportTime: String,
+}, {
+    timestamps: true,
 });
 exports.Diagnosis = (0, mongoose_1.model)("Diagnosis", diagnosisSchema);

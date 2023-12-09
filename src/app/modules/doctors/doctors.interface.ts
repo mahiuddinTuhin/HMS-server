@@ -1,14 +1,13 @@
-import { Types } from "mongoose";
-import { TEducation, TSchedule } from "../../interfaces/TCommon.interface";
+import mongoose from "mongoose";
+import { TEducation } from "../../interfaces/TCommon.interface";
 
 export type TDoctor = {
-  user: Types.ObjectId;
   id: string;
-  department: Types.ObjectId;
-  schedule: TSchedule[];
-  allMedicalHistory: Types.ObjectId[];
-  pendingAppointments: Types.ObjectId[];
-  license_info: string[];
+  user: mongoose.Types.ObjectId;
+  department: mongoose.Types.ObjectId;
+  schedules: string[];
+  allMedicalHistory: mongoose.Types.ObjectId[];
+  pendingAppointments: mongoose.Types.ObjectId[];
   email: string;
   phone: string;
   education: TEducation[];
@@ -24,4 +23,7 @@ export type TDoctor = {
   dateOfBirth: string;
   gender: string;
   profileImage: string;
+  license_info: string;
+  createdAt: Date;
+  updatedAt: Date;
 };

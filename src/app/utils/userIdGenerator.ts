@@ -1,7 +1,9 @@
+/* eslint-disable no-empty */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { User } from "../modules/utils/users/user.model";
+import AppError from "../errors/customError";
+import { User } from "../modules/users/user.model";
 
 /**
  *    id: pattern
@@ -30,38 +32,39 @@ const generateUserId = async (role: string) => {
   let lastUser;
   let lastThreeDigit: any;
   try {
-    lastUser = (await findLastUser(role)) || { id: "" };
-    const id = lastUser.id.toString();
-    const lastUserDate = id.substring(3, 5);
+    lastUser = (await findLastUser(role)) || {};
 
-    lastThreeDigit = id.substring(9, 12);
+    if (lastUser?.id) {
+      const lastUserDate = lastUser?.id?.toString()?.substring(3, 5);
 
-    if (
-      lastUserDate === newDate &&
-      lastThreeDigit &&
-      Number(lastThreeDigit) < 1000
-    ) {
-      lastThreeDigit = (Number(lastThreeDigit) + 1).toString();
-    } else {
-      lastThreeDigit = "001";
+      lastThreeDigit = lastUser?.id?.substring(9, 12);
+
+      if (
+        lastUserDate === newDate &&
+        lastThreeDigit &&
+        Number(lastThreeDigit) < 1000
+      ) {
+        lastThreeDigit = (Number(lastThreeDigit) + 1).toString();
+      } else {
+        lastThreeDigit = "001";
+      }
+
+      if (lastThreeDigit.length === 2) {
+        lastThreeDigit = `0${lastThreeDigit}`;
+      } else if (lastThreeDigit.length === 1) {
+        lastThreeDigit = `00${lastThreeDigit}`;
+      }
+      const newId: string =
+        (role.substring(0, 3) || "Guest") +
+        newDate +
+        newMonth +
+        currentYear +
+        lastThreeDigit;
+
+      return newId;
     }
-  } catch (error) {
-    // console.log(null);
-  }
-
-  if (lastThreeDigit.toString().length === 2) {
-    lastThreeDigit = `0${lastThreeDigit}`;
-  } else if (lastThreeDigit.toString().length === 1) {
-    lastThreeDigit = `00${lastThreeDigit}`;
-  }
-  const newId: string =
-    (role.substring(0, 3) || "Guest") +
-    newDate +
-    newMonth +
-    currentYear +
-    lastThreeDigit;
-
-  return newId;
+    throw new AppError("Failed to create id!", 400);
+  } catch (error) {}
 };
 
 export default generateUserId;

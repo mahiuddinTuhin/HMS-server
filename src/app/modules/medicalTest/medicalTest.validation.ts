@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { z } from "zod";
 
 const medicalTestValidation = z.object({
@@ -26,8 +25,8 @@ const medicalTestValidation = z.object({
     })
     .optional(),
   equipments: z.array(z.string()).min(1, "Equipments array cannot be empty"),
-  doctor: z.instanceof(ObjectId),
-  staff: z.instanceof(ObjectId),
+  doctor: z.string(),
+  staff: z.string(),
   delivery: z.string({
     required_error: "Delivery date is required",
     invalid_type_error: "Delivery date must be a string",

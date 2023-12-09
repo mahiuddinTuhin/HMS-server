@@ -119,6 +119,33 @@ const patientGuardianSchema = new Schema<TGuardian>({
   address: String,
 });
 
+const fullNameSchema = new Schema(
+  {
+    firstName: { type: String, required: [true, "First name is required"] },
+    middleName: { type: String, required: [true, "Middle name is required"] },
+    lastName: { type: String, required: [true, "Last name is required"] },
+  },
+  {
+    _id: false,
+  },
+);
+
+const addressSchema = new Schema(
+  {
+    presentAddress: {
+      type: String,
+      required: [true, "Present address is required"],
+    },
+    permanentAddress: {
+      type: String,
+      required: [true, "Permanent address is required"],
+    },
+  },
+  {
+    _id: false,
+  },
+);
+
 export const utilsSchema = {
   nonPatientContactSchema,
   patientContactSchema,
@@ -127,4 +154,6 @@ export const utilsSchema = {
   NonPatientPersonalInfo,
   patientPersonalInfo,
   patientGuardianSchema,
+  fullNameSchema,
+  addressSchema,
 };

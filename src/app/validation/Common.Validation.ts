@@ -3,7 +3,8 @@ import { z } from "zod";
 export const passwordPattern =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@~`#^()-_=+$!%*?&])[A-Za-z\d@~`#^()-_=+$!%*?&]{8,}$/;
 export const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-export const phonePattern = /^\+?\d{13}$/;
+export const phonePattern = /^\+?\d{11,15}$/;
+// export const phonePattern = /^\+?\d{15}$/;
 
 export const birthDatePattern =
   /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;

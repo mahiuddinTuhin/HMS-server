@@ -1,36 +1,50 @@
 import { Schema, model } from "mongoose";
 import { TEducation } from "../../interfaces/TCommon.interface";
+import { utilsSchema } from "../../schema/CommonSchema";
+import {
+  birthDatePattern,
+  emailPattern,
+  phonePattern,
+} from "../../validation/Common.Validation";
 import { TAdmin } from "./admin.interface";
 
-export const educationSchema = new Schema<TEducation>(
+export const adminSchema = new Schema<TAdmin>(
   {
-    degree: { type: String, required: true },
-    institute: { type: String, required: true },
-    year: { type: Number, required: true },
-  },
-  { _id: false },
-);
-
-// Create a Mongoose schema based on TAdmin interface
-const adminSchema = new Schema<TAdmin>(
-  {
-    id: { type: String, required: true },
-    user: { type: Schema.Types.ObjectId, required: true },
-    email: { type: String, required: true },
-    phone: { type: String, required: true },
-    education: [educationSchema],
-    fullName: {
-      firstName: { type: String, required: true },
-      middleName: { type: String, required: true },
-      lastName: { type: String, required: true },
+    user: {
+      type: Schema.Types.ObjectId,
+      required: [true, "User ID is required"],
     },
-    address: {
-      presentAddress: { type: String, required: true },
-      permanentAddress: { type: String, required: true },
+    id: { type: String, required: [true, "Nurse ID is required"] },
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      match: [emailPattern, "Invalid email format"],
+      unique: true,
     },
-    dateOfBirth: { type: String, required: true },
-    gender: { type: String, required: true },
-    profileImage: { type: String, required: true },
+    phone: {
+      type: String,
+      required: [true, "Phone number is required"],
+      match: [phonePattern, "Invalid phone number format"],
+    },
+    education: {
+      type: [{ type: Object }], // Assuming TEducation structure is complex; can be refined
+      validate: {
+        validator: (eduArray: TEducation[]) => eduArray.length > 0,
+        message: "At least one education entry is required",
+      },
+    },
+    fullName: utilsSchema.fullNameSchema,
+    address: utilsSchema.addressSchema,
+    dateOfBirth: {
+      type: String,
+      required: [true, "Date of birth is required"],
+      match: [birthDatePattern, "Invalid date format (YYYY-MM-DD)"],
+    },
+    gender: { type: String, required: [true, "Gender is required"] },
+    profileImage: {
+      type: String,
+      required: [true, "Profile image URL is required"],
+    },
   },
   { timestamps: true },
 );

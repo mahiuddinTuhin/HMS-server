@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.globalErrorHandler = void 0;
 const mongoose_1 = require("mongoose");
 const zod_1 = require("zod");
+const customError_1 = __importDefault(require("../errors/customError"));
 const handleValidationError_1 = __importDefault(require("../errors/handleValidationError"));
-const customError_1 = __importDefault(require("../util/customError"));
-const zodErrorHandler_1 = __importDefault(require("../util/zodErrorHandler"));
+const zodErrorHandler_1 = __importDefault(require("../utils/zodErrorHandler"));
 const globalErrorHandler = (err, req, res, next) => {
     let message = err.message || "Something went wring!";
     let statusCode = err.statusCode || 500;

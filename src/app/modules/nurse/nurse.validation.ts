@@ -1,12 +1,8 @@
-import { ObjectId } from "mongodb";
 import { z } from "zod";
 
 const NurseValidation = z.object({
-  user: z.instanceof(ObjectId),
-  id: z.string({
-    required_error: "Nurse ID is required",
-    invalid_type_error: "Nurse ID must be a string",
-  }),
+  user: z.string().optional(),
+  id: z.string().optional(),
   shift: z.enum(["day", "night"]),
   email: z
     .string({

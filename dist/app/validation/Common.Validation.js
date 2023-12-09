@@ -1,9 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.birthDatePattern = exports.phonePattern = exports.emailPattern = exports.passwordPattern = void 0;
 const zod_1 = require("zod");
-const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@~`#^()-_=+$!%*?&])[A-Za-z\d@~`#^()-_=+$!%*?&]{8,}$/;
-const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const phonePattern = /^\+?(\d{1,4})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})$/;
+exports.passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@~`#^()-_=+$!%*?&])[A-Za-z\d@~`#^()-_=+$!%*?&]{8,}$/;
+exports.emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+exports.phonePattern = /^\+?\d{13}$/;
+exports.birthDatePattern = /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 const educationValidation = zod_1.z.object({
     institute: zod_1.z.string().min(4),
     degree: zod_1.z.string().min(2),
@@ -19,20 +21,21 @@ const addressValidation = zod_1.z.object({
     permanentAddress: zod_1.z.string().min(5),
 });
 // Basic email regex pattern
-const phoneValidation = zod_1.z.string().min(11).regex(phonePattern);
+const phoneValidation = zod_1.z.string().min(11).regex(exports.phonePattern);
 const passwordValidation = zod_1.z
     .string()
     .optional()
     .refine((password) => {
     const newPassword = password || process.env.DEFAULT_PASSWORD;
-    return passwordPattern.test(newPassword);
+    console.log(exports.passwordPattern.test(newPassword));
+    return exports.passwordPattern.test(newPassword);
 }, {
     message: "Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.",
 });
 const emailValidation = zod_1.z
     .string()
     .optional()
-    .refine((email) => emailPattern.test(email), {
+    .refine((email) => exports.emailPattern.test(email), {
     message: "Invalid email!",
 });
 const globalValidators = {

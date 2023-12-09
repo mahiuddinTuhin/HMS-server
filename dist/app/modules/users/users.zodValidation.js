@@ -8,6 +8,6 @@ const zod_1 = require("zod");
 const Common_Validation_1 = __importDefault(require("../../validation/Common.Validation"));
 exports.userValidation = zod_1.z.object({
     needsPasswordChange: zod_1.z.boolean().default(true),
-    password: Common_Validation_1.default.passwordValidation,
+    password: Common_Validation_1.default.passwordValidation.optional(),
     email: Common_Validation_1.default.emailValidation,
 });

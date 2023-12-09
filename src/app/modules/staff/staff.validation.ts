@@ -1,35 +1,18 @@
-import { ObjectId } from "mongodb";
 import { z } from "zod";
 
-const TEducationSchema = z.object({
-  institute: z.string({
-    required_error: "Institute is required",
-    invalid_type_error: "Institute must be a string",
-  }),
-  degree: z.string({
-    required_error: "Degree is required",
-    invalid_type_error: "Degree must be a string",
-  }),
-  year: z.number({
-    required_error: "Passing year is required",
-    invalid_type_error: "Passing year must be a number",
-  }),
-});
-
 const staffValidation = z.object({
-  user: z.instanceof(ObjectId),
-  id: z.string({
-    required_error: "ID is required",
-    invalid_type_error: "ID must be a string",
-  }),
+  user: z.string().optional(),
+  id: z
+    .string({
+      required_error: "ID is required",
+      invalid_type_error: "ID must be a string",
+    })
+    .optional(),
   shift: z.enum(["day", "night"], {
     required_error: "Shift is required",
     invalid_type_error: "Shift must be 'day' or 'night'",
   }),
-  education: z.array(TEducationSchema, {
-    required_error: "Education is required",
-    invalid_type_error: "Education must be an array of TEducation",
-  }),
+  education: z.array(z.object({})),
   email: z
     .string({
       required_error: "Email is required",

@@ -1,49 +1,58 @@
-import { ObjectId } from "mongodb";
 import { z } from "zod";
 
 export const patientValidation = z.object({
-  user: z.instanceof(ObjectId).refine((value) => value !== null, {
-    message: "User ID is required",
-  }),
-  id: z.string().refine((value) => value !== null, {
-    message: "ID is required",
-  }),
-  allMedicalHistory: z.array(z.instanceof(ObjectId)).optional(),
+  user: z
+    .string()
+    .refine((value) => value !== null, {
+      message: "User ID is required",
+    })
+    .optional(),
+  id: z
+    .string()
+    .refine((value) => value !== null, {
+      message: "ID is required",
+    })
+    .optional(),
+  allMedicalHistory: z.array(z.string().optional()).optional(),
 
   pendingAppointments: z
     .array(
-      z.object({
-        doctor: z.instanceof(ObjectId).refine((value) => value !== null, {
-          message: "Doctor ID is required",
-        }),
-        date: z.string().refine((value) => value !== null, {
-          message: "Date is required",
-        }),
-        time: z.string().refine((value) => value !== null, {
-          message: "Time is required",
-        }),
-      }),
+      z
+        .object({
+          doctor: z.string().refine((value) => value !== null, {
+            message: "Doctor ID is required",
+          }),
+          date: z.string().refine((value) => value !== null, {
+            message: "Date is required",
+          }),
+          time: z.string().refine((value) => value !== null, {
+            message: "Time is required",
+          }),
+        })
+        .optional(),
     )
     .optional(),
 
   allAppointmentHistory: z
     .array(
-      z.object({
-        doctor: z.instanceof(ObjectId).refine((value) => value !== null, {
-          message: "Doctor ID is required",
-        }),
-        date: z.string().refine((value) => value !== null, {
-          message: "Date is required",
-        }),
-        time: z.string().refine((value) => value !== null, {
-          message: "Time is required",
-        }),
-      }),
+      z
+        .object({
+          doctor: z.string().refine((value) => value !== null, {
+            message: "Doctor ID is required",
+          }),
+          date: z.string().refine((value) => value !== null, {
+            message: "Date is required",
+          }),
+          time: z.string().refine((value) => value !== null, {
+            message: "Time is required",
+          }),
+        })
+        .optional(),
     )
     .optional(),
 
   allDiagnosis: z
-    .array(z.instanceof(ObjectId))
+    .array(z.string().optional())
     .refine((value) => value !== null, {
       message: "All diagnosis is required",
     })
@@ -52,10 +61,11 @@ export const patientValidation = z.object({
   isAdmitted: z.boolean().default(false),
 
   currentMedicalDepartment: z
-    .instanceof(ObjectId)
+    .string()
     .refine((value) => value !== null, {
       message: "Current medical department is required",
-    }),
+    })
+    .optional(),
 
   bills: z
     .number()
@@ -63,13 +73,6 @@ export const patientValidation = z.object({
     .refine((value) => value !== null, {
       message: "Bills is required",
     }),
-
-  contactNumber: z
-    .string()
-    .refine((value) => value !== null, {
-      message: "Contact number is required",
-    })
-    .optional(),
 
   emergencyContact: z
     .string()

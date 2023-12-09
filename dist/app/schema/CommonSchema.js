@@ -109,6 +109,25 @@ const patientGuardianSchema = new mongoose_1.Schema({
     contactNumber: String,
     address: String,
 });
+const fullNameSchema = new mongoose_1.Schema({
+    firstName: { type: String, required: [true, "First name is required"] },
+    middleName: { type: String, required: [true, "Middle name is required"] },
+    lastName: { type: String, required: [true, "Last name is required"] },
+}, {
+    _id: false,
+});
+const addressSchema = new mongoose_1.Schema({
+    presentAddress: {
+        type: String,
+        required: [true, "Present address is required"],
+    },
+    permanentAddress: {
+        type: String,
+        required: [true, "Permanent address is required"],
+    },
+}, {
+    _id: false,
+});
 exports.utilsSchema = {
     nonPatientContactSchema,
     patientContactSchema,
@@ -117,4 +136,6 @@ exports.utilsSchema = {
     NonPatientPersonalInfo,
     patientPersonalInfo,
     patientGuardianSchema,
+    fullNameSchema,
+    addressSchema,
 };

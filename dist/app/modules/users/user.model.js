@@ -4,7 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
+/* eslint-disable @typescript-eslint/no-var-requires */
 const mongoose_1 = __importDefault(require("mongoose"));
+const Common_Validation_1 = require("../../validation/Common.Validation");
+const bcrypt = require("bcrypt");
 const userSchema = new mongoose_1.default.Schema({
     id: {
         type: String,
@@ -16,8 +19,7 @@ const userSchema = new mongoose_1.default.Schema({
         default: process.env.DEFAULT_PASSWORD,
         validate: {
             validator: (value) => {
-                const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@~`#^()-_=+$!%*?&])[A-Za-z\d@~`#^()-_=+$!%*?&]{8,}$/;
-                return passwordPattern.test(value);
+                return Common_Validation_1.passwordPattern.test(value);
             },
             message: "-Password should be at least 8 characters long,\n -containing at least one uppercase letter, \n-one lowercase letter, \n-one number, \n-and one special character!",
         },
@@ -31,7 +33,17 @@ const userSchema = new mongoose_1.default.Schema({
         validate: {
             validator: (value) => {
                 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                // console.log(emailPattern.test(value));
                 return emailPattern.test(value);
+            },
+            message: "Invalid email address format!",
+        },
+    },
+    phone: {
+        type: String,
+        validate: {
+            validator: (value) => {
+                return Common_Validation_1.phonePattern.test(value);
             },
             message: "Invalid email address format!",
         },
@@ -65,8 +77,20 @@ const userSchema = new mongoose_1.default.Schema({
         default: false,
     },
 }, { timestamps: true });
-userSchema.pre("save", function (next) {
-    // do stuff
+/**
+ * @hash_the_pass_before_saving
+ */
+userSchema.pre("save", async function (next) {
+    const salt = bcrypt.genSaltSync(Number(process.env.SALTROUNDS));
+    const hashPass = bcrypt.hashSync(this?.password, salt) || process.env.DEFAULT_PASSWORD;
+    this.password = hashPass;
+    next();
+});
+/**
+ * @hiding_the_password
+ */
+userSchema.post("save", function (doc, next) {
+    doc.password = "";
     next();
 });
 exports.User = mongoose_1.default.model("User", userSchema);

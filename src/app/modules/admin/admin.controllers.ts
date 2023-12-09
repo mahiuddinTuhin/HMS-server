@@ -27,8 +27,6 @@ const createDepartment: RequestHandler = catchAsync(async (req, res) => {
 const createLabratory: RequestHandler = catchAsync(async (req, res) => {
   const labratoryData = req.body;
 
-
-
   const newLab = await adminServices.createLabratory(labratoryData);
 
   return responseToRequest(res, {
