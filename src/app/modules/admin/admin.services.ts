@@ -2,7 +2,7 @@
 
 import FindQueryBuilder from "../../builder/FindQueryBuilder";
 import AppError from "../../errors/customError";
-import generateServiceId from "../../utils/otherIdgenerator";
+import generateServiceId from "../../utils/generateServiceId";
 import { TDepartment } from "../department/department.interface";
 import Department from "../department/department.mode";
 import { TMedicalTest } from "../medicalTest/medicalTest.interface";

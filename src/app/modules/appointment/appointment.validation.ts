@@ -1,10 +1,12 @@
 import { z } from "zod";
 
 const appointmentValidation = z.object({
-  id: z.string({
-    required_error: "Appointment id is required!",
-    invalid_type_error: "Appointment id must be a string",
-  }),
+  id: z
+    .string({
+      required_error: "Appointment id is required!",
+      invalid_type_error: "Appointment id must be a string",
+    })
+    .optional(),
   doctor: z.string(),
   patient: z.string(),
   isPaid: z.boolean().default(false),
