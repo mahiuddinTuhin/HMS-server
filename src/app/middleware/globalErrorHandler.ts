@@ -55,10 +55,17 @@ export const globalErrorHandler: ErrorRequestHandler = (
     message = simplifiedErrors?.message;
     errorSources = simplifiedErrors?.errorSources;
   } else if (err instanceof AppError) {
-    /* handling AppError class message */
-    message = err?.message;
-    errorSources[0].message = err?.message;
-    errorSources[0].path = "";
+    const simplifiedErrors = handleCastError(err);
+
+    statusCode = simplifiedErrors?.statusCode;
+    message = simplifiedErrors?.message;
+    errorSources = simplifiedErrors?.errorSources;
+
+    return res.status(statusCode).json({
+      success: false,
+      message,
+      errors: errorSources,
+    });
   } else if (err instanceof Error) {
     message = err.message;
     errorSources = [
