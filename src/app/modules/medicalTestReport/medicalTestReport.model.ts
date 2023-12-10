@@ -1,9 +1,9 @@
 import mongoose, { model } from "mongoose";
-import { TMedicalTest } from "./medicalTest.interface";
+import { TmedicalTestReport } from "./medicalTestReportReport.interface";
 
 const { Schema } = mongoose;
 
-const MedicalTestSchema = new Schema<TMedicalTest>({
+const medicalTestReportSchema = new Schema<TmedicalTestReport>({
   id: { type: String, required: [true, "Medical Test Id is required."] },
   name: { type: String, required: [true, "Name is required."] },
   details: { type: String, required: [true, "Name is required."] },
@@ -37,7 +37,7 @@ const MedicalTestSchema = new Schema<TMedicalTest>({
   },
 });
 
-export const MedicalTest = model<TMedicalTest>(
-  "MedicalTest",
-  MedicalTestSchema,
+export const medicalTestReport = model<TmedicalTestReport>(
+  "medicalTestReport",
+  medicalTestReportSchema,
 );

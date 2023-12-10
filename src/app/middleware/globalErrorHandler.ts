@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ErrorRequestHandler } from "express";
 import { MongoError } from "mongodb";
@@ -52,9 +53,31 @@ export const globalErrorHandler: ErrorRequestHandler = (
     message = err.message;
     errorSources[0].message = err.message;
     errorSources[0].path = "";
+    // console.log({ errorSources });
   }
 
-  return res
-    .status(statusCode)
-    .json({ success: false, message, errors: errorSources });
+  /* uncaught unhandled error */
+  if (err.name === "CastError") {
+    console.log({ err });
+
+    const newErr: any = Object?.values(err?.error?.errors)[0] || {};
+
+    if (newErr.name === "CastError") {
+      errorSources[0].message = `'${newErr?.value}' is not acceptable as it is ${newErr?.valueType} . Expected type ${newErr?.kind}`;
+      errorSources[0].path = newErr?.path;
+    }
+
+    return res.status(statusCode).json({
+      success: false,
+      message,
+      errors: errorSources,
+    });
+  }
+  // const newObj: any = Object.values(err.error.errors);
+
+  return res.status(statusCode).json({
+    success: false,
+    message,
+    errors: errorSources,
+  });
 };

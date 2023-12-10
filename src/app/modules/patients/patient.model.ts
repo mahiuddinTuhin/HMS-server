@@ -10,7 +10,7 @@ const patientSchema = new Schema<TPatient>(
     },
     id: {
       type: String,
-      required: [true, "Id is required!"],
+      required: [true, "Patient Id is required!"],
     },
 
     allMedicalHistory: [{ type: Schema.Types.ObjectId, ref: "MedicalHistory" }],

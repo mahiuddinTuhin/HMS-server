@@ -1,7 +1,7 @@
 import { Router } from "express";
 import validateRequest from "../../middleware/ZodValidator";
+import TestValidation from "../Test/Test.validation";
 import DepartmentValidation from "../department/departmentValidation";
-import LaboratoryValidation from "../medicalTest/medicalTest.validation";
 import { adminController } from "./admin.controllers";
 
 const router = Router();
@@ -13,11 +13,11 @@ router.post(
   adminController.createDepartment,
 );
 
-/* creating labratory routes */
+/* creating test routes */
 router.post(
-  "/create-labratory",
-  validateRequest(LaboratoryValidation),
-  adminController.createLabratory,
+  "/create-test",
+  validateRequest(TestValidation),
+  adminController.createTest,
 );
 
 /**

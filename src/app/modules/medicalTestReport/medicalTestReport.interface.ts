@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 
-export type TMedicalTest = {
+export type TmedicalTestReport = {
   id: string;
   patient: Types.ObjectId;
   doctor: Types.ObjectId;

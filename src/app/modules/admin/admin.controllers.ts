@@ -23,17 +23,18 @@ const createDepartment: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
-/* creating Labratory controller */
-const createLabratory: RequestHandler = catchAsync(async (req, res) => {
-  const labratoryData = req.body;
+/* creating test controller */
+const createTest: RequestHandler = catchAsync(async (req, res) => {
+  const testData = req.body;
 
-  const newLab = await adminServices.createLabratory(labratoryData);
+
+  const newTest = await adminServices.createTest(testData);
 
   return responseToRequest(res, {
     status: httpStatus?.OK,
     success: true,
-    message: "Labratory Data Created Successfully!",
-    data: newLab,
+    message: "Test Data Created Successfully!",
+    data: newTest,
   });
 });
 
@@ -48,6 +49,6 @@ const findAllAdmin: RequestHandler = catchAsync(async (req, res) => {
 
 export const adminController = {
   createDepartment,
-  createLabratory,
+  createTest,
   findAllAdmin,
 };

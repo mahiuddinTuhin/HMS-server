@@ -7,12 +7,7 @@ export const patientValidation = z.object({
       message: "User ID is required",
     })
     .optional(),
-  id: z
-    .string()
-    .refine((value) => value !== null, {
-      message: "ID is required",
-    })
-    .optional(),
+
   allMedicalHistory: z.array(z.string().optional()).optional(),
 
   pendingAppointments: z

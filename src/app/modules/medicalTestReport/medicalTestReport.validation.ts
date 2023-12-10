@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const medicalTestValidation = z.object({
+const medicalTestReportValidation = z.object({
   id: z.string({
     required_error: "Medical Test Id is required",
     invalid_type_error: "Medical Test Id must be a string",
@@ -37,4 +37,4 @@ const medicalTestValidation = z.object({
   }),
 });
 
-export default medicalTestValidation;
+export default medicalTestReportValidation;

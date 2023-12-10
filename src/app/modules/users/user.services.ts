@@ -23,24 +23,31 @@ const bcrypt = require("bcrypt");
  * @returns_new_admin
  */
 const createAdminService = async (data: any) => {
-  /* taking necessary data for common user */
-
-  const userData: Partial<TUser> = {
-    id: await generateUserId("Admin"),
-    password: data?.password,
-    needsPasswordChange: true,
-    email: data?.email,
-    phone: data?.phone,
-    role: "admin",
-    isDeleted: false,
-    status: "active",
-  };
-
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
 
+    const generatedUserId = await generateUserId("patient");
+
+    if (!generatedUserId) {
+      throw new AppError(
+        "Error occured on creating generating id.",
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      );
+    }
+    /* taking necessary data for common user */
+
+    const userData: Partial<TUser> = {
+      id: generatedUserId,
+      password: data?.password,
+      needsPasswordChange: true,
+      email: data?.email,
+      phone: data?.phone,
+      role: "admin",
+      isDeleted: false,
+      status: "active",
+    };
     const newUser: any = await User.create([userData], { session });
 
     if (!newUser.length) {
@@ -86,23 +93,30 @@ const createAdminService = async (data: any) => {
  */
 
 const createDocService = async (data: any) => {
-  /* taking necessary data for common user */
-
-  const userData: Partial<TUser> = {
-    id: await generateUserId("Doctor"),
-    password: data?.password,
-    needsPasswordChange: true,
-    email: data?.email,
-    phone: data?.phone,
-    role: "doctor",
-    isDeleted: false,
-    status: "active",
-  };
-
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
+    const generatedUserId = await generateUserId("Doctor");
+
+    if (!generatedUserId) {
+      throw new AppError(
+        "Error occured on creating generating id.",
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      );
+    }
+    /* taking necessary data for common user */
+
+    const userData: Partial<TUser> = {
+      id: generatedUserId,
+      password: data?.password,
+      needsPasswordChange: true,
+      email: data?.email,
+      phone: data?.phone,
+      role: "doctor",
+      isDeleted: false,
+      status: "active",
+    };
 
     const newUser: any = await User.create([userData], { session });
 
@@ -202,6 +216,8 @@ const createNurseService = async (data: any) => {
 
 /* 4. creating patient */
 const createPatientService = async (data: any) => {
+  const session = await mongoose.startSession();
+
   /* taking necessary data for common user */
   const userData: Partial<TUser> = {
     id: await generateUserId("Patient"),
@@ -214,10 +230,28 @@ const createPatientService = async (data: any) => {
     status: "active",
   };
 
-  const session = await mongoose.startSession();
-
   try {
     session.startTransaction();
+
+    const generatedUserId = await generateUserId("patient");
+
+    if (!generatedUserId) {
+      throw new AppError(
+        "Error occured on creating generating id.",
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    const userData: Partial<TUser> = {
+      id: generatedUserId,
+      password: data?.password,
+      needsPasswordChange: true,
+      email: data?.email,
+      phone: data?.phone,
+      isDeleted: false,
+      role: "patient",
+      status: "active",
+    };
 
     const newUser: any = await User.create([userData], { session });
 
@@ -266,22 +300,31 @@ const createPatientService = async (data: any) => {
 
 /* 5. creating staff */
 const createStaffService = async (data: any) => {
-  /* taking necessary data for common user */
-  const userData: Partial<TUser> = {
-    id: await generateUserId("staff"),
-    password: data?.password,
-    needsPasswordChange: true,
-    email: data?.email,
-    phone: data?.phone,
-    isDeleted: false,
-    role: "staff",
-    status: "active",
-  };
-
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
+
+    const generatedUserId = await generateUserId("staff");
+
+    if (!generatedUserId) {
+      throw new AppError(
+        "Error generating user ID",
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    /* taking necessary data for common user */
+    const userData: Partial<TUser> = {
+      id: generatedUserId,
+      password: data?.password,
+      needsPasswordChange: true,
+      email: data?.email,
+      phone: data?.phone,
+      isDeleted: false,
+      role: "staff",
+      status: "active",
+    };
 
     const newUser = await User.create([userData], { session });
 

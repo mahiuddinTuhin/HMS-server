@@ -12,7 +12,10 @@ import { User } from "../modules/users/user.model";
  */
 
 const findLastUser = async (role: string) => {
-  const lastUser: any = await User.findOne({ role }, { id: 1, _id: 0 })
+  const lastUser: any = await User.findOne(
+    { role: role.toLowerCase() },
+    { id: 1, _id: 0 },
+  )
     .sort({ createdAt: -1 })
     .lean();
 
@@ -32,7 +35,7 @@ const generateUserId = async (role: string) => {
   let lastUser;
   let lastThreeDigit: any;
   try {
-    lastUser = (await findLastUser(role)) || {};
+    lastUser = await findLastUser(role);
 
     if (lastUser?.id) {
       const lastUserDate = lastUser?.id?.toString()?.substring(3, 5);
@@ -54,6 +57,7 @@ const generateUserId = async (role: string) => {
       } else if (lastThreeDigit.length === 1) {
         lastThreeDigit = `00${lastThreeDigit}`;
       }
+
       const newId: string =
         (role.substring(0, 3) || "Guest") +
         newDate +
@@ -63,8 +67,11 @@ const generateUserId = async (role: string) => {
 
       return newId;
     }
+
+    return `${role}0001.001`;
+  } catch (error) {
     throw new AppError("Failed to create id!", 400);
-  } catch (error) {}
+  }
 };
 
 export default generateUserId;
