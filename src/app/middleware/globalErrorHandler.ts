@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ErrorRequestHandler } from "express";
-import { MongoError } from "mongodb";
-import { Error } from "mongoose";
 import { ZodError } from "zod";
 
 import AppError from "../errors/customError";
+import handleCastError from "../errors/handleCastError";
+import handleDuplcateError from "../errors/handleDuplicationError";
 import handleValidationError from "../errors/handleValidationError";
 import { TErrorSources } from "../interfaces/TCommon.interface";
 import handledZodError from "../utils/zodErrorHandler";
@@ -33,46 +33,42 @@ export const globalErrorHandler: ErrorRequestHandler = (
     statusCode = simplifiedErrors?.statusCode;
     message = simplifiedErrors?.message;
     errorSources = simplifiedErrors?.errorSources;
-  } else if (err instanceof Error.ValidationError) {
+  } else if (err?.name === "ValidationError") {
     /* handling schema validation error */
     const simplifiedErrors = handleValidationError(err);
 
     statusCode = simplifiedErrors?.statusCode;
     message = simplifiedErrors?.message;
     errorSources = simplifiedErrors?.errorSources;
-  } else if ((err as MongoError).code === 11000) {
-    /* handling duplicate error comes from mongodb index */
-    statusCode = 409;
-    const firstKey = Object.keys(err.keyValue)[0];
-    const value = err.keyValue[firstKey];
-    message = `Duplication occurs!`;
-    errorSources[0].message = `'${value}' is already created in ${firstKey}`;
-    errorSources[0].path = `${firstKey}`;
+  } else if (err.name === "CastError") {
+    /* handling schema validation error */
+    const simplifiedErrors = handleCastError(err);
+
+    statusCode = simplifiedErrors?.statusCode;
+    message = simplifiedErrors?.message;
+    errorSources = simplifiedErrors?.errorSources;
+  } else if (err?.code === 11000) {
+    /* handling duplication error */
+    const simplifiedErrors = handleDuplcateError(err);
+
+    statusCode = simplifiedErrors?.statusCode;
+    message = simplifiedErrors?.message;
+    errorSources = simplifiedErrors?.errorSources;
   } else if (err instanceof AppError) {
     /* handling AppError class message */
-    message = err.message;
-    errorSources[0].message = err.message;
+    message = err?.message;
+    errorSources[0].message = err?.message;
     errorSources[0].path = "";
-    // console.log({ errorSources });
+  } else if (err instanceof Error) {
+    message = err.message;
+    errorSources = [
+      {
+        path: "",
+        message: err?.message,
+      },
+    ];
   }
 
-  /* uncaught unhandled error */
-  if (err.name === "CastError") {
-    console.log({ err });
-
-    const newErr: any = Object?.values(err?.error?.errors)[0] || {};
-
-    if (newErr.name === "CastError") {
-      errorSources[0].message = `'${newErr?.value}' is not acceptable as it is ${newErr?.valueType} . Expected type ${newErr?.kind}`;
-      errorSources[0].path = newErr?.path;
-    }
-
-    return res.status(statusCode).json({
-      success: false,
-      message,
-      errors: errorSources,
-    });
-  }
   // const newObj: any = Object.values(err.error.errors);
 
   return res.status(statusCode).json({
