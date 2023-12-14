@@ -5,7 +5,7 @@ import AppError from "../../errors/customError";
 import generateServiceId from "../../utils/generateServiceId";
 import TTest from "../Test/Test.interface";
 import { TDepartment } from "../department/department.interface";
-import Department from "../department/department.mode";
+import Department from "../department/department.model";
 
 import Test from "../Test/Test.model";
 import { nonPatientSearchableField } from "./admin.constant";
