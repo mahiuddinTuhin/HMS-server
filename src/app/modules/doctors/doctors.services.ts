@@ -121,8 +121,9 @@ const updateDocByIdService = async (id: string, data: Partial<TDoctor>) => {
   return updatedDoc;
 };
 
-const getAllDocService = async () => {
-  const allDoc = await Doctor.find();
+const getAllDocService = async (query: Record<string, any>) => {
+  const searchTerm = query?.searchTerm;
+  const allDoc = await Doctor.find(searchTerm);
   return allDoc;
 };
 

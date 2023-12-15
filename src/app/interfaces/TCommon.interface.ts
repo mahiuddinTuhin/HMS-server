@@ -1,7 +1,7 @@
-export type Tcontacts = {
-  homeMobile: string;
-  officeMobile: string;
-  email: string;
+export type TContact = {
+  phone: string[];
+  email: string[];
+  address: string[];
 };
 
 export type TEducation = {
@@ -63,3 +63,5 @@ export type TGenericErrorResponse = {
   message: string;
   errorSources: TErrorSources[];
 };
+
+

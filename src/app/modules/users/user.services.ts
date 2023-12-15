@@ -380,12 +380,9 @@ const getUserById = async (id: number) => {
 };
 
 const getAllUser = async (query: Record<string, any>) => {
-  let searchTerm = "";
+  const searchTerm = query?.searchTerm || "";
 
-  if (query?.searchTerm as string) {
-    searchTerm = query?.searchTerm;
-  }
-  const result = await User.find();
+  const result = await User.find(searchTerm);
 
   return result;
 };

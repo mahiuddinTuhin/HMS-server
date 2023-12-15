@@ -1,31 +1,43 @@
 import { Schema } from "mongoose";
 import {
+  TContact,
   TEducation,
   TGuardian,
   TPersonalInfo,
-  Tcontacts,
 } from "../interfaces/TCommon.interface";
 
-const nonPatientContactSchema = new Schema<Tcontacts>({
-  homeMobile: {
-    type: String,
-    required: [true, "Home Mobile is required!"],
-  },
-  officeMobile: {
-    type: String,
-    required: [true, "Office Mobileis required!"],
-  },
-  email: {
-    required: [true, "Email is required!"],
-    type: String,
-    validate: {
-      validator: (value: string) => {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailPattern.test(value);
-      },
-      message: "Invalid email address format!",
+/*
+ * contact schema
+ */
+
+export const contactSchema = new Schema<TContact>({
+  phone: [
+    {
+      type: String,
+      required: [true, "Phone number is required!"],
     },
-  },
+  ],
+
+  address: [
+    {
+      type: String,
+      required: [true, "Address required!"],
+    },
+  ],
+
+  email: [
+    {
+      required: [true, "Email is required!"],
+      type: String,
+      validate: {
+        validator: (value: string) => {
+          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          return emailPattern.test(value);
+        },
+        message: "Invalid email address format!",
+      },
+    },
+  ],
 });
 
 const nonPatientEducationSchema = new Schema<TEducation>({
@@ -97,20 +109,6 @@ const patientPersonalInfo = new Schema<TPersonalInfo>({
   gender: String,
   profileImage: String,
 });
-const patientContactSchema = new Schema<Tcontacts>({
-  homeMobile: String,
-  officeMobile: String,
-  email: {
-    type: String,
-    validate: {
-      validator: (value: string) => {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailPattern.test(value);
-      },
-      message: "Invalid email address format!",
-    },
-  },
-});
 
 const patientGuardianSchema = new Schema<TGuardian>({
   relation: String,
@@ -147,8 +145,6 @@ const addressSchema = new Schema(
 );
 
 export const utilsSchema = {
-  nonPatientContactSchema,
-  patientContactSchema,
   nonPatientEducationSchema,
   patientEducationSchema,
   NonPatientPersonalInfo,
