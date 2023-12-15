@@ -3,7 +3,9 @@ type CustomErrorProps = {
   statusCode?: number;
 };
 
-class AppError extends Error implements CustomErrorProps {
+//
+class AppError extends Error {
+  // class AppError extends Error implements CustomErrorProps {
   statusCode?: number;
 
   constructor(message: string, statusCode?: number) {

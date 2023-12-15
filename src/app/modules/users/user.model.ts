@@ -31,6 +31,7 @@ const userSchema = new mongoose.Schema<TUser>(
 
     email: {
       type: String,
+      unique: true,
       validate: {
         validator: (value: string) => {
           const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

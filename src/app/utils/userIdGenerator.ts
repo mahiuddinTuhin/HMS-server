@@ -11,79 +11,72 @@ import { User } from "../modules/users/user.model";
  * @param role
  */
 
+/*
+  finding last user from database, roles basis.
+ */
 const findLastUser = async (role: string) => {
-  const lastUser: any = await User.findOne(
-    { role: role.toLowerCase() },
-    { id: 1, _id: 0 },
-  )
-    .sort({ createdAt: -1 })
-    .lean();
-  console.log({ insideLastUserFun: new Date().getTime(), lastUser });
+  try {
+    const lastUser: any = await User.findOne(
+      { role: role.toLowerCase() },
+      { id: 1, _id: 0 },
+    )
+      .sort({ createdAt: -1 })
+      .lean();
 
-  return lastUser;
+    return lastUser?.id;
+  } catch (error) {
+    throw new AppError("Couldn't find last user", 400);
+  }
 };
+
+/*
+      generating id by retrieving last user(role based) or custom id
+*/
 
 const generateUserId = async (role: string) => {
   const date = new Date();
   const currentYear = date.getFullYear().toString().substring(2, 4);
-  const currentMonth = (date.getMonth() + 1).toString();
-  const newMonth = currentMonth.length < 2 ? `0${currentMonth}` : currentMonth;
-  const currentDateStr = date.getDate().toString();
-  const newDate =
-    currentDateStr.length < 2 ? `0${currentDateStr}` : currentDateStr;
+
+  const currentMonth = (date.getMonth() + 1).toString().padStart(2, "0");
+
+  const currentDate = date.getDate().toString().toString().padStart(2, "0");
+
+  const currentformattedDate = `${currentDate}${currentMonth}${currentYear}`;
 
   /* finding last id on a role*/
-  let lastUser;
-  let lastThreeDigit: any;
+  let lastUserId;
+  let newUserId;
+  let newSerial: any;
   try {
-    const now = new Date();
+    lastUserId = (await findLastUser(role)) || `${currentformattedDate}000`;
+    // 151223001
+    const lastUserIdDate = lastUserId.toString().substring(3, 9);
+    const lastUserSerial = Number(lastUserId.toString().substring(9, 12)) || 0;
 
-    const seconds = now.getTime();
-
-    console.log({ beforeFindLastId: seconds });
-
-    lastUser = await findLastUser(role);
-
-    console.log({ afterFindLastId: seconds, lastUser });
-
-    if (lastUser?.id) {
-      console.log({ FoundLastId: seconds });
-
-      const lastUserDate = lastUser?.id?.toString()?.substring(3, 5);
-
-      lastThreeDigit = lastUser?.id?.substring(9, 12);
-
-      if (
-        lastUserDate === newDate &&
-        lastThreeDigit &&
-        Number(lastThreeDigit) < 1000
-      ) {
-        lastThreeDigit = (Number(lastThreeDigit) + 1).toString();
-      } else {
-        lastThreeDigit = "001";
-      }
-
-      if (lastThreeDigit.length === 2) {
-        lastThreeDigit = `0${lastThreeDigit}`;
-      } else if (lastThreeDigit.length === 1) {
-        lastThreeDigit = `00${lastThreeDigit}`;
-      }
-
-      const newId: string =
-        (role.substring(0, 3) || "Guest") +
-        newDate +
-        newMonth +
-        currentYear +
-        lastThreeDigit;
-
-      return newId;
-    } else {
-      console.log({ didnotFOundId: seconds, lastUser });
-
-      throw new AppError("Failed to create id!", 400);
+    if (lastUserSerial >= 999) {
+      throw new AppError("User is overflowed for today!", 400);
     }
+    const needIncrement = lastUserIdDate === currentformattedDate;
+
+    if (needIncrement) {
+      newSerial = (lastUserSerial + 1).toString().padStart(3, "0");
+    } else {
+      newSerial = "001";
+    }
+
+    newUserId = `${currentformattedDate}${newSerial}`;
+
+    const roleStr = role.charAt(0).toUpperCase() + role.slice(1, 3);
+
+    newUserId = roleStr + newUserId;
+
+    return newUserId;
   } catch (error) {
-    throw new AppError("Failed to create id!", 400);
+    if (error instanceof AppError) {
+      throw new AppError(error?.message || "Failed to generate code", 400);
+    } else {
+      throw new AppError("Failed to generate code", 400);
+    }
   }
 };
 

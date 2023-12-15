@@ -48,7 +48,6 @@ export const doctorSchema = new Schema<TDoctor>(
       type: String,
       required: [true, "Email is required"],
       match: [emailPattern, "Invalid email format"],
-      unique: true,
     },
 
     phone: {
