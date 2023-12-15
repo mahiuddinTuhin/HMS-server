@@ -50,21 +50,16 @@ export const medicalProblemSchema = new Schema<TMedicalProblem>(
 /*
  * Medical specialization section schema
  */
-export const medicalSpecializationSchema = new Schema<TMedicalSpecializations>(
-  {
-    specializationName: {
-      type: String,
-      required: [true, "Specialization Name name is required!"],
-      unique: true,
-    },
-    specializationDetails: {
-      type: String,
-      required: [true, "Specialization Details name is required!"],
-    },
+export const medicalSpecializationSchema = new Schema<TMedicalSpecializations>({
+  specializationName: {
+    type: String,
+    required: [true, "Specialization Name name is required!"],
+    unique: true,
+  },
+  specializationDetails: {
+    type: String,
+    required: [true, "Specialization Details name is required!"],
+  },
 
-    problems: [medicalProblemSchema],
-  },
-  {
-    _id: false,
-  },
-);
+  problems: [medicalProblemSchema],
+});

@@ -13,6 +13,17 @@ const findAllDepartment: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
-const departmentController = { findAllDepartment };
+const findDepartmentById: RequestHandler = catchAsync(async (req, res) => {
+  const id: string = req.params?.depId;
+  const department = await departmentService.findDepartmentById(id);
+  responseToRequest(res, {
+    success: true,
+    status: 200,
+    message: "Successfully retrieved department.",
+    data: department,
+  });
+});
+
+const departmentController = { findAllDepartment, findDepartmentById };
 
 export default departmentController;
