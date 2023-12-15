@@ -13,15 +13,11 @@ import { Admin } from "./admin.mode";
 
 /* creating department */
 const createDepartment = async (payload: TDepartment) => {
-  try {
-    payload.id = await generateServiceId(Department);
+  payload.id = await generateServiceId(Department);
 
-    const newDepartment: any = await Department.create(payload);
+  const newDepartment: any = await Department.create(payload);
 
-    return newDepartment;
-  } catch (error) {
-    throw new AppError("Failed to create department by admin!", 400);
-  }
+  return newDepartment;
 };
 
 /* creating Test service*/

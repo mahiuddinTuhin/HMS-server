@@ -14,15 +14,18 @@ const departmentSchema = new Schema<TDepartment>(
     departmentName: {
       type: String,
       required: [true, "Department name is required!"],
+      unique: true,
     },
     departmentDetails: {
       type: String,
       required: [true, "Details of department is required!"],
     },
     specializations: [medicalSpecializationSchema],
-    doctors: [{ type: Schema.Types.ObjectId, ref: "Doctor" }],
+    doctors: [{ type: Schema.Types.ObjectId, ref: "Doctor", unique: true }],
     medicalLicense: [{ type: String, required: true }],
-    medicalHistory: [{ type: Schema.Types.ObjectId, ref: "MedicalHistory" }],
+    medicalHistory: [
+      { type: Schema.Types.ObjectId, ref: "MedicalHistory", unique: true },
+    ],
     contact: contactSchema,
     isDeleted: {
       type: Boolean,

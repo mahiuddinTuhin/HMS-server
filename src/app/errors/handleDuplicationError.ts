@@ -11,9 +11,12 @@ const handleDuplcateError = (err: any): TGenericErrorResponse => {
   // The extracted value will be in the first capturing group
   const extractedMessage = match && match[1];
 
+  console.log({ err });
+  console.log("---------------------------------------------------");
+
   const errorSources: TErrorSources[] = [
     {
-      path: "",
+      path: err?.keyPattern,
       message: `${extractedMessage} is already exists`,
     },
   ];

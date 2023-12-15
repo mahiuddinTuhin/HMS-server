@@ -13,6 +13,7 @@ export const medicalProblemSchema = new Schema<TMedicalProblem>(
     problemName: {
       type: String,
       required: [true, "Problem name is required!"],
+      unique: true,
     },
 
     problemHints: {
@@ -54,6 +55,7 @@ export const medicalSpecializationSchema = new Schema<TMedicalSpecializations>(
     specializationName: {
       type: String,
       required: [true, "Specialization Name name is required!"],
+      unique: true,
     },
     specializationDetails: {
       type: String,
