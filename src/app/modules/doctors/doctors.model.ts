@@ -4,7 +4,6 @@ import { utilsSchema } from "../../schema/CommonSchema";
 import {
   birthDatePattern,
   emailPattern,
-  phonePattern,
 } from "../../validation/Common.Validation";
 import { schedules } from "./doctor.constant";
 import { TDoctor } from "./doctors.interface";
@@ -51,11 +50,12 @@ export const doctorSchema = new Schema<TDoctor>(
       match: [emailPattern, "Invalid email format"],
       unique: true,
     },
+
     phone: {
       type: String,
       required: [true, "Phone number is required"],
-      match: [phonePattern, "Invalid phone number format"],
     },
+
     education: {
       type: [{ type: Object }], // Assuming TEducation structure is complex; can be refined
       validate: {
@@ -79,6 +79,12 @@ export const doctorSchema = new Schema<TDoctor>(
       type: String,
       required: [true, "license_info is required"],
     },
+    specializations: [
+      {
+        type: String,
+        required: [true, "specializations is required"],
+      },
+    ],
   },
   {
     timestamps: true,

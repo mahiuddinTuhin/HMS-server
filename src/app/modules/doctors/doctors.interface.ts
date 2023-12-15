@@ -27,4 +27,5 @@ export type TDoctor = {
   createdAt: Date;
   updatedAt: Date;
   isDeleted: boolean;
+  specializations: string[];
 };

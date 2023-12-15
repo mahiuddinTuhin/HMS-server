@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import mongoose from "mongoose";
-import {
-  passwordPattern,
-  phonePattern,
-} from "../../validation/Common.Validation";
+import { passwordPattern } from "../../validation/Common.Validation";
 import { TUser } from "./user.interface";
 const bcrypt = require("bcrypt");
 
@@ -44,12 +41,12 @@ const userSchema = new mongoose.Schema<TUser>(
     },
     phone: {
       type: String,
-      validate: {
-        validator: function (value: string) {
-          return phonePattern.test(value);
-        },
-        message: "Invalid phone address format!",
-      },
+      // validate: {
+      //   validator: function (value: string) {
+      //     return phonePattern.test(value);
+      //   },
+      //   message: "Invalid phone address format!",
+      // },
     },
 
     role: {

@@ -38,6 +38,7 @@ const generateServiceId = async (Collection: any) => {
     lastThreeDigit = lastUser?.id?.toString()?.substring(3, 6) || "000";
 
     let incrementedId = (Number(lastThreeDigit) + 1).toString();
+    console.log({ incrementedId });
 
     if (incrementedId?.length === 2) {
       incrementedId = `0${incrementedId}`;

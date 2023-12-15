@@ -4,7 +4,7 @@ export type TDepartment = {
   id: string;
   departmentName: string;
   allDoctors: Types.ObjectId[];
-  licences: string;
+  licences: string[];
   details: string;
   allMedicalHistory: Types.ObjectId[];
   isDeleted: boolean;

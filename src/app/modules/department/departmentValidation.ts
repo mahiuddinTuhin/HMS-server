@@ -13,14 +13,16 @@ const DepartmentValidation = z.object({
       invalid_type_error: "Detail of department must be a string",
     })
     .min(20),
-  allDoctors: z.array(z.string().optional()),
-  licences: z
-    .string({
-      required_error: "Licences is required",
-      invalid_type_error: "Licences must be a string",
-    })
-    .min(10),
-  allMedicalHistory: z.array(z.string().optional()),
+  allDoctors: z.array(z.string().optional()).optional(),
+  licences: z.array(
+    z
+      .string({
+        required_error: "Licences is required",
+        invalid_type_error: "Licences must be a string",
+      })
+      .min(10),
+  ),
+  allMedicalHistory: z.array(z.string().optional()).optional(),
 });
 
 export default DepartmentValidation;

@@ -23,10 +23,23 @@ const createDepartment: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+/* const createBulkDepartment: RequestHandler = catchAsync(async (req, res) => {
+  const departmentData = req.body;
+
+  const newDepartment =
+    await adminServices.createBulkDepartment(departmentData);
+
+  return responseToRequest(res, {
+    status: httpStatus?.OK,
+    success: true,
+    message: "Bulk amount of Department Created Successfully!",
+    data: newDepartment,
+  });
+}); */
+
 /* creating test controller */
 const createTest: RequestHandler = catchAsync(async (req, res) => {
   const testData = req.body;
-
 
   const newTest = await adminServices.createTest(testData);
 

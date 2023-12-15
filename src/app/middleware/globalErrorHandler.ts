@@ -19,7 +19,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
   let message = err.message || "Something went wring!";
   let statusCode = err.statusCode || 500;
 
-  let errorSources: TErrorSources[] = [
+  let errorSources: Partial<TErrorSources[]> = [
     {
       path: "",
       message: "Something went wrong",
@@ -55,11 +55,17 @@ export const globalErrorHandler: ErrorRequestHandler = (
     message = simplifiedErrors?.message;
     errorSources = simplifiedErrors?.errorSources;
   } else if (err instanceof AppError) {
-    const simplifiedErrors = handleCastError(err);
+    // console.log({ insideCasting: 1, err });
+    // const simplifiedErrors = handleCastError(err);
 
-    statusCode = simplifiedErrors?.statusCode;
-    message = simplifiedErrors?.message;
-    errorSources = simplifiedErrors?.errorSources;
+    statusCode = err?.statusCode;
+    errorSources = [
+      {
+        path: "",
+        // message: `${err?.error?.name}: ${err?.error?.message}` as string,
+        message: `${err?.message}`,
+      },
+    ];
 
     return res.status(statusCode).json({
       success: false,

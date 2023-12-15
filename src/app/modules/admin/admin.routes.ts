@@ -13,6 +13,9 @@ router.post(
   adminController.createDepartment,
 );
 
+// /* creating department routes */
+// router.post("/create-bulk-department", adminController.createBulkDepartment);
+
 /* creating test routes */
 router.post(
   "/create-test",

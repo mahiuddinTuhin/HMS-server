@@ -24,6 +24,16 @@ const createDepartment = async (data: TDepartment) => {
   }
 };
 
+/* creating bulk amount department */
+// const createBulkDepartment = async (data: any) => {
+//   try {
+//     const newDepartments: any = await Department.create(data);
+//     return newDepartment;
+//   } catch (error) {
+//     throw new AppError("Failed to create bulk departments by admin!", 400);
+//   }
+// };
+
 /* creating Test service*/
 const createTest = async (data: TTest) => {
   try {

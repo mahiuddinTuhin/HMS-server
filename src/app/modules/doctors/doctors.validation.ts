@@ -18,12 +18,14 @@ const DoctorValidation = z.object({
       invalid_type_error: "Email must be a string",
     })
     .email(),
+
   phone: z
     .string({
       required_error: "Phone number is required",
       invalid_type_error: "Phone number must be a string",
     })
     .min(11, "Phone number should be minimum 11 digit long."),
+
   education: z
     .array(z.object({}))
     .min(1, "At least one education entry is required"),

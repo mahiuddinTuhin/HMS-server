@@ -18,6 +18,7 @@ const findLastUser = async (role: string) => {
   )
     .sort({ createdAt: -1 })
     .lean();
+  console.log({ insideLastUserFun: new Date().getTime(), lastUser });
 
   return lastUser;
 };
@@ -35,9 +36,19 @@ const generateUserId = async (role: string) => {
   let lastUser;
   let lastThreeDigit: any;
   try {
+    const now = new Date();
+
+    const seconds = now.getTime();
+
+    console.log({ beforeFindLastId: seconds });
+
     lastUser = await findLastUser(role);
 
+    console.log({ afterFindLastId: seconds, lastUser });
+
     if (lastUser?.id) {
+      console.log({ FoundLastId: seconds });
+
       const lastUserDate = lastUser?.id?.toString()?.substring(3, 5);
 
       lastThreeDigit = lastUser?.id?.substring(9, 12);
@@ -66,9 +77,11 @@ const generateUserId = async (role: string) => {
         lastThreeDigit;
 
       return newId;
-    }
+    } else {
+      console.log({ didnotFOundId: seconds, lastUser });
 
-    return `${role}0001.001`;
+      throw new AppError("Failed to create id!", 400);
+    }
   } catch (error) {
     throw new AppError("Failed to create id!", 400);
   }
