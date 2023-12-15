@@ -3,31 +3,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import AppError from "../errors/customError";
-import { User } from "../modules/users/user.model";
+import findLastUser from "./findLastUser";
 
 /**
  *    id: pattern
  *    Role_first_three_letter+year's last 2 digit(23)+monnth(12)+date(30)+(quantity+1)
  * @param role
  */
-
-/*
-  finding last user from database, roles basis.
- */
-const findLastUser = async (role: string) => {
-  try {
-    const lastUser: any = await User.findOne(
-      { role: role.toLowerCase() },
-      { id: 1, _id: 0 },
-    )
-      .sort({ createdAt: -1 })
-      .lean();
-
-    return lastUser?.id;
-  } catch (error) {
-    throw new AppError("Couldn't find last user", 400);
-  }
-};
 
 /*
       generating id by retrieving last user(role based) or custom id

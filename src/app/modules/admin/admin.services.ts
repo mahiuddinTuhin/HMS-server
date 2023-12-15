@@ -1,15 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import FindQueryBuilder from "../../builder/FindQueryBuilder";
 import AppError from "../../errors/customError";
 import generateServiceId from "../../utils/generateServiceId";
 import TTest from "../Test/Test.interface";
-import { TDepartment } from "../department/department.interface";
 import Department from "../department/department.model";
 
 import Test from "../Test/Test.model";
+import TDepartment from "../department/department.interface";
 import { nonPatientSearchableField } from "./admin.constant";
 import { Admin } from "./admin.mode";
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* creating department */
 const createDepartment = async (data: TDepartment) => {
@@ -24,16 +24,6 @@ const createDepartment = async (data: TDepartment) => {
   }
 };
 
-/* creating bulk amount department */
-// const createBulkDepartment = async (data: any) => {
-//   try {
-//     const newDepartments: any = await Department.create(data);
-//     return newDepartment;
-//   } catch (error) {
-//     throw new AppError("Failed to create bulk departments by admin!", 400);
-//   }
-// };
-
 /* creating Test service*/
 const createTest = async (data: TTest) => {
   try {
@@ -44,7 +34,7 @@ const createTest = async (data: TTest) => {
   } catch (error: any) {
     // console.log({ error });
     // console.log({ error });
-    throw new AppError("Failed to create new Test service!", 400, error);
+    throw new AppError("Failed to create new Test service!", 400);
   }
 };
 
