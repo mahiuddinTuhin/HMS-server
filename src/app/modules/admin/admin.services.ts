@@ -12,11 +12,11 @@ import { Admin } from "./admin.mode";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* creating department */
-const createDepartment = async (data: TDepartment) => {
+const createDepartment = async (payload: TDepartment) => {
   try {
-    data.id = (await generateServiceId(Department)) || `Dep001`;
+    payload.id = await generateServiceId(Department);
 
-    const newDepartment: any = await Department.create(data);
+    const newDepartment: any = await Department.create(payload);
 
     return newDepartment;
   } catch (error) {

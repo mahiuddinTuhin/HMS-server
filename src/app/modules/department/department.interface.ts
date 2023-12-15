@@ -26,6 +26,13 @@ type TDepartment = {
   doctors?: Types.ObjectId[];
   medicalHistory?: Types.ObjectId[];
   contact: TContact;
+  /*
+   type TContact = {
+    phone: string[];
+    email: string[];
+    address: string[];
+}
+  */
   medicalLicense: string[];
   isDeleted: true | false;
 };
