@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import AppError from "../errors/customError";
-import { Appointment } from "../modules/appointment/appointment.model";
-import { Doctor } from "../modules/doctors/doctors.model";
+import AppError from "../../errors/customError";
+import { Appointment } from "../appointment/appointment.model";
+import { Doctor } from "./doctors.model";
 
 const appointedTimeOfDoc = async (doctor_id: string) => {
   const doctor: any = await Doctor.findById(doctor_id);
+
+  console.log("appointed time hit");
 
   if (!doctor) {
     throw new AppError("Doctor id is not found.", 400);

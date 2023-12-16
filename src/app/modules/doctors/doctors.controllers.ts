@@ -95,6 +95,20 @@ const updateDocByIdController: RequestHandler = catchAsync(async (req, res) => {
   );
 });
 
+const appointedTimeOfDoc: RequestHandler = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const newDoc = await doctorServices.appointedTimeOfDoc(id);
+
+  ResponseToServer(
+    req,
+    res,
+    true,
+    200,
+    "successfully get doctor's data.",
+    newDoc,
+  );
+});
+
 export const doctorsController = {
   findDocByIdController,
   updateDocByIdController,
@@ -102,4 +116,5 @@ export const doctorsController = {
   getAllDocController,
   createAppointment,
   createMedicalHistory,
+  appointedTimeOfDoc,
 };

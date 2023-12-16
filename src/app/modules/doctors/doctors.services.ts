@@ -5,6 +5,7 @@ import AppError from "../../errors/customError";
 import { TMedicalHistory } from "../MedicalHistory/medicalHistory.ineterface";
 import { MedicalHistory } from "../MedicalHistory/medicalHistory.model";
 import { TAppointments } from "../appointment/appointment.interface";
+import { Appointment } from "../appointment/appointment.model";
 import { Patient } from "../patients/patient.model";
 import { TDoctor } from "./doctors.interface";
 import { Doctor } from "./doctors.model";
@@ -13,7 +14,6 @@ import { Doctor } from "./doctors.model";
 const createAppointment = async (data: TAppointments) => {
   /* checking whether doctor is available or not */
   const doesDoctorExist = await Doctor.findById(data?.id);
-
 
   if (!doesDoctorExist) {
     throw new AppError(
@@ -120,6 +120,46 @@ const getAllDocService = async () => {
   return allDoc;
 };
 
+const appointedTimeOfDoc = async (doctor_id: string) => {
+  const doctor: any = await Doctor.findById(doctor_id);
+
+  if (!doctor) {
+    throw new AppError("Doctor id is not found.", 400);
+  }
+
+  const pendingAppointments: string[] = doctor?.pendingAppointments;
+
+  const scheduleByDate: Record<string, string[]> = {};
+
+  /* if no appointment found, then return empty obj */
+
+  if (!pendingAppointments.length) {
+    return {};
+  }
+
+  /* getting all appointment from appointment collection by using the _id that is containing in * pendingAppointments */
+
+  const allAppointments = await Appointment.find({
+    _id: { $in: pendingAppointments },
+  });
+
+  /*
+   * loop in all appointment
+   * set scheduleByDate value with filed name using the date
+   * push the time into matching date
+   */
+
+  allAppointments.forEach((appointment) => {
+    const { date, time } = appointment;
+
+    if (!scheduleByDate[date]) {
+      scheduleByDate[date] = [];
+    }
+    scheduleByDate[date].push(time);
+  });
+
+  return scheduleByDate;
+};
 export const doctorServices = {
   findDocByIdService,
   updateDocByIdService,
@@ -127,4 +167,5 @@ export const doctorServices = {
   deleteDocByIdService,
   createAppointment,
   createMedicalHistory,
+  appointedTimeOfDoc,
 };
