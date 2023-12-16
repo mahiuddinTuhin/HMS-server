@@ -2,7 +2,7 @@
  * Medical problem schema
  */
 
-import { Schema } from "mongoose";
+import { Schema, Types } from "mongoose";
 import {
   TMedicalProblem,
   TMedicalSpecializations,
@@ -62,4 +62,10 @@ export const medicalSpecializationSchema = new Schema<TMedicalSpecializations>({
   },
 
   problems: [medicalProblemSchema],
+  doctors: [
+    {
+      type: Types.ObjectId,
+      ref: "Doctor",
+    },
+  ],
 });

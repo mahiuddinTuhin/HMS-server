@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../errors/customError";
@@ -10,81 +11,73 @@ import { Doctor } from "./doctors.model";
 
 /* creating an appointment by doctor */
 const createAppointment = async (data: TAppointments) => {
-  try {
-    /* checking whether doctor is available or not */
-    const doesDoctorExist = await Doctor.findOne({
+  /* checking whether doctor is available or not */
+  const doesDoctorExist = await Doctor.findById(data?.id);
+
+
+  if (!doesDoctorExist) {
+    throw new AppError(
+      "Doctor does not exist. Enter doctor id properly.",
+      StatusCodes.BAD_REQUEST,
+    );
+  }
+
+  if (doesDoctorExist) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const canTakeSchedule: any = await Doctor.findOne({
       id: data?.id,
+      pendingAppointments: {
+        $elemMatch: {
+          date: data?.date,
+          time: data?.time,
+        },
+      },
     });
 
-    if (!doesDoctorExist) {
+    if (canTakeSchedule) {
       throw new AppError(
-        "Doctor does not exist. Enter doctor id properly.",
+        "Doctor does not available on that time. Change time or date.",
         StatusCodes.BAD_REQUEST,
       );
     }
+  }
 
-    if (doesDoctorExist) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const canTakeSchedule: any = await Doctor.findOne({
-        id: data?.id,
+  const newAppointMent = await Doctor.findOneAndUpdate(
+    {
+      id: data?.id,
+    },
+    {
+      $push: {
         pendingAppointments: {
-          $elemMatch: {
-            date: data?.date,
-            time: data?.time,
-          },
-        },
-      });
-
-      if (canTakeSchedule) {
-        throw new AppError(
-          "Doctor does not available on that time. Change time or date.",
-          StatusCodes.BAD_REQUEST,
-        );
-      }
-    }
-
-    const newAppointMent = await Doctor.findOneAndUpdate(
-      {
-        id: data?.id,
-      },
-      {
-        $push: {
-          pendingAppointments: {
-            date: data?.date,
-            time: data?.time,
-          },
+          date: data?.date,
+          time: data?.time,
         },
       },
-      { new: true },
-    );
+    },
+    { new: true },
+  );
 
-    const updatedPatient = await Patient.findOneAndUpdate(
-      {
-        id: data?.id,
-      },
-      {
-        $push: {
-          pendingAppointments: {
-            date: data?.date,
-            time: data?.time,
-          },
+  const updatedPatient = await Patient.findOneAndUpdate(
+    {
+      id: data?.id,
+    },
+    {
+      $push: {
+        pendingAppointments: {
+          date: data?.date,
+          time: data?.time,
         },
       },
-    );
+    },
+  );
 
-    if (!newAppointMent || !updatedPatient) {
-      throw new AppError(
-        "Failed to create appointment!!",
-        StatusCodes.INTERNAL_SERVER_ERROR,
-      );
-    }
-    return newAppointMent;
-  } catch (error) {
+  if (!newAppointMent || !updatedPatient) {
     throw new AppError(
-      `Creating appointment failed from doctor services!: ${error}`,
+      "Failed to create appointment!!",
       StatusCodes.INTERNAL_SERVER_ERROR,
     );
   }
+  return newAppointMent;
 };
 
 /* creating a medical history by doctor */
@@ -107,6 +100,7 @@ const createMedicalHistory = async (data: TMedicalHistory) => {
 };
 
 const findDocByIdService = async (id: string) => {
+  console.log("{by id}");
   const doc = await Doctor.find({ doctorsId: id });
   return doc;
 };
@@ -121,9 +115,8 @@ const updateDocByIdService = async (id: string, data: Partial<TDoctor>) => {
   return updatedDoc;
 };
 
-const getAllDocService = async (query: Record<string, any>) => {
-  const searchTerm = query?.searchTerm;
-  const allDoc = await Doctor.find(searchTerm);
+const getAllDocService = async () => {
+  const allDoc = await Doctor.find();
   return allDoc;
 };
 

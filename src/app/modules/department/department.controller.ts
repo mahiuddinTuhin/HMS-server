@@ -14,6 +14,7 @@ const findAllDepartment: RequestHandler = catchAsync(async (req, res) => {
 });
 
 const findDepartmentById: RequestHandler = catchAsync(async (req, res) => {
+  
   const id: string = req.params?.depId;
   const department = await departmentService.findDepartmentById(id);
   responseToRequest(res, {

@@ -6,12 +6,11 @@ export const appointmentSchema = new Schema<TAppointments>(
   {
     id: {
       type: String,
-      unique: true,
       required: [true, "Appointment id is required!"],
     },
     doctor: {
       type: Schema.Types.ObjectId,
-      ref: "Doctors",
+      ref: "Doctor",
       required: [true, "Doctor id is required!"],
     },
     patient: {
@@ -29,7 +28,7 @@ export const appointmentSchema = new Schema<TAppointments>(
       enum: {
         values: schedules,
         message:
-          "{{VALUE}} is not acceptable as schedule. please enter any one of the following time. 9:00am, 9.30am, 10:00am, 10:30am, 11:00am, 11:30am, 12:00pm, 12:30pm, 2:00pm, 2:30pm, 3:00pm, 3:30pm, 4:00pm, 4:30pm, 5:00pm, 5:30pm",
+          "{{VALUE}} is not acceptable as schedule. please enter any one of the following time. 9:00am 9.30am 10:00am 10:30am 11:00am 11:30am 12:00pm 12:30pm 2:00pm 2:30pm 3:00pm 3:30pm 4:00pm 4:30pm 5:00pm 5:30pm ",
       },
       required: [true, "Schedule is required!"],
     },

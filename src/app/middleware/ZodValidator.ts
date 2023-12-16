@@ -8,6 +8,7 @@ const validateRequest = (schema: AnyZodObject) => {
 
       next();
     } catch (error) {
+      console.log("zod validation failed");
       next(error);
     }
   };

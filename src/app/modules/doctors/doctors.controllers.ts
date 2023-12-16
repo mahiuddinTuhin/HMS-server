@@ -10,8 +10,10 @@ import { doctorServices } from "./doctors.services";
 /* creating appointment  controller by doctor */
 const createAppointment: RequestHandler = catchAsync(async (req, res) => {
   const appointmentData = req.body;
+
   const newAppointment: any =
     await doctorServices.createAppointment(appointmentData);
+
   if (newAppointment) {
     ResponseToServer(req, res, true, StatusCodes.OK, newAppointment);
   } else {
@@ -38,7 +40,7 @@ const createMedicalHistory: RequestHandler = catchAsync(async (req, res) => {
 });
 
 const getAllDocController: RequestHandler = catchAsync(async (req, res) => {
-  const newDoc = doctorServices.getAllDocService();
+  const allDoc = await doctorServices.getAllDocService();
 
   ResponseToServer(
     req,
@@ -46,13 +48,13 @@ const getAllDocController: RequestHandler = catchAsync(async (req, res) => {
     true,
     200,
     "successfully retrieved all doctor's data.",
-    newDoc,
+    allDoc,
   );
 });
 
 const findDocByIdController: RequestHandler = catchAsync(async (req, res) => {
   const id = req.params.id;
-  const newDoc = doctorServices.findDocByIdService(id);
+  const newDoc = await doctorServices.findDocByIdService(id);
 
   ResponseToServer(
     req,

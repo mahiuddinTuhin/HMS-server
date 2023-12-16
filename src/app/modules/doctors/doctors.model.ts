@@ -24,6 +24,13 @@ export const doctorSchema = new Schema<TDoctor>(
       ref: "Department",
       required: [true, "Department id is required!"],
     },
+    specializations: [
+      {
+        type: String,
+        unique: true,
+        required: [true, "specializations is required"],
+      },
+    ],
 
     schedules: {
       type: [String],
@@ -56,7 +63,7 @@ export const doctorSchema = new Schema<TDoctor>(
     },
 
     education: {
-      type: [{ type: Object }], // Assuming TEducation structure is complex; can be refined
+      type: [{ type: Object }],
       validate: {
         validator: (eduArray: TEducation[]) => eduArray.length > 0,
         message: "At least one education entry is required",
@@ -78,16 +85,10 @@ export const doctorSchema = new Schema<TDoctor>(
       type: String,
       required: [true, "license_info is required"],
     },
-    specializations: [
-      {
-        type: String,
-        required: [true, "specializations is required"],
-      },
-    ],
   },
   {
     timestamps: true,
   },
 );
 
-export const Doctor = model<TDoctor>("Doctors", doctorSchema);
+export const Doctor = model<TDoctor>("Doctor", doctorSchema);

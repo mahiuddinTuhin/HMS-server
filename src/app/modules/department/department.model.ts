@@ -21,7 +21,6 @@ const departmentSchema = new Schema<TDepartment>(
       required: [true, "Details of department is required!"],
     },
     specializations: [medicalSpecializationSchema],
-    doctors: [{ type: Schema.Types.ObjectId, ref: "Doctor" }],
     medicalLicense: [{ type: String, required: true }],
     medicalHistory: [{ type: Schema.Types.ObjectId, ref: "MedicalHistory" }],
     contact: contactSchema,

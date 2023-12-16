@@ -48,8 +48,6 @@ const DepartmentValidation = z.object({
 
   specializations: z.array(specializationsValidation),
 
-  doctors: z.array(z.string().optional()).optional(),
-
   medicalLicense: z.array(
     z
       .string({

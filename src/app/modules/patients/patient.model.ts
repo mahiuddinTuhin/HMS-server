@@ -11,6 +11,7 @@ const patientSchema = new Schema<TPatient>(
     id: {
       type: String,
       required: [true, "Patient Id is required!"],
+      unique: true,
     },
 
     allMedicalHistory: [{ type: Schema.Types.ObjectId, ref: "MedicalHistory" }],
@@ -56,4 +57,4 @@ const patientSchema = new Schema<TPatient>(
   },
 );
 
-export const Patient = model<TPatient>("Patients", patientSchema);
+export const Patient = model<TPatient>("Patient", patientSchema);

@@ -7,7 +7,7 @@ export type TDoctor = {
   department: mongoose.Types.ObjectId;
   schedules: string[];
   allMedicalHistory: mongoose.Types.ObjectId[];
-  pendingAppointments: mongoose.Types.ObjectId[];
+  pendingAppointments: string[];
   email: string;
   phone: string;
   education: TEducation[];

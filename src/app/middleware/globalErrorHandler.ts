@@ -19,6 +19,8 @@ export const globalErrorHandler: ErrorRequestHandler = (
   let message = err.message || "Something went wring!";
   let statusCode = err.statusCode || 500;
 
+  // console.log({ err });
+
   let errorSources: Partial<TErrorSources[]> = [
     {
       path: "",
@@ -34,6 +36,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
     message = simplifiedErrors?.message;
     errorSources = simplifiedErrors?.errorSources;
   } else if (err?.name === "ValidationError") {
+    console.log("validation error################");
     /* handling schema validation error */
     const simplifiedErrors = handleValidationError(err);
 

@@ -20,16 +20,22 @@ const ceateAppointment = async (data: TAppointments) => {
 
   try {
     session.startTransaction();
+
     data.id = await generateServiceId(Appointment);
 
     const doctor = await Doctor.findById(data?.doctor)
       .select("pendingAppointments")
       .populate("pendingAppointments");
 
-    const isBooked = doctor?.pendingAppointments?.find(
-      (appointment: any) =>
-        appointment?.time === data?.time && appointment?.date === data?.date,
-    );
+    if (!doctor) {
+      throw new AppError("Doctor id is not found.", 400);
+    }
+
+    const isBooked =
+      doctor?.pendingAppointments?.find(
+        (appointment: any) =>
+          appointment?.time === data?.time && appointment?.date === data?.date,
+      ) || false;
 
     if (isBooked) {
       throw new AppError(
@@ -40,7 +46,13 @@ const ceateAppointment = async (data: TAppointments) => {
 
     /* if doctor will be available on the specific time and date then creating appointment and modify doctor and patient collections. */
 
+    const oldApp: any = await Appointment.find();
     const newAppointment: any = await Appointment.create([data], { session });
+
+    // console.log({ oldApp });
+    if (!newAppointment) {
+      console.log("failed app");
+    }
 
     /* modify doctor */
     await Doctor.findByIdAndUpdate(
@@ -71,20 +83,15 @@ const ceateAppointment = async (data: TAppointments) => {
     await session.commitTransaction();
     await session.endSession();
     return newAppointment;
-  } catch (error) {
-    if (
-      error instanceof AppError &&
-      error.message.includes("Doctor is not available")
-    ) {
-      throw new AppError(
-        "Doctor is not available on this time or date, Change date,time or both.",
-        409,
-      );
+  } catch (error: any) {
+    // console.log({ errorss: error instanceof AppError });
+    if (error instanceof AppError) {
+      throw new AppError(error.message, 409);
     }
     await session.abortTransaction();
     await session.endSession();
 
-    throw new AppError("Appointment creation failed", 400);
+    throw new AppError(error.message, 400);
   }
 };
 
@@ -156,14 +163,14 @@ const deleteAppointmentById = async (id: string) => {
     await session.endSession();
     return isClosed;
   } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
     if (
       error instanceof AppError &&
       error.message.includes("Appointment does not found to delete")
     ) {
-      throw new AppError("Appointment does not found to delete", 400);
+      throw new AppError(error.message, 400);
     }
-    await session.abortTransaction();
-    await session.endSession();
 
     throw new AppError("Failed to delete Appointment", 400);
   }

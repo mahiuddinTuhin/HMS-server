@@ -13,6 +13,7 @@ export type TMedicalSpecializations = {
   specializationName: string;
   specializationDetails: string;
   problems: TMedicalProblem[];
+  doctors: string[];
 };
 
 /*
@@ -23,7 +24,6 @@ type TDepartment = {
   departmentName: string;
   departmentDetails: string;
   specializations: TMedicalSpecializations[];
-  doctors?: Types.ObjectId[];
   medicalHistory?: Types.ObjectId[];
   contact: TContact;
   /*

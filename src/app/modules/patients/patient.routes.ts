@@ -13,7 +13,7 @@ router.post(
 );
 
 /* delete apointment by id */
-router.patch(
+router.delete(
   "/delete-appointment/:id",
   patientController.deleteAppointmentById,
 );
