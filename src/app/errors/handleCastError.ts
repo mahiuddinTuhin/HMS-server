@@ -13,6 +13,7 @@ const handleCastError = (err: any): TGenericErrorResponse => {
   ];
 
   /* making the error as array from object */
+
   const newErr: any = Object?.values(err?.error?.errors)[0] || {};
 
   /* specifying the castError message */

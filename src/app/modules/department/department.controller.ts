@@ -14,7 +14,6 @@ const findAllDepartment: RequestHandler = catchAsync(async (req, res) => {
 });
 
 const findDepartmentById: RequestHandler = catchAsync(async (req, res) => {
-  
   const id: string = req.params?.depId;
   const department = await departmentService.findDepartmentById(id);
   responseToRequest(res, {
@@ -25,6 +24,20 @@ const findDepartmentById: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
-const departmentController = { findAllDepartment, findDepartmentById };
+const findAllSpecializations: RequestHandler = catchAsync(async (req, res) => {
+  const allSpecializations = await departmentService.findSpecializatios();
+
+  responseToRequest(res, {
+    success: true,
+    status: 200,
+    message: "Successfully retrieved all specializations.",
+    data: allSpecializations,
+  });
+});
+const departmentController = {
+  findAllDepartment,
+  findAllSpecializations,
+  findDepartmentById,
+};
 
 export default departmentController;
