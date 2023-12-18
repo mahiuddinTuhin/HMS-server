@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type TContact = {
   phone: string[];
   email: string[];
@@ -54,7 +55,7 @@ export type TRole = ["doctor" | "nurse" | "admin" | "staff" | "patient"];
 
 /* for global error handler */
 export type TErrorSources = {
-  path: string;
+  path: any;
   message: string;
 };
 
@@ -63,5 +64,3 @@ export type TGenericErrorResponse = {
   message: string;
   errorSources: TErrorSources[];
 };
-
-

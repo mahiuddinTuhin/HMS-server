@@ -7,8 +7,8 @@ import AppError from "../errors/customError";
 import handleCastError from "../errors/handleCastError";
 import handleDuplcateError from "../errors/handleDuplicationError";
 import handleValidationError from "../errors/handleValidationError";
+import handledZodError from "../errors/zodErrorHandler";
 import { TErrorSources } from "../interfaces/TCommon.interface";
-import handledZodError from "../utils/zodErrorHandler";
 
 export const globalErrorHandler: ErrorRequestHandler = (
   err,

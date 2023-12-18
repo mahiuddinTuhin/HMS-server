@@ -1,35 +1,7 @@
 import { z } from "zod";
 
 /*
- * medical problem validation with zod
- */
-
-const medicalProblemValidation = z.object({
-  problemName: z.string(),
-
-  problemHints: z.string(),
-
-  symptoms: z.array(z.string()),
-
-  supportsFromHospital: z.array(z.string()),
-
-  treatments: z.array(z.string()),
-});
-
-/*
- * medical specialization section validation with zod
- */
-
-const specializationsValidation = z.object({
-  specializationName: z.string(),
-
-  specializationDetails: z.string(),
-
-  problems: z.array(medicalProblemValidation),
-});
-
-/*
- * medical department section validation with zod
+ * medical department validation with zod
  */
 const DepartmentValidation = z.object({
   departmentName: z
@@ -46,7 +18,7 @@ const DepartmentValidation = z.object({
     })
     .min(20),
 
-  specializations: z.array(specializationsValidation),
+  specializations: z.array(z.string().optional()).optional(),
 
   medicalLicense: z.array(
     z

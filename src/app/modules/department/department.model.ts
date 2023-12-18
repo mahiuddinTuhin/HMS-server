@@ -44,36 +44,6 @@ const departmentSchema = new Schema<TDepartment>(
       },
     ],
     contact: contactSchema,
-    /*
-    {
-  phone: [
-    {
-      type: String,
-      required: [true, "Phone number is required!"],
-    },
-  ],
-
-  address: [
-    {
-      type: String,
-      required: [true, "Address required!"],
-    },
-  ],
-
-  email: [
-    {
-      required: [true, "Email is required!"],
-      type: String,
-      validate: {
-        validator: (value: string) => {
-          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          return emailPattern.test(value);
-        },
-        message: "Invalid email address format!",
-      },
-    },
-  ],
-} */
     isDeleted: {
       type: Boolean,
       default: false,

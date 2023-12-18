@@ -1,7 +1,9 @@
 import { Router } from "express";
 import validateRequest from "../../middleware/ZodValidator";
+import validateMultipleDocuemnt from "../../middleware/validateMultipleDocuemnt";
 import TestValidation from "../Test/Test.validation";
 import DepartmentValidation from "../department/departmentValidation";
+import specializationsValidation from "../specializations/specialization.validation";
 import { adminController } from "./admin.controllers";
 
 const router = Router();
@@ -11,6 +13,20 @@ router.post(
   "/create-department",
   validateRequest(DepartmentValidation),
   adminController.createDepartment,
+);
+
+/* creating  bulk specialization routes */
+router.post(
+  "/create-bulk-specialization",
+  validateMultipleDocuemnt(specializationsValidation),
+  adminController.createSpecialization,
+);
+
+/* creating specialization routes */
+router.post(
+  "/create-specialization",
+  validateRequest(specializationsValidation),
+  adminController.createSpecialization,
 );
 
 // /* creating department routes */

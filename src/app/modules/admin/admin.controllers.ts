@@ -23,6 +23,20 @@ const createDepartment: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+/* creating  Specialization */
+const createSpecialization: RequestHandler = catchAsync(async (req, res) => {
+  const SpecializationData = req.body;
+
+  const newSpecialization =
+    await adminServices.createSpecialization(SpecializationData);
+
+  return responseToRequest(res, {
+    status: httpStatus?.OK,
+    success: true,
+    message: "Specialization Created Successfully!",
+    data: newSpecialization,
+  });
+});
 
 /* creating test controller */
 const createTest: RequestHandler = catchAsync(async (req, res) => {
@@ -51,4 +65,5 @@ export const adminController = {
   createDepartment,
   createTest,
   findAllAdmin,
+  createSpecialization,
 };

@@ -9,6 +9,8 @@ export type TMedicalProblem = {
 };
 
 export type TMedicalSpecializations = {
+  _id?: Types.ObjectId;
+  id?: string;
   specializationName: string;
   specializationDetails: string;
   problems: TMedicalProblem[];
