@@ -24,7 +24,7 @@ export const medicalProblemSchema = new Schema<TMedicalProblem>(
     symptoms: [
       {
         type: String,
-        required: [true, "Problem symtoms is required!"],
+        required: [true, "Problem Symptoms is required!"],
       },
     ],
 

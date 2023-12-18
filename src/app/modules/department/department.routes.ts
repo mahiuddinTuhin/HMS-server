@@ -3,13 +3,26 @@ import departmentController from "./department.controller";
 
 const router = Router();
 
-/* find  all department */
-router.get("/", departmentController.findAllDepartment);
+/* find  all problems */
+router.get("/problems", departmentController.findAllProblems);
+
+/* find  all symptoms */
+router.get("/symptoms", departmentController.findAllSymptoms);
+
+/* find all specialization  */
+router.get("/specializations", departmentController.findAllSpecializations);
+
+/* find specialization by id  */
+router.get(
+  "/specializations/:specializationId",
+  departmentController.findSpecializationById,
+);
 
 /* find a department by id */
 router.get("/:depId", departmentController.findDepartmentById);
-/* find all specialization  */
-router.get("/specializations", departmentController.findAllSpecializations);
+
+/* find  all department */
+router.get("/", departmentController.findAllDepartment);
 
 const departmentRouter = router;
 
