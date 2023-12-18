@@ -1,6 +1,5 @@
 import mongoose, { Schema } from "mongoose";
 import { contactSchema } from "../../schema/CommonSchema";
-import { medicalSpecializationSchema } from "./common.model";
 import TDepartment from "./department.interface";
 
 // Define a Mongoose schema for TDepartment
@@ -20,10 +19,61 @@ const departmentSchema = new Schema<TDepartment>(
       type: String,
       required: [true, "Details of department is required!"],
     },
-    specializations: [medicalSpecializationSchema],
-    medicalLicense: [{ type: String, required: true }],
-    medicalHistory: [{ type: Schema.Types.ObjectId, ref: "MedicalHistory" }],
+    specializations: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Specialization",
+      },
+    ],
+    medicalLicense: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
+    medicalHistory: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "MedicalHistory",
+      },
+    ],
+    doctors: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Doctor",
+      },
+    ],
     contact: contactSchema,
+    /*
+    {
+  phone: [
+    {
+      type: String,
+      required: [true, "Phone number is required!"],
+    },
+  ],
+
+  address: [
+    {
+      type: String,
+      required: [true, "Address required!"],
+    },
+  ],
+
+  email: [
+    {
+      required: [true, "Email is required!"],
+      type: String,
+      validate: {
+        validator: (value: string) => {
+          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          return emailPattern.test(value);
+        },
+        message: "Invalid email address format!",
+      },
+    },
+  ],
+} */
     isDeleted: {
       type: Boolean,
       default: false,
