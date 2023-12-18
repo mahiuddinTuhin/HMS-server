@@ -1,30 +1,17 @@
 import { Types } from "mongoose";
 import { TContact } from "../../interfaces/TCommon.interface";
 
-export type TMedicalProblem = {
-  problemName: string;
-  problemHints: string;
-  symptoms: string[];
-  supportsFromHospital: string[];
-  treatments: string[];
-};
-
-export type TMedicalSpecializations = {
-  specializationName: string;
-  specializationDetails: string;
-  problems: TMedicalProblem[];
-  doctors: string[];
-};
-
 /*
  *    interface for medical department with all detail information
  */
+
 type TDepartment = {
   id: string;
   departmentName: string;
   departmentDetails: string;
-  specializations: TMedicalSpecializations[];
+  specializations: Types.ObjectId[];
   medicalHistory?: Types.ObjectId[];
+  doctors: Types.ObjectId[];
   contact: TContact;
   /*
    type TContact = {

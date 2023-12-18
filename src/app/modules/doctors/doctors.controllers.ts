@@ -53,7 +53,7 @@ const getAllDocController: RequestHandler = catchAsync(async (req, res) => {
 });
 
 const findDocByIdController: RequestHandler = catchAsync(async (req, res) => {
-  const id = req.params.id;
+  const id = req.params.userId;
   const newDoc = await doctorServices.findDocByIdService(id);
 
   ResponseToServer(
@@ -109,6 +109,20 @@ const appointedTimeOfDoc: RequestHandler = catchAsync(async (req, res) => {
   );
 });
 
+const findDoctorBySymptoms: RequestHandler = catchAsync(async (req, res) => {
+  const symptoms: string = req.body;
+  const doctors = await doctorServices.findDoctorBySymptoms(symptoms);
+
+  ResponseToServer(
+    req,
+    res,
+    true,
+    200,
+    "successfully get doctors data by symptoms",
+    doctors,
+  );
+});
+
 export const doctorsController = {
   findDocByIdController,
   updateDocByIdController,
@@ -117,4 +131,5 @@ export const doctorsController = {
   createAppointment,
   createMedicalHistory,
   appointedTimeOfDoc,
+  findDoctorBySymptoms,
 };

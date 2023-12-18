@@ -1,11 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusCodes } from "http-status-codes";
+import { Types } from "mongoose";
 import AppError from "../../errors/customError";
 import { TMedicalHistory } from "../MedicalHistory/medicalHistory.ineterface";
 import { MedicalHistory } from "../MedicalHistory/medicalHistory.model";
 import { TAppointments } from "../appointment/appointment.interface";
 import { Appointment } from "../appointment/appointment.model";
+import Department from "../department/department.model";
 import { Patient } from "../patients/patient.model";
 import { TDoctor } from "./doctors.interface";
 import { Doctor } from "./doctors.model";
@@ -100,8 +101,10 @@ const createMedicalHistory = async (data: TMedicalHistory) => {
 };
 
 const findDocByIdService = async (id: string) => {
-  console.log("{by id}");
-  const doc = await Doctor.find({ doctorsId: id });
+  const doc = await Doctor.findOne({
+    user: new Types.ObjectId(id),
+  });
+  // console.log({ doc });
   return doc;
 };
 
@@ -160,6 +163,32 @@ const appointedTimeOfDoc = async (doctor_id: string) => {
 
   return scheduleByDate;
 };
+
+/*
+ *find doctor by symptoms
+ */
+
+const findDoctorBySymptoms = async (symptoms: string) => {
+  const doc = await Department.find(
+    {
+      specializations: {
+        $elemMatch: {
+          problems: {
+            $elemMatch: {
+              symptoms,
+            },
+          },
+        },
+      },
+    },
+    {
+      doctors: 1,
+    },
+  );
+
+  return doc;
+};
+
 export const doctorServices = {
   findDocByIdService,
   updateDocByIdService,
@@ -168,4 +197,5 @@ export const doctorServices = {
   createAppointment,
   createMedicalHistory,
   appointedTimeOfDoc,
+  findDoctorBySymptoms,
 };
