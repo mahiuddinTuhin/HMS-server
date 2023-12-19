@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+import httpStatus from "http-status";
 import mongoose from "mongoose";
+import AppError from "../../errors/customError";
 import { passwordPattern } from "../../validation/Common.Validation";
-import { TUser } from "./user.interface";
+import Tlogin from "../auth/login/login.interface";
+import { TUser, UserStaticModel } from "./user.interface";
 const bcrypt = require("bcrypt");
 
-const userSchema = new mongoose.Schema<TUser>(
+const userSchema = new mongoose.Schema<TUser, UserStaticModel>(
   {
     id: {
       type: String,
@@ -15,6 +18,7 @@ const userSchema = new mongoose.Schema<TUser>(
     password: {
       type: String,
       default: process.env.DEFAULT_PASSWORD,
+      // select: 0,
       validate: {
         validator: (value: string) => {
           return passwordPattern.test(value);
@@ -62,7 +66,7 @@ const userSchema = new mongoose.Schema<TUser>(
       type: String,
       default: "active",
       enum: {
-        values: ["active", "inactive"],
+        values: ["active", "deactive"],
         message:
           "{VALUES} is not correct role. Choose active or inactive as status",
       },
@@ -109,4 +113,39 @@ userSchema.post("save", function (doc, next) {
   next();
 });
 
-export const User = mongoose.model<TUser>("User", userSchema);
+userSchema.static(
+  "checkingUserExistance",
+  async function checkingUserExistance(payload: Tlogin) {
+    const user = await User.findOne({
+      $or: [{ id: payload?.id }, { email: payload?.id }],
+    });
+
+    /* if user not match by id or email */
+    if (!user) {
+      throw new AppError(
+        "User not found. User correct id or email!",
+        httpStatus.NOT_FOUND,
+      );
+    }
+
+    /* if id deactivate */
+    if (user.status === "deactive") {
+      throw new AppError(
+        "This user has been deactivate. Contact with administration!",
+        httpStatus.NOT_FOUND,
+      );
+    }
+
+    const passwordMatched = await bcrypt.compare(
+      payload?.password,
+      user?.password,
+    );
+
+    if (passwordMatched) {
+      // await findDeviceInfo();
+      return true;
+    } else throw new AppError("Incorrect password!", httpStatus.UNAUTHORIZED);
+  },
+);
+
+export const User = mongoose.model<TUser, UserStaticModel>("User", userSchema);
