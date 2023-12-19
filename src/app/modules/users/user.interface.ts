@@ -1,5 +1,4 @@
 import { Model } from "mongoose";
-import Tlogin from "../auth/login/login.interface";
 
 export type TUser = {
   id: string;
@@ -16,5 +15,6 @@ export type TUser = {
 };
 
 export type UserStaticModel = {
-  checkingUserExistance(payload: Tlogin): boolean;
+  passwordMatched(payloadPassword: string, userPassword: string): boolean;
+  isUserExist(id: string): TUser;
 } & Model<TUser>;

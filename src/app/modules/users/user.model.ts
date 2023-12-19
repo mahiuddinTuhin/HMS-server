@@ -3,7 +3,6 @@ import httpStatus from "http-status";
 import mongoose from "mongoose";
 import AppError from "../../errors/customError";
 import { passwordPattern } from "../../validation/Common.Validation";
-import Tlogin from "../auth/login/login.interface";
 import { TUser, UserStaticModel } from "./user.interface";
 const bcrypt = require("bcrypt");
 
@@ -113,39 +112,46 @@ userSchema.post("save", function (doc, next) {
   next();
 });
 
+/* password Matching static method */
 userSchema.static(
-  "checkingUserExistance",
-  async function checkingUserExistance(payload: Tlogin) {
-    const user = await User.findOne({
-      $or: [{ id: payload?.id }, { email: payload?.id }],
-    });
-
-    /* if user not match by id or email */
-    if (!user) {
-      throw new AppError(
-        "User not found. User correct id or email!",
-        httpStatus.NOT_FOUND,
-      );
-    }
-
-    /* if id deactivate */
-    if (user.status === "deactive") {
-      throw new AppError(
-        "This user has been deactivate. Contact with administration!",
-        httpStatus.NOT_FOUND,
-      );
-    }
-
-    const passwordMatched = await bcrypt.compare(
-      payload?.password,
-      user?.password,
-    );
+  "passwordMatched",
+  async function passwordMatched(
+    payloadPassword: string,
+    userPassword: string,
+  ) {
+    const passwordMatched = await bcrypt.compare(payloadPassword, userPassword);
 
     if (passwordMatched) {
-      // await findDeviceInfo();
       return true;
     } else throw new AppError("Incorrect password!", httpStatus.UNAUTHORIZED);
   },
 );
+
+/* user existance checking static method */
+
+userSchema.static("isUserExist", async function isUserExist(id: string) {
+  /* query in database */
+  const user = await User.findOne({
+    $or: [{ id: id }, { email: id }],
+  });
+
+  /* if user not match by id or email */
+  if (!user) {
+    throw new AppError(
+      "User not found. User correct id or email!",
+      httpStatus.NOT_FOUND,
+    );
+  }
+
+  /* if id deactivate */
+  if (user.status === "deactive") {
+    throw new AppError(
+      "This user has been deactivate. Contact with administration!",
+      httpStatus.NOT_FOUND,
+    );
+  }
+
+  return user;
+});
 
 export const User = mongoose.model<TUser, UserStaticModel>("User", userSchema);
