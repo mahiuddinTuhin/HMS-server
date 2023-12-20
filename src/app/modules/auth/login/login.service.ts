@@ -1,18 +1,23 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { TUser } from "../../users/user.interface";
 import { User } from "../../users/user.model";
 import Tlogin from "./login.interface";
 
 const login = async (payload: Tlogin) => {
-  const user: TUser = await User.isUserExist(payload?.id as string);
-  console.log({ user });
+  const user = await User.isUserExist(payload?.id as string);
 
   const isUserAuthiticated = User.passwordMatched(
     payload?.password,
     user?.password,
   );
 
-  return isUserAuthiticated;
+  if (isUserAuthiticated) {
+    const accessToken = await User.accessTokenCreation({
+      id: user?.id,
+      role: user?.role,
+    });
+
+    return { accessToken, needsPasswordChange: user?.needsPasswordChange };
+  }
 };
 
 /* check password */

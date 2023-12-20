@@ -5,6 +5,7 @@ import AppError from "../../errors/customError";
 import { passwordPattern } from "../../validation/Common.Validation";
 import { TUser, UserStaticModel } from "./user.interface";
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema<TUser, UserStaticModel>(
   {
@@ -151,7 +152,37 @@ userSchema.static("isUserExist", async function isUserExist(id: string) {
     );
   }
 
+  /* if id deactivate */
+  if (user.isDeleted === true) {
+    throw new AppError(
+      "This user has been deleted. Contact with administration!",
+      httpStatus.NOT_FOUND,
+    );
+  }
+
   return user;
 });
+/* user accessToken creation method */
+
+userSchema.static(
+  "accessTokenCreation",
+  async function accessTokenCreation(payload: Partial<TUser>) {
+    /* creating signature by json webtoken */
+    const { id, role } = payload;
+
+    const accessToken = await jwt.sign(
+      { id, role },
+      process.env.JWT_ACCESS_TOKEN,
+      {
+        // algorithm: "RS256",
+        expiresIn: "10d",
+      },
+    );
+
+    // console.log({ accessToken });
+
+    return accessToken;
+  },
+);
 
 export const User = mongoose.model<TUser, UserStaticModel>("User", userSchema);

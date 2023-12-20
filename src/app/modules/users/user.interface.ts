@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Model } from "mongoose";
 
 export type TUser = {
@@ -16,5 +17,6 @@ export type TUser = {
 
 export type UserStaticModel = {
   passwordMatched(payloadPassword: string, userPassword: string): boolean;
-  isUserExist(id: string): TUser;
+  isUserExist(id: string): Promise<TUser>;
+  accessTokenCreation(payload: Partial<TUser>): any;
 } & Model<TUser>;
