@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { userRole } from "../../interfaces/interfaces";
+import auth from "../../middleware/auth";
 import { doctorsController } from "./doctors.controllers";
 
 const router = Router();
@@ -10,7 +12,11 @@ router.post("/create-medicalhistory", doctorsController.createMedicalHistory);
 router.get("/symptoms", doctorsController.findDoctorBySymptoms);
 
 router.get("/:id/appointedtime", doctorsController.appointedTimeOfDoc);
-router.get("/:userId", doctorsController.findDocByIdController);
+router.get(
+  "/:userId",
+  auth(userRole.nurse),
+  doctorsController.findDocByIdController,
+);
 router.get("/", doctorsController.getAllDocController);
 router.put("/", doctorsController.updateDocByIdController);
 
