@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import httpStatus from "http-status";
 import mongoose from "mongoose";
 import AppError from "../../errors/customError";
+import { generatePassword } from "../../utils/randomPass";
 import { passwordPattern } from "../../validation/Common.Validation";
 import { TUser, UserStaticModel } from "./user.interface";
 const bcrypt = require("bcrypt");
@@ -17,8 +19,8 @@ const userSchema = new mongoose.Schema<TUser, UserStaticModel>(
 
     password: {
       type: String,
-      default: process.env.DEFAULT_PASSWORD,
-      // select: 0,
+      default: generatePassword(),
+      select: 0,
       validate: {
         validator: (value: string) => {
           return passwordPattern.test(value);
@@ -97,21 +99,28 @@ const userSchema = new mongoose.Schema<TUser, UserStaticModel>(
  * @hash_the_pass_before_saving
  */
 userSchema.pre("save", async function (next) {
-  const salt = bcrypt.genSaltSync(Number(process.env.SALTROUNDS));
-  const hashPass =
-    bcrypt.hashSync(this?.password, salt) || process.env.DEFAULT_PASSWORD;
+  if (this.isModified("password")) {
+    try {
+      const saltRounds = Number(process.env.SALTROUNDS) || 10;
+      const salt = await bcrypt.genSaltSync(saltRounds);
+      const passwordToHash = this?.password || generatePassword();
+      const hashPass = bcrypt.hashSync(passwordToHash, salt);
 
-  this.password = hashPass;
-  next();
+      this.password = hashPass;
+      next();
+    } catch (error: any) {
+      next(error);
+    }
+  }
 });
 
 /**
  * @hiding_the_password
  */
-userSchema.post("save", function (doc, next) {
-  doc.password = "";
-  next();
-});
+// userSchema.post("save", function (doc, next) {
+//   doc.password = "";
+//   next();
+// });
 
 /* password Matching static method */
 userSchema.static(
