@@ -5,6 +5,7 @@ import httpStatus from "http-status";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import AppError from "../errors/customError";
 import TUserRole from "../interfaces/interfaces";
+import { User } from "../modules/users/user.model";
 import catchAsync from "../utils/catchAsync";
 
 const auth = (...requiredRoles: TUserRole[]) =>
@@ -22,6 +23,7 @@ const auth = (...requiredRoles: TUserRole[]) =>
     ) as JwtPayload;
 
     const { id, role, iat } = decoded;
+    await User.isUserExist(id);
 
     if (requiredRoles && !requiredRoles.includes(role)) {
       throw new AppError("Unauthorized request!", httpStatus.UNAUTHORIZED);

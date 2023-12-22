@@ -23,6 +23,8 @@ const userSchema = new mongoose.Schema<TUser, UserStaticModel>(
       select: 0,
       validate: {
         validator: (value: string) => {
+          console.log({ passV: value });
+
           return passwordPattern.test(value);
         },
         message:
@@ -96,21 +98,21 @@ const userSchema = new mongoose.Schema<TUser, UserStaticModel>(
 );
 
 /**
+ *  @Pre_hook
+ *
  * @hash_the_pass_before_saving
  */
 userSchema.pre("save", async function (next) {
-  if (this.isModified("password")) {
-    try {
-      const saltRounds = Number(process.env.SALTROUNDS) || 10;
-      const salt = await bcrypt.genSaltSync(saltRounds);
-      const passwordToHash = this?.password || generatePassword();
-      const hashPass = bcrypt.hashSync(passwordToHash, salt);
+  try {
+    const saltRounds = Number(process.env.SALTROUNDS) || 10;
+    const salt = await bcrypt.genSaltSync(saltRounds);
+    const passwordToHash = this?.password || generatePassword();
+    const hashPass = bcrypt.hashSync(passwordToHash, salt);
 
-      this.password = hashPass;
-      next();
-    } catch (error: any) {
-      next(error);
-    }
+    this.password = hashPass;
+    next();
+  } catch (error: any) {
+    next(error);
   }
 });
 
@@ -123,6 +125,9 @@ userSchema.pre("save", async function (next) {
 // });
 
 /* password Matching static method */
+/*
+ * passwordMatched
+ */
 userSchema.static(
   "passwordMatched",
   async function passwordMatched(
@@ -138,7 +143,9 @@ userSchema.static(
 );
 
 /* user existance checking static method */
-
+/*
+ * isUserExist
+ */
 userSchema.static("isUserExist", async function isUserExist(id: string) {
   /* query in database */
   const user = await User.findOne({
@@ -171,26 +178,32 @@ userSchema.static("isUserExist", async function isUserExist(id: string) {
 
   return user;
 });
-/* user accessToken creation method */
+
+/*
+ * user accessToken creation method
+ */
 
 userSchema.static(
   "accessTokenCreation",
   async function accessTokenCreation(payload: Partial<TUser>) {
     /* creating signature by json webtoken */
-    const { id, role } = payload;
+    try {
+      const { id, role } = payload;
 
-    const accessToken = await jwt.sign(
-      { id, role },
-      process.env.JWT_ACCESS_TOKEN,
-      {
-        // algorithm: "RS256",
-        expiresIn: "10d",
-      },
-    );
+      const accessToken = await jwt.sign(
+        { id, role },
+        process.env.JWT_ACCESS_TOKEN,
+        {
+          expiresIn: "10d",
+        },
+      );
 
-    // console.log({ accessToken });
+      // console.log({ accessToken });
 
-    return accessToken;
+      return accessToken;
+    } catch (error: any) {
+      throw new AppError(error?.message, 400);
+    }
   },
 );
 

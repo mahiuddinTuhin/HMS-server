@@ -12,11 +12,11 @@ const login = async (payload: Tlogin) => {
   );
 
   if (isUserAuthiticated) {
+    console.log({ isUserAuthiticated });
     const accessToken = await User.accessTokenCreation({
       id: user?.id,
       role: user?.role,
     });
-
     return { accessToken, needsPasswordChange: user?.needsPasswordChange };
   }
 };

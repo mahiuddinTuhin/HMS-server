@@ -14,7 +14,7 @@ router.get("/symptoms", doctorsController.findDoctorBySymptoms);
 router.get("/:id/appointedtime", doctorsController.appointedTimeOfDoc);
 router.get(
   "/:userId",
-  auth(userRole.nurse),
+  auth(userRole.doctor),
   doctorsController.findDocByIdController,
 );
 router.get("/", doctorsController.getAllDocController);

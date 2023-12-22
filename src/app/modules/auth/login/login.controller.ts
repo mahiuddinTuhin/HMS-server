@@ -7,6 +7,7 @@ import loginService from "./login.service";
 const login = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const login = await loginService.login(req.body);
+
     responseToRequest(res, {
       success: true,
       status: 200,

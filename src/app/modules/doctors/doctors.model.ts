@@ -27,7 +27,6 @@ export const doctorSchema = new Schema<TDoctor>(
     specializations: [
       {
         type: String,
-        unique: true,
         required: [true, "specializations is required"],
       },
     ],
