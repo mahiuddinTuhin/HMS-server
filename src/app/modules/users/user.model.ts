@@ -161,7 +161,7 @@ userSchema.static("isUserExist", async function isUserExist(id: string) {
   if (user.status === "deactive") {
     throw new AppError(
       "This user has been deactivate. Contact with administration!",
-      httpStatus.NOT_FOUND,
+      httpStatus.FORBIDDEN,
     );
   }
 
@@ -169,7 +169,7 @@ userSchema.static("isUserExist", async function isUserExist(id: string) {
   if (user.isDeleted === true) {
     throw new AppError(
       "This user has been deleted. Contact with administration!",
-      httpStatus.NOT_FOUND,
+      httpStatus.FORBIDDEN,
     );
   }
 

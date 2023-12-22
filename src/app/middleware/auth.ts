@@ -5,6 +5,7 @@ import httpStatus from "http-status";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import AppError from "../errors/customError";
 import TUserRole from "../interfaces/interfaces";
+import { TUser } from "../modules/users/user.interface";
 import { User } from "../modules/users/user.model";
 import catchAsync from "../utils/catchAsync";
 
@@ -22,8 +23,18 @@ const auth = (...requiredRoles: TUserRole[]) =>
       process.env.JWT_ACCESS_TOKEN as string,
     ) as JwtPayload;
 
-    const { id, role, iat } = decoded;
-    await User.isUserExist(id);
+    const { id, role } = decoded;
+    const iat = decoded.iat as number;
+
+    const user: TUser = await User.isUserExist(id);
+
+    const passChangeTimeInSecond =
+      new Date(user.passwordChangedAt as Date).getTime() / 1000;
+
+    // checking if the access token created before the password change
+    if (passChangeTimeInSecond > iat) {
+      throw new AppError("Unauthorized request!", httpStatus.UNAUTHORIZED);
+    }
 
     if (requiredRoles && !requiredRoles.includes(role)) {
       throw new AppError("Unauthorized request!", httpStatus.UNAUTHORIZED);
