@@ -53,6 +53,8 @@ const changePassword = async (
     },
     {
       password: await hashingPassword(newPassword),
+      needsPasswordChange: false,
+      passwordChangedAt: new Date(),
     },
   );
 

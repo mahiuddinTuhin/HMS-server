@@ -5,6 +5,7 @@ export type TUser = {
   id: string;
   password: string;
   needsPasswordChange: boolean;
+  passwordChangedAt?: Date;
   email?: string;
   phone?: string;
   role: "patient" | "doctor" | "admin" | "nurse" | "staff";

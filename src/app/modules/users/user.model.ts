@@ -5,7 +5,6 @@ import httpStatus from "http-status";
 import mongoose from "mongoose";
 import AppError from "../../errors/customError";
 import hashingPassword from "../../utils/hashedPassword";
-import { generatePassword } from "../../utils/randomPass";
 import { passwordPattern } from "../../validation/Common.Validation";
 import { TUser, UserStaticModel } from "./user.interface";
 const jwt = require("jsonwebtoken");
@@ -20,7 +19,7 @@ const userSchema = new mongoose.Schema<TUser, UserStaticModel>(
 
     password: {
       type: String,
-      default: generatePassword(),
+      default: "P@ss0rd!", //generatePassword(),
       select: 0,
       validate: {
         validator: (value: string) => {
@@ -37,6 +36,8 @@ const userSchema = new mongoose.Schema<TUser, UserStaticModel>(
       type: Boolean,
       default: true,
     },
+
+    passwordChangedAt: { type: Date, default: null },
 
     email: {
       type: String,

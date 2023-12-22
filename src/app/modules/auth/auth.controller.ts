@@ -25,12 +25,13 @@ const changePassword = catchAsync(
     const { ...passwordData } = req.body;
     const result = await authService.changePassword(user, passwordData);
 
-    responseToRequest(res, {
-      success: true,
-      status: 200,
-      message: "Successfully login.",
-      data: result,
-    });
+    result &&
+      responseToRequest(res, {
+        success: true,
+        status: 200,
+        message: "Successfully changed password.",
+        data: null,
+      });
   },
 );
 
