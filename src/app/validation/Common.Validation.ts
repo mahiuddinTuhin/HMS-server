@@ -52,6 +52,15 @@ const emailValidation = z
     message: "Invalid email!",
   });
 
+const resetPasswordValidation = z.object({
+  oldPassword: z.string({
+    required_error: "old password is required for reset password!",
+  }),
+  newPassword: z.string({
+    required_error: "new password is required for reset password!",
+  }),
+});
+
 const globalValidators = {
   educationValidation,
   fullNameValidation,
@@ -59,5 +68,6 @@ const globalValidators = {
   emailValidation,
   phoneValidation,
   passwordValidation,
+  resetPasswordValidation,
 };
 export default globalValidators;

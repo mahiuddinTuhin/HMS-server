@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import validateRequest from "../../middleware/ZodValidator";
 import isUserExisted from "../../utils/isUserExisted";
+import globalValidators from "../../validation/Common.Validation";
 import { adminValidation } from "../admin/admin.validation";
 import DoctorValidation from "../doctors/doctors.validation";
 import NurseValidation from "../nurse/nurse.validation";
@@ -54,6 +55,14 @@ router.post(
   validateRequest(userValidation),
   validateRequest(staffValidation),
   userControllers.createStaff,
+);
+
+/* password reset */
+
+router.post(
+  "/reset-password/:userId",
+  validateRequest(globalValidators.resetPasswordValidation),
+  // userControllers.createStaff,
 );
 
 router.get("/", userControllers.getAllUser);

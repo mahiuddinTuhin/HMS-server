@@ -5,3 +5,8 @@ const loginValidation = z.object({
   password: z.string({ required_error: "password is required" }),
 });
 export default loginValidation;
+
+export const changePasswordValidation = z.object({
+  oldPassword: z.string({ required_error: "Old password is required" }),
+  newPassword: z.string({ required_error: "New password is required" }),
+});

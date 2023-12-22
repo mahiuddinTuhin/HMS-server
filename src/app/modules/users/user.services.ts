@@ -4,6 +4,7 @@
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import AppError from "../../errors/customError";
+import { TPasswordReset } from "../../interfaces/TCommon.interface";
 import generateUserId from "../../utils/userIdGenerator";
 import { TAdmin } from "../admin/admin.interface";
 import { Admin } from "../admin/admin.mode";
@@ -389,6 +390,29 @@ const getAllUser = async (query: Record<string, any>) => {
 
 const updateUserById = (id: number, body: any) => {};
 
+/**
+ *
+ * @reset_password
+ *
+ */
+
+const resetPassword = async (data: TPasswordReset) => {
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+
+    
+
+    session.commitTransaction();
+    session.endSession();
+  } catch (error: any) {
+    session.abortTransaction();
+    session.endSession();
+
+    throw new AppError(error?.message, 400);
+  }
+};
+
 export const userServices = {
   createAdminService,
   createDocService,
@@ -398,4 +422,5 @@ export const userServices = {
   getUserById,
   updateUserById,
   getAllUser,
+  resetPassword,
 };

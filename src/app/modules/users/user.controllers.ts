@@ -9,6 +9,7 @@ import {
 } from "../../utils/ResponseToServer";
 import catchAsync from "../../utils/catchAsync";
 import { userServices } from "./user.services";
+import { TPasswordReset } from "../../interfaces/TCommon.interface";
 
 /* 1. creating admin */
 const createAdmin: RequestHandler = catchAsync(async (req, res) => {
@@ -158,6 +159,28 @@ const updateUserById: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+const resetPassword: RequestHandler = catchAsync(async (req, res) => {
+  const id: string = req.params?.userId;
+  const { oldPassword, newPassword } = req.body;
+  const data: TPasswordReset = {
+    id,
+    oldPassword,
+    newPassword,
+  };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  await userServices.resetPassword(data);
+  ResponseToServer(
+    req,
+    res,
+    true,
+    200,
+    "Successfyully change the user password!",
+    {
+      data: null,
+    },
+  );
+});
+
 export const userControllers = {
   createAdmin,
   createDoctor,
@@ -167,4 +190,5 @@ export const userControllers = {
   getAllUser,
   createNurse,
   createStaff,
+  resetPassword,
 };

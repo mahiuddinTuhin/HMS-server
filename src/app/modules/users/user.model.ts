@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-var-requires */
+const bcrypt = require("bcrypt");
 import httpStatus from "http-status";
 import mongoose from "mongoose";
 import AppError from "../../errors/customError";
+import hashingPassword from "../../utils/hashedPassword";
 import { generatePassword } from "../../utils/randomPass";
 import { passwordPattern } from "../../validation/Common.Validation";
 import { TUser, UserStaticModel } from "./user.interface";
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema<TUser, UserStaticModel>(
@@ -104,12 +105,13 @@ const userSchema = new mongoose.Schema<TUser, UserStaticModel>(
  */
 userSchema.pre("save", async function (next) {
   try {
-    const saltRounds = Number(process.env.SALTROUNDS) || 10;
-    const salt = await bcrypt.genSaltSync(saltRounds);
-    const passwordToHash = this?.password || generatePassword();
-    const hashPass = bcrypt.hashSync(passwordToHash, salt);
+    // const saltRounds = Number(process.env.SALTROUNDS) || 10;
+    // const salt = await bcrypt.genSaltSync(saltRounds);
+    // const passwordToHash = this?.password || generatePassword();
+    // const hashPass = bcrypt.hashSync(passwordToHash, salt);
 
-    this.password = hashPass;
+    // this.password = hashPass;
+    this.password = await hashingPassword(this.password);
     next();
   } catch (error: any) {
     next(error);
@@ -128,19 +130,13 @@ userSchema.pre("save", async function (next) {
 /*
  * passwordMatched
  */
-userSchema.static(
-  "passwordMatched",
-  async function passwordMatched(
-    payloadPassword: string,
-    userPassword: string,
-  ) {
-    const passwordMatched = await bcrypt.compare(payloadPassword, userPassword);
-
-    if (passwordMatched) {
-      return true;
-    } else throw new AppError("Incorrect password!", httpStatus.UNAUTHORIZED);
-  },
-);
+userSchema.statics.passwordMatched = async function (
+  plainTextPassword,
+  hasedPassword,
+) {
+  // console.log({ plainTextPassword, hasedPassword });
+  return await bcrypt.compare(plainTextPassword, hasedPassword);
+};
 
 /* user existance checking static method */
 /*
@@ -150,7 +146,7 @@ userSchema.static("isUserExist", async function isUserExist(id: string) {
   /* query in database */
   const user = await User.findOne({
     $or: [{ id: id }, { email: id }],
-  });
+  }).select("+password");
 
   /* if user not match by id or email */
   if (!user) {

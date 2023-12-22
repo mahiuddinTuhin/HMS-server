@@ -64,3 +64,9 @@ export type TGenericErrorResponse = {
   message: string;
   errorSources: TErrorSources[];
 };
+
+export type TPasswordReset = {
+  id?: string;
+  oldPassword: string;
+  newPassword: string;
+};
