@@ -29,7 +29,7 @@ const createAdminService = async (data: any) => {
   try {
     session.startTransaction();
 
-    const generatedUserId = await generateUserId("patient");
+    const generatedUserId = await generateUserId("admin");
 
     if (!generatedUserId) {
       throw new AppError(
@@ -400,8 +400,6 @@ const resetPassword = async (data: TPasswordReset) => {
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
-
-    
 
     session.commitTransaction();
     session.endSession();

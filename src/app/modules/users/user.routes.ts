@@ -1,6 +1,7 @@
 import { Router } from "express";
-
+import { userRole } from "../../interfaces/interfaces";
 import validateRequest from "../../middleware/ZodValidator";
+import auth from "../../middleware/auth";
 import isUserExisted from "../../utils/isUserExisted";
 import globalValidators from "../../validation/Common.Validation";
 import { adminValidation } from "../admin/admin.validation";
@@ -25,6 +26,7 @@ router.post(
 /*  2. create doctor */
 router.post(
   "/create-doctor",
+  auth(userRole.admin),
   validateRequest(userValidation),
   validateRequest(DoctorValidation),
   userControllers.createDoctor,
@@ -34,6 +36,7 @@ router.post(
 
 router.post(
   "/create-nurse",
+  auth(userRole.admin),
   validateRequest(userValidation),
   validateRequest(NurseValidation),
   userControllers.createNurse,
@@ -52,6 +55,7 @@ router.post(
 
 router.post(
   "/create-staff",
+  auth(userRole.admin),
   validateRequest(userValidation),
   validateRequest(staffValidation),
   userControllers.createStaff,
@@ -65,7 +69,8 @@ router.post(
   // userControllers.createStaff,
 );
 
-router.get("/", userControllers.getAllUser);
+// get all user
+router.get("/", auth(userRole.admin), userControllers.getAllUser);
 router.get("/:userId", userControllers.getUserById);
 // router.delete("/:userId", userControllers.deleteUserById);
 router.put("/:userId", userControllers.updateUserById);

@@ -181,19 +181,17 @@ userSchema.static("isUserExist", async function isUserExist(id: string) {
  */
 
 userSchema.static(
-  "accessTokenCreation",
-  async function accessTokenCreation(payload: Partial<TUser>) {
+  "createToken",
+  async function createToken(
+    payload: Partial<TUser>,
+    secret: string,
+    exp: string,
+  ) {
     /* creating signature by json webtoken */
     try {
-      const { id, role } = payload;
-
-      const accessToken = await jwt.sign(
-        { id, role },
-        process.env.JWT_ACCESS_TOKEN,
-        {
-          expiresIn: "10d",
-        },
-      );
+      const accessToken = await jwt.sign(payload, secret, {
+        expiresIn: exp,
+      });
 
       // console.log({ accessToken });
 
@@ -203,5 +201,9 @@ userSchema.static(
     }
   },
 );
+
+/*
+ * user accessToken creation method
+ */
 
 export const User = mongoose.model<TUser, UserStaticModel>("User", userSchema);

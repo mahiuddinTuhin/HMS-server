@@ -20,7 +20,7 @@ const auth = (...requiredRoles: TUserRole[]) =>
 
     const decoded = jwt.verify(
       accessToken,
-      process.env.JWT_ACCESS_TOKEN as string,
+      process.env.JWT_ACCESS_TOKEN_SECRET as string,
     ) as JwtPayload;
 
     const { id, role } = decoded;

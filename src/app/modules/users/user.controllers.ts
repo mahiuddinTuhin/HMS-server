@@ -3,13 +3,13 @@ import { RequestHandler } from "express";
 import httpStatus from "http-status";
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../errors/customError";
+import { TPasswordReset } from "../../interfaces/TCommon.interface";
 import {
   ResponseToServer,
   responseToRequest,
 } from "../../utils/ResponseToServer";
 import catchAsync from "../../utils/catchAsync";
 import { userServices } from "./user.services";
-import { TPasswordReset } from "../../interfaces/TCommon.interface";
 
 /* 1. creating admin */
 const createAdmin: RequestHandler = catchAsync(async (req, res) => {

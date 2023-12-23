@@ -7,13 +7,20 @@ import authService from "./auth.service";
 /* login controller */
 const login = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const login = await authService.login(req.body);
+    const result = await authService.login(req.body);
+
+    const { refreshToken, accessToken, needsPasswordChange } = result;
+
+    res.cookie("refreshToken", refreshToken, {
+      secure: false || process.env.NODE_ENV === "production",
+      httpOnly: true,
+    });
 
     responseToRequest(res, {
       success: true,
       status: 200,
       message: "Successfully login.",
-      data: login,
+      data: { accessToken, needsPasswordChange },
     });
   },
 );
