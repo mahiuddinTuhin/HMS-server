@@ -21,3 +21,9 @@ export const refreshTokenValidation = z.object({
     refreshToken: z.string({ required_error: "Refresh Token is required!" }),
   }),
 });
+
+export const forgetPasswordValidation = z.object({
+  body: z.object({
+    id: z.string({ required_error: "User id is required!" }),
+  }),
+});

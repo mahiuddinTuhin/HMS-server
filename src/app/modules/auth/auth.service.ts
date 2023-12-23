@@ -134,9 +134,35 @@ const refreshToken = async (refreshToken: string) => {
   return accessToken;
 };
 
+const forgetPassword = async (id: string) => {
+  const user: TUser = await User.isUserExist(id as string);
+
+  const JwtPayload: Partial<TUser> = {
+    id: user?.id,
+    role: user?.role,
+  };
+  const accessSecret = process.env.JWT_ACCESS_TOKEN_SECRET as string;
+  const accessExpiresIn = process.env.JWT_ACCESS_EXPIRES_IN as string;
+
+  /*
+   * creating  access token
+   */
+  
+  const token = (await User.createToken(
+    JwtPayload,
+    accessSecret,
+    accessExpiresIn,
+  )) as string;
+
+  const resetLink = `http:localhost://5173?id=${id}&token=${token}`;
+
+  return resetLink;
+};
+
 const authService = {
   login,
   changePassword,
   refreshToken,
+  forgetPassword,
 };
 export default authService;

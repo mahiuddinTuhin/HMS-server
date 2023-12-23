@@ -5,6 +5,7 @@ import auth from "../../middleware/auth";
 import authController from "./auth.controller";
 import loginValidation, {
   changePasswordValidation,
+  forgetPasswordValidation,
   refreshTokenValidation,
 } from "./auth.validation";
 
@@ -27,11 +28,22 @@ router.post(
   authController.changePassword,
 );
 
-/* change password routes */
+/* refresh token create routes */
 router.post(
   "/refresh-token",
   validateRequest(refreshTokenValidation),
   authController.refreshToken,
+);
+
+/*
+ *  forget password routes
+ *
+ *  return reset link
+ */
+router.post(
+  "/forget-password",
+  validateRequest(forgetPasswordValidation),
+  authController.forgetPassword,
 );
 
 const authRouter = router;
