@@ -202,8 +202,5 @@ userSchema.static(
   },
 );
 
-/*
- * user accessToken creation method
- */
 
 export const User = mongoose.model<TUser, UserStaticModel>("User", userSchema);

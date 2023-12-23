@@ -69,9 +69,26 @@ router.post(
   // userControllers.createStaff,
 );
 
+/*
+ *  get me routes
+ *
+ *  return matched id profile/service
+ */
+router.get(
+  "/me",
+  auth(
+    userRole.admin,
+    userRole.doctor,
+    userRole.nurse,
+    userRole.patient,
+    userRole.staff,
+  ),
+  userControllers.getMe,
+);
+
 // get all user
 router.get("/", auth(userRole.admin), userControllers.getAllUser);
-router.get("/:userId", userControllers.getUserById);
+// router.get("/:userId", userControllers.getUserById);
 // router.delete("/:userId", userControllers.deleteUserById);
 router.put("/:userId", userControllers.updateUserById);
 

@@ -181,6 +181,26 @@ const resetPassword: RequestHandler = catchAsync(async (req, res) => {
   );
 });
 
+/**
+ *
+ * @Get_me_controller
+ *
+ */
+
+const getMe: RequestHandler = catchAsync(async (req, res) => {
+  const { role, id } = req.user;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const result = await userServices.getMe(id, role);
+
+  result &&
+    responseToRequest(res, {
+      success: true,
+      status: 200,
+      message: "Successfyully retreive the user!",
+      data: result,
+    });
+});
 export const userControllers = {
   createAdmin,
   createDoctor,
@@ -191,4 +211,5 @@ export const userControllers = {
   createNurse,
   createStaff,
   resetPassword,
+  getMe,
 };

@@ -411,6 +411,28 @@ const resetPassword = async (data: TPasswordReset) => {
   }
 };
 
+/**
+ *
+ * @Get_me_service
+ *
+ */
+const getMe = async (id: string, role: string) => {
+  let result;
+  if (role === "admin") {
+    result = await Admin.findOne({ id }).populate("user");
+  } else if (role === "nurse") {
+    result = await Nurse.findOne({ id }).populate("user");
+  } else if (role === "doctor") {
+    result = await Doctor.findOne({ id }).populate("user");
+  } else if (role === "staff") {
+    result = await Staff.findOne({ id }).populate("user");
+  } else if (role === "patient") {
+    result = await Patient.findOne({ id }).populate("user");
+  }
+
+  return result;
+};
+
 export const userServices = {
   createAdminService,
   createDocService,
@@ -421,4 +443,5 @@ export const userServices = {
   updateUserById,
   getAllUser,
   resetPassword,
+  getMe,
 };

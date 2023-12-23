@@ -12,6 +12,7 @@ export const adminSchema = new Schema<TAdmin>(
   {
     user: {
       type: Schema.Types.ObjectId,
+      ref: "User",
       required: [true, "User ID is required"],
     },
     id: { type: String, required: [true, "Nurse ID is required"] },
