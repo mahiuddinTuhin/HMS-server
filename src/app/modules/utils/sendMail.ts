@@ -8,15 +8,15 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: process.env.NODE_ENV === "production" || false,
   auth: {
-    user: "mahiuddiinntuhin@gmail.com",
-    pass: "xwnp vxpf qwjx iroc", //xwnp vxpf qwjx iroc
+    user: process.env.MAIL,
+    pass: process.env.SMPT_MAIL_PASS,
   },
 });
 
 const sendEmail = async (to: string, subject: string, text: string) => {
   try {
     await transporter.sendMail({
-      from: "mahiuddiinntuhin@gmail.com", // sender address
+      from: process.env.MAIL, // sender address
       to, // list of receivers
       subject, // Subject line
       text, // plain text body
