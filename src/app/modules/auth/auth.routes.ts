@@ -3,7 +3,10 @@ import { userRole } from "../../interfaces/interfaces";
 import validateRequest from "../../middleware/ZodValidator";
 import auth from "../../middleware/auth";
 import authController from "./auth.controller";
-import loginValidation, { changePasswordValidation } from "./auth.validation";
+import loginValidation, {
+  changePasswordValidation,
+  refreshTokenValidation,
+} from "./auth.validation";
 
 const router = Router();
 
@@ -22,6 +25,13 @@ router.post(
   ),
   validateRequest(changePasswordValidation),
   authController.changePassword,
+);
+
+/* change password routes */
+router.post(
+  "/refresh-token",
+  validateRequest(refreshTokenValidation),
+  authController.refreshToken,
 );
 
 const authRouter = router;

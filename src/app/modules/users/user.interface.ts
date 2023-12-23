@@ -20,5 +20,4 @@ export type UserStaticModel = {
   passwordMatched(payloadPassword: string, userPassword: string): boolean;
   isUserExist(id: string): Promise<TUser>;
   createToken(payload: Partial<TUser>, secretKey: string, exp: string): any;
-  refreshTokenCreation(payload: Partial<TUser>): any;
 } & Model<TUser>;

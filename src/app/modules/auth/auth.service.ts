@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { JwtPayload } from "jsonwebtoken";
+import httpStatus from "http-status";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import AppError from "../../errors/customError";
 import { TPasswordReset } from "../../interfaces/TCommon.interface";
 import hashingPassword from "../../utils/hashedPassword";
@@ -14,6 +15,7 @@ const login = async (payload: Tlogin) => {
 
   // console.log({ pass: user });
 
+  /* match password */
   if (
     !(await User.passwordMatched(
       payload?.password, //text pass
@@ -22,6 +24,7 @@ const login = async (payload: Tlogin) => {
   ) {
     throw new AppError("Incorrect password", 400);
   }
+
   const JwtPayload: Partial<TUser> = {
     id: user?.id,
     role: user?.role,
@@ -70,10 +73,12 @@ const changePassword = async (
   const { oldPassword, newPassword } = passwordData;
   // console.log(oldPassword);
 
+  /* match old and new password */
   if (!(await User.passwordMatched(oldPassword, hasedPassword))) {
     throw new AppError("Incorrect password", 400);
   }
 
+  /* updating password and related field */
   const result = await User.findByIdAndUpdate(
     {
       _id: existedUser?._id,
@@ -88,8 +93,50 @@ const changePassword = async (
   return result;
 };
 
+/* refresh token service */
+
+const refreshToken = async (refreshToken: string) => {
+  const decoded = jwt.verify(
+    refreshToken,
+    process.env.JWT_REFRESH_TOKEN_SECRET as string,
+  ) as JwtPayload;
+
+  const { id } = decoded;
+  const iat = decoded.iat as number;
+  const user: TUser = await User.isUserExist(id as string);
+  // return result;
+
+  /* get last time of password change in second  */
+  const passChangeTimeInSecond =
+    new Date(user.passwordChangedAt as Date).getTime() / 1000;
+
+  // checking if the access token created before the password change
+  if (passChangeTimeInSecond > iat) {
+    throw new AppError("Unauthorized request!", httpStatus.UNAUTHORIZED);
+  }
+
+  const JwtPayload: Partial<TUser> = {
+    id: user?.id,
+    role: user?.role,
+  };
+  const accessSecret = process.env.JWT_ACCESS_TOKEN_SECRET as string;
+  const accessExpiresIn = process.env.JWT_ACCESS_EXPIRES_IN as string;
+
+  /*
+   * creating  access token
+   */
+  const accessToken = await User.createToken(
+    JwtPayload,
+    accessSecret,
+    accessExpiresIn,
+  );
+
+  return accessToken;
+};
+
 const authService = {
   login,
   changePassword,
+  refreshToken,
 };
 export default authService;
