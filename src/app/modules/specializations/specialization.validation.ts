@@ -21,11 +21,13 @@ const medicalProblemValidation = z.object({
  */
 
 const specializationsValidation = z.object({
-  specializationName: z.string(),
+  body: z.object({
+    specializationName: z.string(),
 
-  specializationDetails: z.string(),
+    specializationDetails: z.string(),
 
-  problems: z.array(medicalProblemValidation),
+    problems: z.array(medicalProblemValidation),
+  }),
 });
 
 export default specializationsValidation;

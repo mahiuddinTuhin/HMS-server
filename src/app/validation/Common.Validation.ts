@@ -53,11 +53,13 @@ const emailValidation = z
   });
 
 const resetPasswordValidation = z.object({
-  oldPassword: z.string({
-    required_error: "old password is required for reset password!",
-  }),
-  newPassword: z.string({
-    required_error: "new password is required for reset password!",
+  body: z.object({
+    oldPassword: z.string({
+      required_error: "old password is required for reset password!",
+    }),
+    newPassword: z.string({
+      required_error: "new password is required for reset password!",
+    }),
   }),
 });
 
