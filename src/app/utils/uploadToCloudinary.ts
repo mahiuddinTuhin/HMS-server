@@ -7,14 +7,19 @@ cloudinary.config({
   api_secret: process.env.API_SECRET,
 });
 
-const uploadToCloudinary = () => {
-  cloudinary.uploader.upload(
-    "https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg",
-    { public_id: "olympic_flag" },
-    function (error, result) {
-      console.log(result);
-    },
-  );
+const uploadToCloudinary = (path: string, imageName: string) => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload(
+      path, //local image path
+      { public_id: imageName },
+      function (error, result) {
+        if (error) {
+          reject(error);
+        }
+        resolve(result);
+      },
+    );
+  });
 };
 
 export default uploadToCloudinary;

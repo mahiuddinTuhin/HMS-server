@@ -14,7 +14,9 @@ import { userServices } from "./user.services";
 /* 1. creating admin */
 const createAdmin: RequestHandler = catchAsync(async (req, res) => {
   const data = req.body;
-  console.log({ files: req.files });
+  const file = req.file as any;
+  const path = file?.path;
+  data.path = path;
 
   const newAdmin: any = await userServices.createAdminService(data);
 

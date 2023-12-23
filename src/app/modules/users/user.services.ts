@@ -32,6 +32,13 @@ const createAdminService = async (data: any) => {
 
     const generatedUserId = await generateUserId("admin");
 
+    const imageName = `image-${data?.fullName?.firstName}-${data?.fullName?.middleName}-${data?.fullName?.lastName}`;
+
+    const { secure_url } = (await uploadToCloudinary(
+      data?.path,
+      imageName,
+    )) as any;
+
     if (!generatedUserId) {
       throw new AppError(
         "Error occured on creating generating id.",
@@ -70,14 +77,14 @@ const createAdminService = async (data: any) => {
       id: newUser[0]?.id,
       user: newUser[0]?._id,
     };
+    adminData.profileImage = secure_url;
 
     const newAdmin = await Admin.create([adminData], { session });
+    console.log({ newAdmin });
 
     if (!newAdmin.length) {
       throw new AppError("Failed to create admin from service.", 400);
     }
-
-    uploadToCloudinary();
 
     await session.commitTransaction();
     await session.endSession();
