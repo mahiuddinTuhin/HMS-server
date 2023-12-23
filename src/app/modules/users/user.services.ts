@@ -5,6 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import AppError from "../../errors/customError";
 import { TPasswordReset } from "../../interfaces/TCommon.interface";
+import uploadToCloudinary from "../../utils/uploadToCloudinary";
 import generateUserId from "../../utils/userIdGenerator";
 import { TAdmin } from "../admin/admin.interface";
 import { Admin } from "../admin/admin.mode";
@@ -75,6 +76,8 @@ const createAdminService = async (data: any) => {
     if (!newAdmin.length) {
       throw new AppError("Failed to create admin from service.", 400);
     }
+
+    uploadToCloudinary();
 
     await session.commitTransaction();
     await session.endSession();

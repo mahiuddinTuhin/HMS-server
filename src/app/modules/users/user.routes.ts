@@ -2,7 +2,9 @@ import { Router } from "express";
 import { userRole } from "../../interfaces/interfaces";
 import validateRequest from "../../middleware/ZodValidator";
 import auth from "../../middleware/auth";
+import jsonParseData from "../../middleware/jsonParseData";
 import isUserExisted from "../../utils/isUserExisted";
+import { upload } from "../../utils/uploadToCloudinary";
 import globalValidators from "../../validation/Common.Validation";
 import { adminValidation } from "../admin/admin.validation";
 import DoctorValidation from "../doctors/doctors.validation";
@@ -17,6 +19,8 @@ const router = Router();
 /* 1. creating admin */
 router.post(
   "/create-admin",
+  upload.single("file"),
+  jsonParseData,
   isUserExisted(),
   validateRequest(userValidation),
   validateRequest(adminValidation),
