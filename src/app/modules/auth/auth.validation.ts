@@ -27,3 +27,10 @@ export const forgetPasswordValidation = z.object({
     id: z.string({ required_error: "User id is required!" }),
   }),
 });
+
+export const resetPasswordValidation = z.object({
+  body: z.object({
+    id: z.string({ required_error: "User id is required!" }),
+    newPassword: z.string({ required_error: "User new password is required!" }),
+  }),
+});

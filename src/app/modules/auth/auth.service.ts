@@ -136,25 +136,24 @@ const refreshToken = async (refreshToken: string) => {
 };
 
 const forgetPassword = async (id: string) => {
-  const fetchedUser: TUser = await User.isUserExist(id as string);
-
-  const JwtPayload: Partial<TUser> = {
-    id: fetchedUser?.id,
-    role: fetchedUser?.role,
-  };
   const accessSecret = process.env.JWT_ACCESS_TOKEN_SECRET as string;
+
+  const fetchedUser = await User.isUserExist(id);
 
   /*
    * creating  access token
    */
 
   const token = (await User.createToken(
-    JwtPayload,
+    {
+      id: fetchedUser.id,
+      role: fetchedUser.role,
+    },
     accessSecret,
     "10m",
   )) as string;
 
-  const resetLink = `http:localhost://5173?id=${id}&token=${token}`;
+  const resetLink = `${process.env.RESET_PASSWORD_UI_LINK}?id=${fetchedUser.id}&token=${token}`;
   const to = fetchedUser.email as string;
   const subject = "PASSWORD Reset mail!";
   const text = `Reset your password with following link
@@ -166,10 +165,29 @@ const forgetPassword = async (id: string) => {
   return to;
 };
 
+/* reset password service */
+
+const resetPassword = async (user: TUser, newPassword: string) => {
+  /* updating password and related field */
+  await User.findOneAndUpdate(
+    {
+      $or: [{ id: user?.id }, { email: user?.email }],
+    },
+    {
+      password: await hashingPassword(newPassword),
+      needsPasswordChange: false,
+      passwordChangedAt: new Date(),
+    },
+  );
+
+  return true;
+};
+
 const authService = {
   login,
   changePassword,
   refreshToken,
   forgetPassword,
+  resetPassword,
 };
 export default authService;

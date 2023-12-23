@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 
 export type TUser = {
+  _id?: Types.ObjectId;
   id: string;
   password: string;
   needsPasswordChange: boolean;

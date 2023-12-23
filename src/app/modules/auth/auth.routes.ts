@@ -7,6 +7,7 @@ import loginValidation, {
   changePasswordValidation,
   forgetPasswordValidation,
   refreshTokenValidation,
+  resetPasswordValidation,
 } from "./auth.validation";
 
 const router = Router();
@@ -44,6 +45,24 @@ router.post(
   "/forget-password",
   validateRequest(forgetPasswordValidation),
   authController.forgetPassword,
+);
+
+/*
+ *  reset password routes
+ *
+ *  return null
+ */
+router.post(
+  "/reset-password",
+  auth(
+    userRole.admin,
+    userRole.doctor,
+    userRole.nurse,
+    userRole.patient,
+    userRole.staff,
+  ),
+  validateRequest(resetPasswordValidation),
+  authController.resetPassword,
 );
 
 const authRouter = router;

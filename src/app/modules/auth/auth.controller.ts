@@ -2,6 +2,7 @@
 import { NextFunction, Request, Response } from "express";
 import { responseToRequest } from "../../utils/ResponseToServer";
 import catchAsync from "../../utils/catchAsync";
+import { TUser } from "../users/user.interface";
 import authService from "./auth.service";
 
 /* login controller */
@@ -52,7 +53,7 @@ const refreshToken = catchAsync(
       responseToRequest(res, {
         success: true,
         status: 200,
-        message: "Successfully created new accessToken.",
+        message: "Successfully created new refresh Token.",
         data: result,
       });
   },
@@ -74,10 +75,28 @@ const forgetPassword = catchAsync(
   },
 );
 
+/* reset password controller */
+const resetPassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user as TUser;
+    const newPassword = req?.body?.newPassword;
+    const result = await authService.resetPassword(user, newPassword);
+
+    result &&
+      responseToRequest(res, {
+        success: true,
+        status: 200,
+        message: "Successfully reset password.",
+        data: null,
+      });
+  },
+);
+
 const authController = {
   login,
   changePassword,
   refreshToken,
   forgetPassword,
+  resetPassword,
 };
 export default authController;
