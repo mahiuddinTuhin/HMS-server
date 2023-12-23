@@ -80,7 +80,6 @@ const createAdminService = async (data: any) => {
     adminData.profileImage = secure_url;
 
     const newAdmin = await Admin.create([adminData], { session });
-    console.log({ newAdmin });
 
     if (!newAdmin.length) {
       throw new AppError("Failed to create admin from service.", 400);

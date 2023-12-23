@@ -1,5 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { v2 as cloudinary } from "cloudinary";
 import multer from "multer";
+import AppError from "../errors/customError";
+const fs = require("fs");
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -17,6 +21,16 @@ const uploadToCloudinary = (path: string, imageName: string) => {
           reject(error);
         }
         resolve(result);
+
+        // removing image file from 'path' of image
+        fs.unlink(path, (err: any) => {
+          if (err) {
+            throw new AppError("Error in deleting file after uploads", 400);
+          }
+          // else {
+          //   console.log("File is deleted.");
+          // }
+        });
       },
     );
   });
