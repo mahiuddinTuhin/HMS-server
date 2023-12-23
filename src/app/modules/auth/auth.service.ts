@@ -7,6 +7,7 @@ import { TPasswordReset } from "../../interfaces/TCommon.interface";
 import hashingPassword from "../../utils/hashedPassword";
 import { TUser } from "../users/user.interface";
 import { User } from "../users/user.model";
+import sendEmail from "../utils/sendMail";
 import Tlogin from "./auth.interface";
 
 /* login service */
@@ -135,28 +136,34 @@ const refreshToken = async (refreshToken: string) => {
 };
 
 const forgetPassword = async (id: string) => {
-  const user: TUser = await User.isUserExist(id as string);
+  const fetchedUser: TUser = await User.isUserExist(id as string);
 
   const JwtPayload: Partial<TUser> = {
-    id: user?.id,
-    role: user?.role,
+    id: fetchedUser?.id,
+    role: fetchedUser?.role,
   };
   const accessSecret = process.env.JWT_ACCESS_TOKEN_SECRET as string;
-  const accessExpiresIn = process.env.JWT_ACCESS_EXPIRES_IN as string;
 
   /*
    * creating  access token
    */
-  
+
   const token = (await User.createToken(
     JwtPayload,
     accessSecret,
-    accessExpiresIn,
+    "10m",
   )) as string;
 
   const resetLink = `http:localhost://5173?id=${id}&token=${token}`;
+  const to = fetchedUser.email as string;
+  const subject = "PASSWORD Reset mail!";
+  const text = `Reset your password with following link
+        link: ${resetLink}
+  `;
 
-  return resetLink;
+  await sendEmail(to, subject, text);
+
+  return to;
 };
 
 const authService = {
