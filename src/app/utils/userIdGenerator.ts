@@ -5,14 +5,14 @@
 import AppError from "../errors/customError";
 import findLastUser from "./findLastUser";
 
-/**
+/*
  *    id: pattern
- *    Role_first_three_letter+year's last 2 digit(23)+monnth(12)+date(30)+(quantity+1)
+ **    first_three_letter_of_Role_+year's last 2 digit(23)+monnth(12)+date(30)+(quantity+1)
  * @param role
  */
 
 /*
-      generating id by retrieving last user(role based) or custom id
+ NOTE     generating id by retrieving last user(role based) or custom id
 */
 
 const generateUserId = async (role: string) => {
@@ -38,19 +38,17 @@ const generateUserId = async (role: string) => {
     if (lastUserSerial >= 999) {
       throw new AppError("User is overflowed for today!", 400);
     }
-    const needIncrement = lastUserIdDate === currentformattedDate;
+    const needIncrementSerial = lastUserIdDate === currentformattedDate;
 
-    if (needIncrement) {
+    if (needIncrementSerial) {
       newSerial = (lastUserSerial + 1).toString().padStart(3, "0");
     } else {
       newSerial = "001";
     }
 
-    newUserId = `${currentformattedDate}${newSerial}`;
-
     const roleStr = role.charAt(0).toUpperCase() + role.slice(1, 3);
 
-    newUserId = roleStr + newUserId;
+    newUserId = `${roleStr}${currentformattedDate}${newSerial}`;
 
     return newUserId;
   } catch (error) {

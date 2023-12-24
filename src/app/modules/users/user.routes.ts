@@ -3,9 +3,7 @@ import { userRole } from "../../interfaces/interfaces";
 import validateRequest from "../../middleware/ZodValidator";
 import auth from "../../middleware/auth";
 import jsonParseData from "../../middleware/jsonParseData";
-import isUserExisted from "../../utils/isUserExisted";
 import { upload } from "../../utils/uploadToCloudinary";
-import globalValidators from "../../validation/Common.Validation";
 import { adminValidation } from "../admin/admin.validation";
 import DoctorValidation from "../doctors/doctors.validation";
 import NurseValidation from "../nurse/nurse.validation";
@@ -21,7 +19,6 @@ router.post(
   "/create-admin",
   upload.single("file"),
   jsonParseData,
-  isUserExisted(),
   validateRequest(userValidation),
   validateRequest(adminValidation),
   userControllers.createAdmin,
@@ -31,6 +28,8 @@ router.post(
 router.post(
   "/create-doctor",
   auth(userRole.admin),
+  upload.single("file"), //multer
+  jsonParseData, //text to json
   validateRequest(userValidation),
   validateRequest(DoctorValidation),
   userControllers.createDoctor,
@@ -41,6 +40,8 @@ router.post(
 router.post(
   "/create-nurse",
   auth(userRole.admin),
+  upload.single("file"),
+  jsonParseData,
   validateRequest(userValidation),
   validateRequest(NurseValidation),
   userControllers.createNurse,
@@ -50,6 +51,8 @@ router.post(
 
 router.post(
   "/create-patient",
+  upload.single("file"),
+  jsonParseData,
   validateRequest(userValidation),
   validateRequest(patientValidation),
   userControllers.createPatient,
@@ -60,17 +63,11 @@ router.post(
 router.post(
   "/create-staff",
   auth(userRole.admin),
+  upload.single("file"),
+  jsonParseData,
   validateRequest(userValidation),
   validateRequest(staffValidation),
   userControllers.createStaff,
-);
-
-/* password reset */
-
-router.post(
-  "/reset-password/:userId",
-  validateRequest(globalValidators.resetPasswordValidation),
-  // userControllers.createStaff,
 );
 
 /*

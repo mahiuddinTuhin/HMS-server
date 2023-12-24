@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { RequestHandler } from "express";
 import httpStatus from "http-status";
-import { StatusCodes } from "http-status-codes";
-import AppError from "../../errors/customError";
 import { TPasswordReset } from "../../interfaces/TCommon.interface";
 import {
   ResponseToServer,
@@ -11,7 +9,9 @@ import {
 import catchAsync from "../../utils/catchAsync";
 import { userServices } from "./user.services";
 
-/* 1. creating admin */
+/*
+ *   creating admin controller
+ */
 const createAdmin: RequestHandler = catchAsync(async (req, res) => {
   const data = req.body;
   const file = req.file as any;
@@ -28,91 +28,82 @@ const createAdmin: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
-/* 2. creating doctor */
+/*
+ *   creating doctor controller
+ */
 const createDoctor: RequestHandler = catchAsync(async (req, res) => {
   const data = req.body;
+  const file = req.file as any;
+  const path = file?.path;
+  data.path = path;
 
   const newDoctor: any = await userServices.createDocService(data);
 
-  if (newDoctor) {
-    ResponseToServer(
-      req,
-      res,
-      true,
-      200,
-      "successfully created doctor's data.",
-      newDoctor,
-    );
-  } else {
-    throw new AppError(
-      "Failed to create doc!",
-      StatusCodes.INTERNAL_SERVER_ERROR,
-    );
-  }
+  responseToRequest(res, {
+    success: true,
+    status: httpStatus.OK as number,
+    message: "Doctor is created succesfully",
+    data: newDoctor,
+  });
 });
 
-/* 3. creating Nurse */
+/*
+ *   creating nurse controller
+ */
 const createNurse: RequestHandler = catchAsync(async (req, res) => {
   const data = req.body;
+  const file = req.file as any;
+  const path = file?.path;
+  data.path = path;
 
   const newNurse: any = await userServices.createNurseService(data);
 
-  ResponseToServer(
-    req,
-    res,
-    true,
-    200,
-    "successfully created nurse's data.",
-    newNurse,
-  );
+  responseToRequest(res, {
+    success: true,
+    status: httpStatus.OK as number,
+    message: "Nurse is created succesfully",
+    data: newNurse,
+  });
 });
 
-/* 4. creating patient */
+/*
+ *   creating patient controller
+ */
 const createPatient: RequestHandler = catchAsync(async (req, res) => {
-  const body = req.body;
+  const data = req.body;
+  const file = req.file as any;
+  const path = file?.path;
+  data.path = path;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const newPatient: any = await userServices.createPatientService(body);
+  const newPatient: any = await userServices.createPatientService(data);
 
-  if (newPatient.length) {
-    ResponseToServer(
-      req,
-      res,
-      true,
-      200,
-      "successfully created Patient's data.",
-      newPatient,
-    );
-  } else {
-    throw new AppError(
-      "Failed to create Patient!",
-      StatusCodes.INTERNAL_SERVER_ERROR,
-    );
-  }
+  responseToRequest(res, {
+    success: true,
+    status: httpStatus.OK as number,
+    message: "Patient is created succesfully",
+    data: newPatient,
+  });
 });
 
-/* 5. creating patient */
+/*
+ *   creating staff controller
+ */
 const createStaff: RequestHandler = catchAsync(async (req, res) => {
-  const body = req.body;
+  const data = req.body;
+  const file = req.file as any;
+  const path = file?.path;
+  data.path = path;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const newStaff: any = await userServices.createStaffService(body);
+  const newStaff: any = await userServices.createStaffService(data);
 
-  if (newStaff.length) {
-    ResponseToServer(
-      req,
-      res,
-      true,
-      200,
-      "successfully created Staff's data.",
-      newStaff,
-    );
-  } else {
-    throw new AppError(
-      "Failed to create Staff!",
-      StatusCodes.INTERNAL_SERVER_ERROR,
-    );
-  }
+  responseToRequest(res, {
+    success: true,
+    status: httpStatus.OK as number,
+    message: "Staff is created succesfully",
+    data: newStaff,
+  });
 });
 
 const getUserById: RequestHandler = catchAsync(async (req, res) => {

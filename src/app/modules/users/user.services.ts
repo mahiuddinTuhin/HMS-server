@@ -5,6 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import AppError from "../../errors/customError";
 import { TPasswordReset } from "../../interfaces/TCommon.interface";
+import { userRole } from "../../interfaces/interfaces";
 import uploadToCloudinary from "../../utils/uploadToCloudinary";
 import generateUserId from "../../utils/userIdGenerator";
 import { TAdmin } from "../admin/admin.interface";
@@ -16,7 +17,6 @@ import { Patient } from "../patients/patient.model";
 import Staff from "../staff/staff.model";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
-const bcrypt = require("bcrypt");
 
 /**
  *
@@ -30,14 +30,11 @@ const createAdminService = async (data: any) => {
   try {
     session.startTransaction();
 
-    const generatedUserId = await generateUserId("admin");
-
-    const imageName = `image-${data?.fullName?.firstName}-${data?.fullName?.middleName}-${data?.fullName?.lastName}`;
-
-    const { secure_url } = (await uploadToCloudinary(
-      data?.path,
-      imageName,
-    )) as any;
+    /*
+     *  generating user id
+     * returns the incremented id of previous one from DB
+     */
+    const generatedUserId = await generateUserId(userRole.admin);
 
     if (!generatedUserId) {
       throw new AppError(
@@ -45,18 +42,30 @@ const createAdminService = async (data: any) => {
         StatusCodes.INTERNAL_SERVER_ERROR,
       );
     }
+
+    // generating image name for imageDB
+    const imageName = `image-${data?.fullName?.firstName}-${data?.fullName
+      ?.middleName}-${data?.fullName?.lastName}-${Date.now()}`;
+
+    /*
+     *  uploads to cloudinary with path and imageName
+     * return secure_url
+     */
+    const { secure_url } = (await uploadToCloudinary(
+      data?.path,
+      imageName,
+    )) as any;
+
     /* taking necessary data for common user */
 
     const userData: Partial<TUser> = {
       id: generatedUserId,
       password: data?.password,
-      needsPasswordChange: true,
       email: data?.email,
       phone: data?.phone,
       role: "admin",
-      isDeleted: false,
-      status: "active",
     };
+
     const newUser: any = await User.create([userData], { session });
 
     if (!newUser.length) {
@@ -76,8 +85,8 @@ const createAdminService = async (data: any) => {
       ...restOfData,
       id: newUser[0]?.id,
       user: newUser[0]?._id,
+      profileImage: secure_url,
     };
-    adminData.profileImage = secure_url;
 
     const newAdmin = await Admin.create([adminData], { session });
 
@@ -89,17 +98,19 @@ const createAdminService = async (data: any) => {
     await session.endSession();
 
     return newAdmin;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();
-    throw error;
+
+    throw new AppError(error?.message, 400);
   }
 };
 
 /**
- * @function creating Doctor Services
  *
+ * @creating_doctor_service
+ *
+ * @returns_new_doctor
  */
 
 const createDocService = async (data: any) => {
@@ -107,7 +118,11 @@ const createDocService = async (data: any) => {
 
   try {
     session.startTransaction();
-    const generatedUserId = await generateUserId("Doctor");
+    /*
+     *  generating user id
+     * returns the incremented id of previous one from DB
+     */
+    const generatedUserId = await generateUserId(userRole.doctor);
 
     if (!generatedUserId) {
       throw new AppError(
@@ -115,17 +130,27 @@ const createDocService = async (data: any) => {
         StatusCodes.INTERNAL_SERVER_ERROR,
       );
     }
+
+    // generating image name for imageDB
+    const imageName = `image-${data?.fullName?.firstName}-${data?.fullName
+      ?.middleName}-${data?.fullName?.lastName}-${Date.now()}`;
+
+    /*
+     *  uploads to cloudinary with path and imageName
+     * return secure_url
+     */
+    const { secure_url } = (await uploadToCloudinary(
+      data?.path,
+      imageName,
+    )) as any;
     /* taking necessary data for common user */
 
     const userData: Partial<TUser> = {
       id: generatedUserId,
       password: data?.password,
-      needsPasswordChange: true,
       email: data?.email,
       phone: data?.phone,
-      role: "doctor",
-      isDeleted: false,
-      status: "active",
+      role: userRole.doctor,
     };
 
     const newUser: any = await User.create([userData], { session });
@@ -147,6 +172,7 @@ const createDocService = async (data: any) => {
       ...restOfData,
       id: newUser[0]?.id,
       user: newUser[0]?._id,
+      profileImage: secure_url,
     };
 
     const newDoctor = await Doctor.create([doctorData], { session });
@@ -163,29 +189,55 @@ const createDocService = async (data: any) => {
   } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();
-    throw error;
+    throw new AppError(error?.message, 400);
   }
 };
 
-/*  3. create nurse service */
+/**
+ *
+ * @creating_nurse_service
+ *
+ * @returns_new_nurse
+ */
 const createNurseService = async (data: any) => {
-  /* taking necessary data for common user */
-  const userData: Partial<TUser> = {
-    id: await generateUserId("Nurse"),
-    password: data?.password,
-    needsPasswordChange: true,
-    email: data?.email,
-    phone: data?.phone,
-    role: "nurse",
-    isDeleted: false,
-    status: "active",
-  };
-
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
+    /*
+     *  generating user id
+     * returns the incremented id of previous one from DB
+     */
+    const generatedUserId = await generateUserId(userRole.nurse);
 
+    if (!generatedUserId) {
+      throw new AppError(
+        "Error occured on creating generating id.",
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    // generating image name for imageDB
+    const imageName = `image-${data?.fullName?.firstName}-${data?.fullName
+      ?.middleName}-${data?.fullName?.lastName}-${Date.now()}`;
+
+    /*
+     *  uploads to cloudinary with path and imageName
+     * return secure_url
+     */
+    const { secure_url } = (await uploadToCloudinary(
+      data?.path,
+      imageName,
+    )) as any;
+
+    /* taking necessary data for common user */
+    const userData: Partial<TUser> = {
+      id: generatedUserId,
+      password: data?.password,
+      email: data?.email,
+      phone: data?.phone,
+      role: userRole.nurse,
+    };
     const newUser = await User.create([userData], { session });
 
     const {
@@ -201,6 +253,7 @@ const createNurseService = async (data: any) => {
       ...restOfData,
       id: newUser[0]?.id,
       user: newUser[0]?._id,
+      profileImage: secure_url,
     };
 
     const newNurse = await Nurse.create([nurseData], { session });
@@ -220,30 +273,27 @@ const createNurseService = async (data: any) => {
   } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();
-    throw new Error(error);
+    throw new AppError(error?.message, 400);
   }
 };
 
-/* 4. creating patient */
+/**
+ *
+ * @creating_patient_service
+ *
+ * @returns_new_patient
+ */
 const createPatientService = async (data: any) => {
   const session = await mongoose.startSession();
-
-  /* taking necessary data for common user */
-  const userData: Partial<TUser> = {
-    id: await generateUserId("Patient"),
-    password: data?.password,
-    needsPasswordChange: true,
-    email: data?.email,
-    phone: data?.phone,
-    isDeleted: false,
-    role: "patient",
-    status: "active",
-  };
 
   try {
     session.startTransaction();
 
-    const generatedUserId = await generateUserId("patient");
+    /*
+     *  generating user id
+     * returns the incremented id of previous one from DB
+     */
+    const generatedUserId = await generateUserId(userRole.patient);
 
     if (!generatedUserId) {
       throw new AppError(
@@ -252,15 +302,26 @@ const createPatientService = async (data: any) => {
       );
     }
 
+    // generating image name for imageDB
+    const imageName = `image-${data?.fullName?.firstName}-${data?.fullName
+      ?.middleName}-${data?.fullName?.lastName}-${Date.now()}`;
+
+    /*
+     *  uploads to cloudinary with path and imageName
+     * return secure_url
+     */
+    const { secure_url } = (await uploadToCloudinary(
+      data?.path,
+      imageName,
+    )) as any;
+
+    /* taking necessary data for common user */
     const userData: Partial<TUser> = {
       id: generatedUserId,
       password: data?.password,
-      needsPasswordChange: true,
       email: data?.email,
       phone: data?.phone,
-      isDeleted: false,
-      role: "patient",
-      status: "active",
+      role: userRole.patient,
     };
 
     const newUser: any = await User.create([userData], { session });
@@ -285,6 +346,7 @@ const createPatientService = async (data: any) => {
       ...restOfData,
       id: newUser[0]?.id,
       user: newUser[0]?._id,
+      profileImage: secure_url,
     };
 
     const newPatient = await Patient.create([patientData], { session });
@@ -304,36 +366,55 @@ const createPatientService = async (data: any) => {
   } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();
-    throw error;
+    throw new AppError(error?.message, 400);
   }
 };
 
-/* 5. creating staff */
+/**
+ *
+ * @creating_staff_service
+ *
+ * @returns_new_staff
+ */
 const createStaffService = async (data: any) => {
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
 
-    const generatedUserId = await generateUserId("staff");
+    /*
+     *  generating user id
+     * returns the incremented id of previous one from DB
+     */
+    const generatedUserId = await generateUserId(userRole.staff);
 
     if (!generatedUserId) {
       throw new AppError(
-        "Error generating user ID",
+        "Error occured on creating generating id.",
         StatusCodes.INTERNAL_SERVER_ERROR,
       );
     }
+
+    // generating image name for imageDB
+    const imageName = `image-${data?.fullName?.firstName}-${data?.fullName
+      ?.middleName}-${data?.fullName?.lastName}-${Date.now()}`;
+
+    /*
+     *  uploads to cloudinary with path and imageName
+     * return secure_url
+     */
+    const { secure_url } = (await uploadToCloudinary(
+      data?.path,
+      imageName,
+    )) as any;
 
     /* taking necessary data for common user */
     const userData: Partial<TUser> = {
       id: generatedUserId,
       password: data?.password,
-      needsPasswordChange: true,
       email: data?.email,
       phone: data?.phone,
-      isDeleted: false,
-      role: "staff",
-      status: "active",
+      role: userRole.staff,
     };
 
     const newUser = await User.create([userData], { session });
@@ -358,6 +439,7 @@ const createStaffService = async (data: any) => {
       ...restOfData,
       id: newUser[0]?.id,
       user: newUser[0]?._id,
+      profileImage: secure_url,
     };
 
     const newStaff = await Staff.create([staffData], { session });
@@ -377,7 +459,7 @@ const createStaffService = async (data: any) => {
   } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();
-    throw error;
+    throw new AppError(error?.message, 400);
   }
 };
 
