@@ -10,6 +10,6 @@ export const adminValidation = z.object({
     address: validators.addressValidation,
     dateOfBirth: z.string(),
     gender: z.string(),
-    profileImage: z.string().url(),
+    profileImage: z.string().url().optional(),
   }),
 });

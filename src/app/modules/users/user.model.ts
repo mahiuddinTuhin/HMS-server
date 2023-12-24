@@ -23,8 +23,6 @@ const userSchema = new mongoose.Schema<TUser, UserStaticModel>(
       select: 0,
       validate: {
         validator: (value: string) => {
-          console.log({ passV: value });
-
           return passwordPattern.test(value);
         },
         message:
@@ -201,6 +199,5 @@ userSchema.static(
     }
   },
 );
-
 
 export const User = mongoose.model<TUser, UserStaticModel>("User", userSchema);

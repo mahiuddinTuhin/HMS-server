@@ -74,7 +74,8 @@ const NurseValidation = z.object({
         required_error: "Profile image URL is required",
         invalid_type_error: "Profile image URL must be a string",
       })
-      .min(5, "Profile image URL shoulbd be minimum 5 character long!"),
+      .min(5, "Profile image URL shoulbd be minimum 5 character long!")
+      .optional(),
   }),
 });
 

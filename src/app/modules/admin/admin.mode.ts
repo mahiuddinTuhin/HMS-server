@@ -44,7 +44,6 @@ export const adminSchema = new Schema<TAdmin>(
     gender: { type: String, required: [true, "Gender is required"] },
     profileImage: {
       type: String,
-      required: [true, "Profile image URL is required"],
     },
   },
   { timestamps: true },

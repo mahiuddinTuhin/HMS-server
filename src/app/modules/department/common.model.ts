@@ -6,7 +6,7 @@ import { Schema, Types } from "mongoose";
 import {
   TMedicalProblem,
   TMedicalSpecializations,
-} from "./department.interface";
+} from "../specializations/specializations.interface";
 
 export const medicalProblemSchema = new Schema<TMedicalProblem>(
   {

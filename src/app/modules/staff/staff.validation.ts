@@ -58,10 +58,12 @@ const staffValidation = z.object({
       required_error: "Gender is required",
       invalid_type_error: "Gender must be a string",
     }),
-    profileImage: z.string({
-      required_error: "Profile image is required",
-      invalid_type_error: "Profile image must be a string",
-    }),
+    profileImage: z
+      .string({
+        required_error: "Profile image is required",
+        invalid_type_error: "Profile image must be a string",
+      })
+      .optional(),
   }),
 });
 

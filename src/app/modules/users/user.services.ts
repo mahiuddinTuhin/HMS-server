@@ -10,10 +10,12 @@ import uploadToCloudinary from "../../utils/uploadToCloudinary";
 import generateUserId from "../../utils/userIdGenerator";
 import { TAdmin } from "../admin/admin.interface";
 import { Admin } from "../admin/admin.mode";
+import Department from "../department/department.model";
 import { TDoctor } from "../doctors/doctors.interface";
 import { Doctor } from "../doctors/doctors.model";
 import Nurse from "../nurse/nurse.model";
 import { Patient } from "../patients/patient.model";
+import Specialization from "../specializations/specializations.model";
 import Staff from "../staff/staff.model";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
@@ -168,6 +170,7 @@ const createDocService = async (data: any) => {
       ...restOfData
     } = data;
 
+    /* cooking doctor obj for create document in database */
     const doctorData: Partial<TDoctor> = {
       ...restOfData,
       id: newUser[0]?.id,
@@ -175,7 +178,40 @@ const createDocService = async (data: any) => {
       profileImage: secure_url,
     };
 
-    const newDoctor = await Doctor.create([doctorData], { session });
+    // creting doctor document
+    const newDoctor: any = await Doctor.create([doctorData], { session });
+
+    // updating department with doctor's user_id, also skip if already exist
+
+    await Department.findByIdAndUpdate(
+      doctorData.department, // object id
+      {
+        $addToSet: {
+          doctors: doctorData.user, //doctorData.user is a object id
+        },
+      },
+      { session },
+    );
+
+    // updating specialization collection with doctor's user_id, also skip if already exist. Note: A doctor can exist in multiple specialization.
+
+    const newSpecializations = newDoctor[0].specializations as string[];
+
+    await Promise.all(
+      newSpecializations?.map(async (spec) => {
+        await Specialization.findByIdAndUpdate(
+          spec,
+          {
+            $addToSet: {
+              doctors: doctorData.user, //doctorData.user is a object id
+            },
+          },
+          {
+            session,
+          },
+        );
+      }),
+    );
 
     if (!newDoctor?.length) {
       throw new AppError("Failed to create admin from service.", 400);

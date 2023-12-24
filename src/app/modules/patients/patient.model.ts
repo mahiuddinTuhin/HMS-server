@@ -47,6 +47,9 @@ const patientSchema = new Schema<TPatient>(
     insuranceInfo: String,
 
     guardian: String,
+    profileImage: {
+      type: String,
+    },
     isDeleted: {
       type: Boolean,
       default: false,

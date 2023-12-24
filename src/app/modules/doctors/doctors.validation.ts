@@ -82,7 +82,8 @@ const DoctorValidation = z.object({
         required_error: "Profile image URL is required",
         invalid_type_error: "Profile image URL must be a string",
       })
-      .min(5, "Profile image URL should be minimum 5 character long!"),
+      .min(5, "Profile image URL should be minimum 5 character long!")
+      .optional(),
     license_info: z.string({
       required_error: "license_info is required",
       invalid_type_error: "license_info must be a string",

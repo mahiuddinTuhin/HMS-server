@@ -62,7 +62,7 @@ const createSpecialization = async (payload: TMedicalSpecializations[]) => {
       }),
     );
 
-    // console.log({ newSpecializations });
+    // updating department for mupltiple specialization
     if (newSpecializations) {
       await Promise.all(
         newSpecializations?.map(async (spec: TMedicalSpecializations) => {
