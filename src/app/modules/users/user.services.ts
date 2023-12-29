@@ -46,8 +46,7 @@ const createAdminService = async (data: any) => {
     }
 
     // generating image name for imageDB
-    const imageName = `image-${data?.fullName?.firstName}-${data?.fullName
-      ?.middleName}-${data?.fullName?.lastName}-${Date.now()}`;
+    const imageName = `image-${generatedUserId}`;
 
     /*
      *  uploads to cloudinary with path and imageName
@@ -134,8 +133,7 @@ const createDocService = async (data: any) => {
     }
 
     // generating image name for imageDB
-    const imageName = `image-${data?.fullName?.firstName}-${data?.fullName
-      ?.middleName}-${data?.fullName?.lastName}-${Date.now()}`;
+    const imageName = `image-${generatedUserId}`;
 
     /*
      *  uploads to cloudinary with path and imageName
@@ -254,8 +252,7 @@ const createNurseService = async (data: any) => {
     }
 
     // generating image name for imageDB
-    const imageName = `image-${data?.fullName?.firstName}-${data?.fullName
-      ?.middleName}-${data?.fullName?.lastName}-${Date.now()}`;
+    const imageName = `image-${generatedUserId}`;
 
     /*
      *  uploads to cloudinary with path and imageName
@@ -339,8 +336,7 @@ const createPatientService = async (data: any) => {
     }
 
     // generating image name for imageDB
-    const imageName = `image-${data?.fullName?.firstName}-${data?.fullName
-      ?.middleName}-${data?.fullName?.lastName}-${Date.now()}`;
+    const imageName = `image-${generatedUserId}`;
 
     /*
      *  uploads to cloudinary with path and imageName
@@ -432,9 +428,7 @@ const createStaffService = async (data: any) => {
     }
 
     // generating image name for imageDB
-    const imageName = `image-${data?.fullName?.firstName}-${data?.fullName
-      ?.middleName}-${data?.fullName?.lastName}-${Date.now()}`;
-
+    const imageName = `image-${generatedUserId}`;
     /*
      *  uploads to cloudinary with path and imageName
      * return secure_url
