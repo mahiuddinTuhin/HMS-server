@@ -20,6 +20,12 @@ exports.doctorSchema = new mongoose_1.Schema({
         ref: "Department",
         required: [true, "Department id is required!"],
     },
+    specializations: [
+        {
+            type: String,
+            required: [true, "specializations is required"],
+        },
+    ],
     schedules: {
         type: [String],
         enum: doctor_constant_1.schedules,
@@ -42,12 +48,10 @@ exports.doctorSchema = new mongoose_1.Schema({
         type: String,
         required: [true, "Email is required"],
         match: [Common_Validation_1.emailPattern, "Invalid email format"],
-        unique: true,
     },
     phone: {
         type: String,
         required: [true, "Phone number is required"],
-        match: [Common_Validation_1.phonePattern, "Invalid phone number format"],
     },
     education: {
         type: [{ type: Object }],
@@ -75,4 +79,4 @@ exports.doctorSchema = new mongoose_1.Schema({
 }, {
     timestamps: true,
 });
-exports.Doctor = (0, mongoose_1.model)("Doctors", exports.doctorSchema);
+exports.Doctor = (0, mongoose_1.model)("Doctor", exports.doctorSchema);

@@ -10,7 +10,8 @@ const patientSchema = new mongoose_1.Schema({
     },
     id: {
         type: String,
-        required: [true, "Id is required!"],
+        required: [true, "Patient Id is required!"],
+        unique: true,
     },
     allMedicalHistory: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "MedicalHistory" }],
     pendingAppointments: [
@@ -40,6 +41,9 @@ const patientSchema = new mongoose_1.Schema({
     emergencyContact: String,
     insuranceInfo: String,
     guardian: String,
+    profileImage: {
+        type: String,
+    },
     isDeleted: {
         type: Boolean,
         default: false,
@@ -47,4 +51,4 @@ const patientSchema = new mongoose_1.Schema({
 }, {
     timestamps: true,
 });
-exports.Patient = (0, mongoose_1.model)("Patients", patientSchema);
+exports.Patient = (0, mongoose_1.model)("Patient", patientSchema);

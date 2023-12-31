@@ -1,5 +1,5 @@
 import mongoose, { model } from "mongoose";
-import { TmedicalTestReport } from "./medicalTestReportReport.interface";
+import { TmedicalTestReport } from "./medicalTestReport.interface";
 
 const { Schema } = mongoose;
 

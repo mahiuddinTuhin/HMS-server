@@ -18,7 +18,7 @@ app.use(cookieParser());
 app.use("/api/v1", router);
 
 const test = async (req: Request, res: Response) => {
-  Promise.reject();
+  res.send("Server is running");
 };
 
 app.get("/", test);

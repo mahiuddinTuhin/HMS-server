@@ -5,14 +5,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userControllers = void 0;
 const http_status_1 = __importDefault(require("http-status"));
-const http_status_codes_1 = require("http-status-codes");
-const customError_1 = __importDefault(require("../../errors/customError"));
 const ResponseToServer_1 = require("../../utils/ResponseToServer");
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const user_services_1 = require("./user.services");
-/* 1. creating admin */
+/*
+ *   creating admin controller
+ */
 const createAdmin = (0, catchAsync_1.default)(async (req, res) => {
     const data = req.body;
+    const file = req.file;
+    const path = file?.path;
+    data.path = path;
     const newAdmin = await user_services_1.userServices.createAdminService(data);
     (0, ResponseToServer_1.responseToRequest)(res, {
         success: true,
@@ -21,46 +24,71 @@ const createAdmin = (0, catchAsync_1.default)(async (req, res) => {
         data: newAdmin,
     });
 });
-/* 2. creating doctor */
+/*
+ *   creating doctor controller
+ */
 const createDoctor = (0, catchAsync_1.default)(async (req, res) => {
     const data = req.body;
+    const file = req.file;
+    const path = file?.path;
+    data.path = path;
     const newDoctor = await user_services_1.userServices.createDocService(data);
-    if (newDoctor) {
-        (0, ResponseToServer_1.ResponseToServer)(req, res, true, 200, "successfully created doctor's data.", newDoctor);
-    }
-    else {
-        throw new customError_1.default("Failed to create doc!", http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR);
-    }
+    (0, ResponseToServer_1.responseToRequest)(res, {
+        success: true,
+        status: http_status_1.default.OK,
+        message: "Doctor is created succesfully",
+        data: newDoctor,
+    });
 });
-/* 3. creating Nurse */
+/*
+ *   creating nurse controller
+ */
 const createNurse = (0, catchAsync_1.default)(async (req, res) => {
     const data = req.body;
+    const file = req.file;
+    const path = file?.path;
+    data.path = path;
     const newNurse = await user_services_1.userServices.createNurseService(data);
-    (0, ResponseToServer_1.ResponseToServer)(req, res, true, 200, "successfully created nurse's data.", newNurse);
+    (0, ResponseToServer_1.responseToRequest)(res, {
+        success: true,
+        status: http_status_1.default.OK,
+        message: "Nurse is created succesfully",
+        data: newNurse,
+    });
 });
-/* 4. creating patient */
+/*
+ *   creating patient controller
+ */
 const createPatient = (0, catchAsync_1.default)(async (req, res) => {
-    const body = req.body;
+    const data = req.body;
+    const file = req.file;
+    const path = file?.path;
+    data.path = path;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const newPatient = await user_services_1.userServices.createPatientService(body);
-    if (newPatient.length) {
-        (0, ResponseToServer_1.ResponseToServer)(req, res, true, 200, "successfully created Patient's data.", newPatient);
-    }
-    else {
-        throw new customError_1.default("Failed to create Patient!", http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR);
-    }
+    const newPatient = await user_services_1.userServices.createPatientService(data);
+    (0, ResponseToServer_1.responseToRequest)(res, {
+        success: true,
+        status: http_status_1.default.OK,
+        message: "Patient is created succesfully",
+        data: newPatient,
+    });
 });
-/* 5. creating patient */
+/*
+ *   creating staff controller
+ */
 const createStaff = (0, catchAsync_1.default)(async (req, res) => {
-    const body = req.body;
+    const data = req.body;
+    const file = req.file;
+    const path = file?.path;
+    data.path = path;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const newStaff = await user_services_1.userServices.createStaffService(body);
-    if (newStaff.length) {
-        (0, ResponseToServer_1.ResponseToServer)(req, res, true, 200, "successfully created Staff's data.", newStaff);
-    }
-    else {
-        throw new customError_1.default("Failed to create Staff!", http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR);
-    }
+    const newStaff = await user_services_1.userServices.createStaffService(data);
+    (0, ResponseToServer_1.responseToRequest)(res, {
+        success: true,
+        status: http_status_1.default.OK,
+        message: "Staff is created succesfully",
+        data: newStaff,
+    });
 });
 const getUserById = (0, catchAsync_1.default)(async (req, res) => {
     const id = Number(req.params.userId);
@@ -94,6 +122,37 @@ const updateUserById = (0, catchAsync_1.default)(async (req, res) => {
         data: result,
     });
 });
+const resetPassword = (0, catchAsync_1.default)(async (req, res) => {
+    const id = req.params?.userId;
+    const { oldPassword, newPassword } = req.body;
+    const data = {
+        id,
+        oldPassword,
+        newPassword,
+    };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    await user_services_1.userServices.resetPassword(data);
+    (0, ResponseToServer_1.ResponseToServer)(req, res, true, 200, "Successfyully change the user password!", {
+        data: null,
+    });
+});
+/**
+ *
+ * @Get_me_controller
+ *
+ */
+const getMe = (0, catchAsync_1.default)(async (req, res) => {
+    const { role, id } = req.user;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = await user_services_1.userServices.getMe(id, role);
+    result &&
+        (0, ResponseToServer_1.responseToRequest)(res, {
+            success: true,
+            status: 200,
+            message: "Successfyully retreive the user!",
+            data: result,
+        });
+});
 exports.userControllers = {
     createAdmin,
     createDoctor,
@@ -103,4 +162,6 @@ exports.userControllers = {
     getAllUser,
     createNurse,
     createStaff,
+    resetPassword,
+    getMe,
 };

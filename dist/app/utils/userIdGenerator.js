@@ -7,56 +7,51 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const customError_1 = __importDefault(require("../errors/customError"));
-const user_model_1 = require("../modules/users/user.model");
-/**
+const findLastUser_1 = __importDefault(require("./findLastUser"));
+/*
  *    id: pattern
- *    Role_first_three_letter+year's last 2 digit(23)+monnth(12)+date(30)+(quantity+1)
+ **    first_three_letter_of_Role_+year's last 2 digit(23)+monnth(12)+date(30)+(quantity+1)
  * @param role
  */
-const findLastUser = async (role) => {
-    const lastUser = await user_model_1.User.findOne({ role }, { id: 1, _id: 0 })
-        .sort({ createdAt: -1 })
-        .lean();
-    return lastUser;
-};
+/*
+ NOTE     generating id by retrieving last user(role based) or custom id
+*/
 const generateUserId = async (role) => {
     const date = new Date();
     const currentYear = date.getFullYear().toString().substring(2, 4);
-    const currentMonth = (date.getMonth() + 1).toString();
-    const newMonth = currentMonth.length < 2 ? `0${currentMonth}` : currentMonth;
-    const currentDateStr = date.getDate().toString();
-    const newDate = currentDateStr.length < 2 ? `0${currentDateStr}` : currentDateStr;
+    const currentMonth = (date.getMonth() + 1).toString().padStart(2, "0");
+    const currentDate = date.getDate().toString().toString().padStart(2, "0");
+    const currentformattedDate = `${currentDate}${currentMonth}${currentYear}`;
     /* finding last id on a role*/
-    let lastUser;
-    let lastThreeDigit;
+    let lastUserId;
+    let newUserId;
+    let newSerial;
     try {
-        lastUser = (await findLastUser(role)) || {};
-        if (lastUser?.id) {
-            const lastUserDate = lastUser?.id?.toString()?.substring(3, 5);
-            lastThreeDigit = lastUser?.id?.substring(9, 12);
-            if (lastUserDate === newDate &&
-                lastThreeDigit &&
-                Number(lastThreeDigit) < 1000) {
-                lastThreeDigit = (Number(lastThreeDigit) + 1).toString();
-            }
-            else {
-                lastThreeDigit = "001";
-            }
-            if (lastThreeDigit.length === 2) {
-                lastThreeDigit = `0${lastThreeDigit}`;
-            }
-            else if (lastThreeDigit.length === 1) {
-                lastThreeDigit = `00${lastThreeDigit}`;
-            }
-            const newId = (role.substring(0, 3) || "Guest") +
-                newDate +
-                newMonth +
-                currentYear +
-                lastThreeDigit;
-            return newId;
+        lastUserId = (await (0, findLastUser_1.default)(role)) || `${currentformattedDate}000`;
+        // 151223001
+        const lastUserIdDate = lastUserId.toString().substring(3, 9);
+        const lastUserSerial = Number(lastUserId.toString().substring(9, 12)) || 0;
+        if (lastUserSerial >= 999) {
+            throw new customError_1.default("User is overflowed for today!", 400);
         }
-        throw new customError_1.default("Failed to create id!", 400);
+        const needIncrementSerial = lastUserIdDate === currentformattedDate;
+        if (needIncrementSerial) {
+            newSerial = (lastUserSerial + 1).toString().padStart(3, "0");
+        }
+        else {
+            newSerial = "001";
+        }
+        const roleStr = role.charAt(0).toUpperCase() + role.slice(1, 3);
+        newUserId = `${roleStr}${currentformattedDate}${newSerial}`;
+        return newUserId;
     }
-    catch (error) { }
+    catch (error) {
+        if (error instanceof customError_1.default) {
+            throw new customError_1.default(error?.message || "Failed to generate code", 400);
+        }
+        else {
+            throw new customError_1.default("Failed to generate code", 400);
+        }
+    }
 };
 exports.default = generateUserId;

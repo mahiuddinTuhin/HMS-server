@@ -20,15 +20,26 @@ const createDepartment = (0, catchAsync_1.default)(async (req, res) => {
         data: newDepartment,
     });
 });
-/* creating Labratory controller */
-const createLabratory = (0, catchAsync_1.default)(async (req, res) => {
-    const labratoryData = req.body;
-    const newLab = await admin_services_1.adminServices.createLabratory(labratoryData);
+/* creating  Specialization */
+const createSpecialization = (0, catchAsync_1.default)(async (req, res) => {
+    const SpecializationData = req.body;
+    const newSpecialization = await admin_services_1.adminServices.createSpecialization(SpecializationData);
     return (0, ResponseToServer_1.responseToRequest)(res, {
         status: http_status_1.default?.OK,
         success: true,
-        message: "Labratory Data Created Successfully!",
-        data: newLab,
+        message: "Specialization Created Successfully!",
+        data: newSpecialization,
+    });
+});
+/* creating test controller */
+const createTest = (0, catchAsync_1.default)(async (req, res) => {
+    const testData = req.body;
+    const newTest = await admin_services_1.adminServices.createTest(testData);
+    return (0, ResponseToServer_1.responseToRequest)(res, {
+        status: http_status_1.default?.OK,
+        success: true,
+        message: "Test Data Created Successfully!",
+        data: newTest,
     });
 });
 /**
@@ -40,6 +51,7 @@ const findAllAdmin = (0, catchAsync_1.default)(async (req, res) => {
 });
 exports.adminController = {
     createDepartment,
-    createLabratory,
+    createTest,
     findAllAdmin,
+    createSpecialization,
 };

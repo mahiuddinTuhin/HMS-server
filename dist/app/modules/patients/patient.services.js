@@ -25,12 +25,20 @@ const ceateAppointment = async (data) => {
         const doctor = await doctors_model_1.Doctor.findById(data?.doctor)
             .select("pendingAppointments")
             .populate("pendingAppointments");
-        const isBooked = doctor?.pendingAppointments?.find((appointment) => appointment?.time === data?.time && appointment?.date === data?.date);
+        if (!doctor) {
+            throw new customError_1.default("Doctor id is not found.", 400);
+        }
+        const isBooked = doctor?.pendingAppointments?.find((appointment) => appointment?.time === data?.time && appointment?.date === data?.date) || false;
         if (isBooked) {
             throw new customError_1.default("Doctor is not available on this time or date, Change date,time or both.", 409);
         }
         /* if doctor will be available on the specific time and date then creating appointment and modify doctor and patient collections. */
+        const oldApp = await appointment_model_1.Appointment.find();
         const newAppointment = await appointment_model_1.Appointment.create([data], { session });
+        // console.log({ oldApp });
+        if (!newAppointment) {
+            console.log("failed app");
+        }
         /* modify doctor */
         await doctors_model_1.Doctor.findByIdAndUpdate(data?.doctor, {
             $push: {
@@ -52,13 +60,13 @@ const ceateAppointment = async (data) => {
         return newAppointment;
     }
     catch (error) {
-        if (error instanceof customError_1.default &&
-            error.message.includes("Doctor is not available")) {
-            throw new customError_1.default("Doctor is not available on this time or date, Change date,time or both.", 409);
+        // console.log({ errorss: error instanceof AppError });
+        if (error instanceof customError_1.default) {
+            throw new customError_1.default(error.message, 409);
         }
         await session.abortTransaction();
         await session.endSession();
-        throw new customError_1.default("Appointment creation failed", 400);
+        throw new customError_1.default(error.message, 400);
     }
 };
 const getAllPatient = async () => {
@@ -107,12 +115,12 @@ const deleteAppointmentById = async (id) => {
         return isClosed;
     }
     catch (error) {
-        if (error instanceof customError_1.default &&
-            error.message.includes("Appointment does not found to delete")) {
-            throw new customError_1.default("Appointment does not found to delete", 400);
-        }
         await session.abortTransaction();
         await session.endSession();
+        if (error instanceof customError_1.default &&
+            error.message.includes("Appointment does not found to delete")) {
+            throw new customError_1.default(error.message, 400);
+        }
         throw new customError_1.default("Failed to delete Appointment", 400);
     }
 };

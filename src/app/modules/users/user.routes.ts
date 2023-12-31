@@ -88,7 +88,11 @@ router.get(
 );
 
 // get all user
-router.get("/", auth(userRole.admin), userControllers.getAllUser);
+router.get(
+  "/",
+  //  auth(userRole.admin),
+  userControllers.getAllUser,
+);
 // router.get("/:userId", userControllers.getUserById);
 // router.delete("/:userId", userControllers.deleteUserById);
 router.put("/:userId", userControllers.updateUserById);

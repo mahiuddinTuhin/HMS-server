@@ -4,19 +4,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const mongoose_1 = __importDefault(require("mongoose"));
-const Common_Validation_1 = require("../../validation/Common.Validation");
 const bcrypt = require("bcrypt");
+const http_status_1 = __importDefault(require("http-status"));
+const mongoose_1 = __importDefault(require("mongoose"));
+const customError_1 = __importDefault(require("../../errors/customError"));
+const hashedPassword_1 = __importDefault(require("../../utils/hashedPassword"));
+const Common_Validation_1 = require("../../validation/Common.Validation");
+const jwt = require("jsonwebtoken");
 const userSchema = new mongoose_1.default.Schema({
     id: {
         type: String,
-        required: [true, "id is required!"],
+        required: [true, "User id is required!"],
         unique: true,
     },
     password: {
         type: String,
-        default: process.env.DEFAULT_PASSWORD,
+        default: "P@ss0rd!", //generatePassword(),
+        select: 0,
         validate: {
             validator: (value) => {
                 return Common_Validation_1.passwordPattern.test(value);
@@ -28,8 +34,10 @@ const userSchema = new mongoose_1.default.Schema({
         type: Boolean,
         default: true,
     },
+    passwordChangedAt: { type: Date, default: null },
     email: {
         type: String,
+        unique: true,
         validate: {
             validator: (value) => {
                 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -40,12 +48,12 @@ const userSchema = new mongoose_1.default.Schema({
     },
     phone: {
         type: String,
-        validate: {
-            validator: function (value) {
-                return Common_Validation_1.phonePattern.test(value);
-            },
-            message: "Invalid phone address format!",
-        },
+        // validate: {
+        //   validator: function (value: string) {
+        //     return phonePattern.test(value);
+        //   },
+        //   message: "Invalid phone address format!",
+        // },
     },
     role: {
         type: String,
@@ -57,7 +65,7 @@ const userSchema = new mongoose_1.default.Schema({
         type: String,
         default: "active",
         enum: {
-            values: ["active", "inactive"],
+            values: ["active", "deactive"],
             message: "{VALUES} is not correct role. Choose active or inactive as status",
         },
     },
@@ -77,19 +85,76 @@ const userSchema = new mongoose_1.default.Schema({
     },
 }, { timestamps: true });
 /**
+ *  @Pre_hook
+ *
  * @hash_the_pass_before_saving
  */
 userSchema.pre("save", async function (next) {
-    const salt = bcrypt.genSaltSync(Number(process.env.SALTROUNDS));
-    const hashPass = bcrypt.hashSync(this?.password, salt) || process.env.DEFAULT_PASSWORD;
-    this.password = hashPass;
-    next();
+    try {
+        // const saltRounds = Number(process.env.SALTROUNDS) || 10;
+        // const salt = await bcrypt.genSaltSync(saltRounds);
+        // const passwordToHash = this?.password || generatePassword();
+        // const hashPass = bcrypt.hashSync(passwordToHash, salt);
+        // this.password = hashPass;
+        this.password = await (0, hashedPassword_1.default)(this.password);
+        next();
+    }
+    catch (error) {
+        next(error);
+    }
 });
 /**
  * @hiding_the_password
  */
-userSchema.post("save", function (doc, next) {
-    doc.password = "";
-    next();
+// userSchema.post("save", function (doc, next) {
+//   doc.password = "";
+//   next();
+// });
+/* password Matching static method */
+/*
+ * passwordMatched
+ */
+userSchema.statics.passwordMatched = async function (plainTextPassword, hasedPassword) {
+    // console.log({ plainTextPassword, hasedPassword });
+    return await bcrypt.compare(plainTextPassword, hasedPassword);
+};
+/* user existance checking static method */
+/*
+ * isUserExist
+ */
+userSchema.static("isUserExist", async function isUserExist(id) {
+    /* query in database */
+    const user = await exports.User.findOne({
+        $or: [{ id: id }, { email: id }],
+    }).select("+password");
+    /* if user not match by id or email */
+    if (!user) {
+        throw new customError_1.default("User not found. User correct id or email!", http_status_1.default.NOT_FOUND);
+    }
+    /* if id deactivate */
+    if (user.status === "deactive") {
+        throw new customError_1.default("This user has been deactivate. Contact with administration!", http_status_1.default.FORBIDDEN);
+    }
+    /* if id deactivate */
+    if (user.isDeleted === true) {
+        throw new customError_1.default("This user has been deleted. Contact with administration!", http_status_1.default.FORBIDDEN);
+    }
+    return user;
+});
+/*
+ * user accessToken creation method
+ */
+userSchema.static("createToken", async function createToken(payload, secret, exp) {
+    /* creating signature by json webtoken */
+    try {
+        const accessToken = await jwt.sign(payload, secret, {
+            expiresIn: exp,
+        });
+        // console.log({ accessToken });
+        return accessToken;
+    }
+    catch (error) {
+        throw new customError_1.default(error?.message, 400);
+    }
 });
 exports.User = mongoose_1.default.model("User", userSchema);

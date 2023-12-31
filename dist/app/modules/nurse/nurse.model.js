@@ -51,7 +51,7 @@ const NurseSchema = new mongoose_1.Schema({
         match: [Common_Validation_1.phonePattern, "Invalid phone number format"],
     },
     education: {
-        type: [{ type: Object }],
+        type: [{ type: Object }], // Assuming TEducation structure is complex; can be refined
         validate: {
             validator: (eduArray) => eduArray.length > 0,
             message: "At least one education entry is required",

@@ -38,6 +38,16 @@ const emailValidation = zod_1.z
     .refine((email) => exports.emailPattern.test(email), {
     message: "Invalid email!",
 });
+const resetPasswordValidation = zod_1.z.object({
+    body: zod_1.z.object({
+        oldPassword: zod_1.z.string({
+            required_error: "old password is required for reset password!",
+        }),
+        newPassword: zod_1.z.string({
+            required_error: "new password is required for reset password!",
+        }),
+    }),
+});
 const globalValidators = {
     educationValidation,
     fullNameValidation,
@@ -45,5 +55,6 @@ const globalValidators = {
     emailValidation,
     phoneValidation,
     passwordValidation,
+    resetPasswordValidation,
 };
 exports.default = globalValidators;

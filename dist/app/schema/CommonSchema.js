@@ -1,27 +1,36 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.utilsSchema = void 0;
+exports.utilsSchema = exports.contactSchema = void 0;
 const mongoose_1 = require("mongoose");
-const nonPatientContactSchema = new mongoose_1.Schema({
-    homeMobile: {
-        type: String,
-        required: [true, "Home Mobile is required!"],
-    },
-    officeMobile: {
-        type: String,
-        required: [true, "Office Mobileis required!"],
-    },
-    email: {
-        required: [true, "Email is required!"],
-        type: String,
-        validate: {
-            validator: (value) => {
-                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return emailPattern.test(value);
-            },
-            message: "Invalid email address format!",
+/*
+ * contact schema
+ */
+exports.contactSchema = new mongoose_1.Schema({
+    phone: [
+        {
+            type: String,
+            required: [true, "Phone number is required!"],
         },
-    },
+    ],
+    address: [
+        {
+            type: String,
+            required: [true, "Address required!"],
+        },
+    ],
+    email: [
+        {
+            required: [true, "Email is required!"],
+            type: String,
+            validate: {
+                validator: (value) => {
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return emailPattern.test(value);
+                },
+                message: "Invalid email address format!",
+            },
+        },
+    ],
 });
 const nonPatientEducationSchema = new mongoose_1.Schema({
     institute: {
@@ -89,20 +98,6 @@ const patientPersonalInfo = new mongoose_1.Schema({
     gender: String,
     profileImage: String,
 });
-const patientContactSchema = new mongoose_1.Schema({
-    homeMobile: String,
-    officeMobile: String,
-    email: {
-        type: String,
-        validate: {
-            validator: (value) => {
-                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return emailPattern.test(value);
-            },
-            message: "Invalid email address format!",
-        },
-    },
-});
 const patientGuardianSchema = new mongoose_1.Schema({
     relation: String,
     name: String,
@@ -129,8 +124,6 @@ const addressSchema = new mongoose_1.Schema({
     _id: false,
 });
 exports.utilsSchema = {
-    nonPatientContactSchema,
-    patientContactSchema,
     nonPatientEducationSchema,
     patientEducationSchema,
     NonPatientPersonalInfo,

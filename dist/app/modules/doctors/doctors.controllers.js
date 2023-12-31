@@ -32,12 +32,12 @@ const createMedicalHistory = (0, catchAsync_1.default)(async (req, res) => {
     }
 });
 const getAllDocController = (0, catchAsync_1.default)(async (req, res) => {
-    const newDoc = doctors_services_1.doctorServices.getAllDocService();
-    (0, ResponseToServer_1.ResponseToServer)(req, res, true, 200, "successfully retrieved all doctor's data.", newDoc);
+    const allDoc = await doctors_services_1.doctorServices.getAllDocService();
+    (0, ResponseToServer_1.ResponseToServer)(req, res, true, 200, "successfully retrieved all doctor's data.", allDoc);
 });
 const findDocByIdController = (0, catchAsync_1.default)(async (req, res) => {
-    const id = req.params.id;
-    const newDoc = doctors_services_1.doctorServices.findDocByIdService(id);
+    const id = req.params.userId;
+    const newDoc = await doctors_services_1.doctorServices.findDocByIdService(id);
     (0, ResponseToServer_1.ResponseToServer)(req, res, true, 200, "successfully get doctor's data.", newDoc);
 });
 const deleteDocByIdController = (0, catchAsync_1.default)(async (req, res) => {
@@ -51,6 +51,16 @@ const updateDocByIdController = (0, catchAsync_1.default)(async (req, res) => {
     const newDoc = doctors_services_1.doctorServices.updateDocByIdService(id, data);
     (0, ResponseToServer_1.ResponseToServer)(req, res, true, 200, "successfully updated doctor's data.", newDoc);
 });
+const appointedTimeOfDoc = (0, catchAsync_1.default)(async (req, res) => {
+    const id = req.params.id;
+    const newDoc = await doctors_services_1.doctorServices.appointedTimeOfDoc(id);
+    (0, ResponseToServer_1.ResponseToServer)(req, res, true, 200, "successfully get doctor's data.", newDoc);
+});
+const findDoctorBySymptoms = (0, catchAsync_1.default)(async (req, res) => {
+    const symptoms = req.body;
+    const doctors = await doctors_services_1.doctorServices.findDoctorBySymptoms(symptoms);
+    (0, ResponseToServer_1.ResponseToServer)(req, res, true, 200, "successfully get doctors data by symptoms", doctors);
+});
 exports.doctorsController = {
     findDocByIdController,
     updateDocByIdController,
@@ -58,4 +68,6 @@ exports.doctorsController = {
     getAllDocController,
     createAppointment,
     createMedicalHistory,
+    appointedTimeOfDoc,
+    findDoctorBySymptoms,
 };
