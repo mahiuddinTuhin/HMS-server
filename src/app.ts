@@ -8,11 +8,9 @@ import router from "./app/routes";
 const app = express();
 
 app.use(express.json());
-app.use(
-  cors({
-    origin: ["http://localhost:5173"],
-  }),
-);
+
+app.use(cors());
+
 app.use(cookieParser());
 
 app.use("/api/v1", router);
@@ -24,6 +22,7 @@ const test = async (req: Request, res: Response) => {
 app.get("/", test);
 
 app.use(globalErrorHandler);
+
 app.use(notFound);
 
 export default app;
