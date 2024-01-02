@@ -6,7 +6,7 @@ import catchAsync from "../../utils/catchAsync";
 import medicalTestReportService from "./medicalTestReport.service";
 
 /*
- * if user is a patient then only he can not find other patient's test report
+ * if user is a patient then  he can not find other patient's test report
  */
 const findTestReportById: RequestHandler = catchAsync(async (req, res) => {
   const id: string = req.params?.id;
@@ -29,7 +29,7 @@ const findTestReportById: RequestHandler = catchAsync(async (req, res) => {
 });
 
 /*
- * if user is a patient then only he can not find other patient's test report
+ * if user is a patient then  he can not find other patient's test report
  */
 const findAllTestReportByUserId: RequestHandler = catchAsync(
   async (req, res) => {
