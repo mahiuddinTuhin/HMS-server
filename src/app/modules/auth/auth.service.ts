@@ -29,6 +29,8 @@ const login = async (payload: Tlogin) => {
   const JwtPayload: Partial<TUser> = {
     id: user?.id,
     role: user?.role,
+    _id: user?._id,
+    email: user?.email,
   };
   const accessSecret = process.env.JWT_ACCESS_TOKEN_SECRET as string;
   const accessExpiresIn = process.env.JWT_ACCESS_EXPIRES_IN as string;
