@@ -223,7 +223,7 @@ const deleteAdmin: RequestHandler = catchAsync(async (req, res) => {
 });
 
 /*
- *   delete admin controller
+ *   delete nurse controller
  */
 
 const deleteNurse: RequestHandler = catchAsync(async (req, res) => {
@@ -231,6 +231,17 @@ const deleteNurse: RequestHandler = catchAsync(async (req, res) => {
   const result = await userServices.deleteNurse(id);
   result &&
     ResponseToServer(req, res, true, 200, "successfully deleted the nurse.");
+});
+
+/*
+ *   delete staff controller
+ */
+
+const deleteStaff: RequestHandler = catchAsync(async (req, res) => {
+  const id = req.params.userId;
+  const result = await userServices.deleteStaff(id);
+  result &&
+    ResponseToServer(req, res, true, 200, "successfully deleted the staff.");
 });
 
 export const userControllers = {
@@ -247,4 +258,5 @@ export const userControllers = {
   deleteDocById,
   deleteAdmin,
   deleteNurse,
+  deleteStaff,
 };

@@ -109,7 +109,17 @@ router.delete(
 router.delete("/delete-admin/:userId", userControllers.deleteAdmin);
 
 /* delete nurse */
-/* need super nurse here */
-router.delete("/delete-nurse/:userId", userControllers.deleteNurse);
+router.delete(
+  "/delete-nurse/:userId",
+  auth(userRole.admin),
+  userControllers.deleteNurse,
+);
+
+/* delete staff */
+router.delete(
+  "/delete-staff/:userId",
+  auth(userRole.admin),
+  userControllers.deleteStaff,
+);
 
 export const userRoutes = router;
