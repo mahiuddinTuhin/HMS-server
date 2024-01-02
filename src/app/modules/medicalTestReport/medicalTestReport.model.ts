@@ -10,7 +10,7 @@ const medicalTestReportSchema = new Schema<TmedicalTestReport>({
   summary: { type: String },
   patient: {
     type: Schema.Types.ObjectId,
-    ref: "Patient",
+    ref: "User",
     required: [true, "Patient is required."],
   },
   test: {

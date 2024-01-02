@@ -1,28 +1,16 @@
 import { Router } from "express";
-import departmentController from "./medicalTestReport.controller";
+import { userRole } from "../../interfaces/interfaces";
+import auth from "../../middleware/auth";
+import medicalTestReportController from "./medicalTestReport.controller";
 
 const router = Router();
 
-/* find  all problems */
-router.get("/problems", departmentController.findAllProblems);
-
-/* find  all symptoms */
-router.get("/symptoms", departmentController.findAllSymptoms);
-
-/* find all specialization  */
-router.get("/specializations", departmentController.findAllSpecializations);
-
-/* find specialization by id  */
+/* find  test report by id */
 router.get(
-  "/specializations/:specializationId",
-  departmentController.findSpecializationById,
+  "/:id",
+  auth(userRole.admin, userRole.patient, userRole.doctor),
+  medicalTestReportController.findTestReportById,
 );
-
-/* find a department by id */
-router.get("/:depId", departmentController.findDepartmentById);
-
-/* find  all department */
-router.get("/", departmentController.findAllDepartment);
 
 const medicalTestReportRouter = router;
 
