@@ -657,7 +657,7 @@ const deleteDoctor = async (id: string) => {
         }),
       );
 
-      const updatedDoctor = await Doctor.findByIdAndUpdate(
+      await Doctor.findByIdAndUpdate(
         {
           _id: doctorData?._id,
         },
@@ -669,7 +669,7 @@ const deleteDoctor = async (id: string) => {
         { session },
       );
 
-      return updatedDoctor;
+      return true;
     });
 
     return result;

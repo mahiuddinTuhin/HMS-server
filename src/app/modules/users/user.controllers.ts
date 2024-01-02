@@ -207,7 +207,6 @@ const deleteDocById: RequestHandler = catchAsync(async (req, res) => {
       true,
       200,
       "successfully deleted doctor's data.",
-      newDoc,
     );
 });
 
