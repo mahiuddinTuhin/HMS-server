@@ -12,6 +12,13 @@ router.get(
   medicalTestReportController.findTestReportById,
 );
 
+/* find  test report by id */
+router.get(
+  "/allreports/:userId",
+  auth(userRole.admin, userRole.patient, userRole.doctor),
+  medicalTestReportController.findAllTestReportByUserId,
+);
+
 const medicalTestReportRouter = router;
 
 export default medicalTestReportRouter;

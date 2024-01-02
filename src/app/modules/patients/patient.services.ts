@@ -84,7 +84,7 @@ const ceateAppointment = async (data: TAppointments) => {
 
     await session.commitTransaction();
     await session.endSession();
-    return newAppointment;
+    return newAppointment[0];
   } catch (error: any) {
     // console.log({ errorss: error instanceof AppError });
     if (error instanceof AppError) {

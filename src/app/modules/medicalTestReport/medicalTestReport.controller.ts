@@ -28,8 +28,35 @@ const findTestReportById: RequestHandler = catchAsync(async (req, res) => {
     });
 });
 
+/*
+ * if user is a patient then only he can not find other patient's test report
+ */
+const findAllTestReportByUserId: RequestHandler = catchAsync(
+  async (req, res) => {
+    const id: string = req.params?.userId;
+    const testReports =
+      await medicalTestReportService.findAllTestReportByUserId(id);
+
+    if (
+      req.user?.role === userRole.patient &&
+      req.user?._id !== testReports[0]?.patient?._id.toString()
+    ) {
+      throw new AppError("Unauthorized request!", 400);
+    }
+
+    testReports &&
+      responseToRequest(res, {
+        success: true,
+        status: 200,
+        message: "Successfully retrieved all test Report by user id.",
+        data: testReports,
+      });
+  },
+);
+
 const medicalTestReportController = {
   findTestReportById,
+  findAllTestReportByUserId,
 };
 
 export default medicalTestReportController;

@@ -10,9 +10,14 @@ import { patientServices } from "./patient.services";
 const ceateAppointment: RequestHandler = catchAsync(async (req, res) => {
   const result: any = await patientServices.ceateAppointment(req?.body);
 
-  ResponseToServer(req, res, true, 200, "Successfyully created appointment!", {
-    data: result,
-  });
+  ResponseToServer(
+    req,
+    res,
+    true,
+    200,
+    "Successfyully created appointment!",
+    result,
+  );
 });
 
 const getAllPatient: RequestHandler = catchAsync(async (req, res) => {
