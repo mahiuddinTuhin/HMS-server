@@ -26,7 +26,7 @@ const auth = (...requiredRoles: TUserRole[]) =>
     const { id, role } = decoded;
     const iat = decoded.iat as number;
 
-    const user: TUser = await User.isUserExist(id);
+    const user: TUser = await User.isTokenIdExist(id);
 
     const passChangeTimeInSecond =
       new Date(user.passwordChangedAt as Date).getTime() / 1000;

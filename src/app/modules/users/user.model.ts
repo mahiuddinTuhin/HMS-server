@@ -174,6 +174,34 @@ userSchema.static("isUserExist", async function isUserExist(id: string) {
   return user;
 });
 
+/* user existance checking static method */
+/*
+ * isTokenIdExist
+ */
+userSchema.static("isTokenIdExist", async function isUserExist(id: string) {
+  /* query in database */
+  const user = await User.findOne({
+    $or: [{ id: id }, { email: id }],
+  }).select("+password");
+
+  /* if user not match by id or email */
+  if (!user) {
+    throw new AppError("Unauthorize request!", httpStatus.NOT_FOUND);
+  }
+
+  /* if id deactivate */
+  if (user.status === "deactive") {
+    throw new AppError("Unauthorize request!", httpStatus.FORBIDDEN);
+  }
+
+  /* if id deactivate */
+  if (user.isDeleted === true) {
+    throw new AppError("Unauthorize request!", httpStatus.FORBIDDEN);
+  }
+
+  return user;
+});
+
 /*
  * user accessToken creation method
  */
