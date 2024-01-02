@@ -1,5 +1,7 @@
 import { Router } from "express";
+import { userRole } from "../../interfaces/interfaces";
 import validateRequest from "../../middleware/ZodValidator";
+import auth from "../../middleware/auth";
 import validateMultipleDocuemnt from "../../middleware/validateMultipleDocuemnt";
 import TestValidation from "../Test/Test.validation";
 import DepartmentValidation from "../department/departmentValidation";
@@ -35,6 +37,7 @@ router.post(
 /* creating test routes */
 router.post(
   "/create-test",
+  auth(userRole.admin),
   validateRequest(TestValidation),
   adminController.createTest,
 );

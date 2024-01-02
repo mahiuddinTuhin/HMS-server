@@ -11,10 +11,10 @@ type TTest = {
     yearOfManufacture: number;
   };
   benefits: string[]; // List of benefits from this test
-  patientCount: number; // Number of patients who have taken this test
-  responsibleDoctor: Types.ObjectId | string; // Refers to Doctor document
+  patientCount?: number; // Number of patients who have taken this test
+  responsibleDoctor?: Types.ObjectId; // Refers to Doctor document
   cost: number; // Cost of the test
-  isDeleted: boolean;
+  isDeleted?: boolean;
 } & Document;
 
 export default TTest;

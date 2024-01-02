@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Schema, Types, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import TTest from "./Test.interface";
 
 // Create a Mongoose schema for MedicalTest
@@ -20,15 +20,12 @@ const testSchema = new Schema<TTest>({
     type: Schema.Types.ObjectId,
     ref: "Doctor",
     required: true,
-    validate: {
-      validator: function (value: any) {
-        console.log({ data: Types.ObjectId.isValid(value) });
-        return Types.ObjectId.isValid(value);
-      },
-      message: "Invalid ObjectId format for responsibleDoctor",
-    },
   },
   cost: { type: Number, required: true, min: 0 },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Test = model<TTest>("Test", testSchema);

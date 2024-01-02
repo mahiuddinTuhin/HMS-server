@@ -29,15 +29,13 @@ const createDepartment = async (payload: TDepartment) => {
  * @creating_medical_test
  */
 
-const createTest = async (data: TTest) => {
+const createTest = async (payload: TTest) => {
   try {
-    data.id = await generateServiceId(Test);
+    payload.id = await generateServiceId(Test);
 
-    const newTest: any = await Test.create(data);
+    const newTest: any = await Test.create(payload);
     return newTest;
   } catch (error: any) {
-    // console.log({ error });
-    // console.log({ error });
     throw new AppError("Failed to create new Test service!", 400);
   }
 };
