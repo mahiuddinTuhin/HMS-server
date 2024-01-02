@@ -6,7 +6,7 @@ export type TMedicalHistory = {
   doctor: Types.ObjectId;
   patient: Types.ObjectId;
   appointment: Types.ObjectId;
-  diagonosis?: Types.ObjectId[];
+  MedicalTestReport?: Types.ObjectId[];
   allMedications?: string[];
   bill?: number;
   isPaid?: boolean;

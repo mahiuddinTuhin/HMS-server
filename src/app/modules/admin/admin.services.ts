@@ -7,6 +7,8 @@ import Department from "../department/department.model";
 import mongoose, { Types } from "mongoose";
 import Test from "../Test/Test.model";
 import TDepartment from "../department/department.interface";
+import { TmedicalTestReport } from "../medicalTestReport/medicalTestReport.interface";
+import { MedicalTestReport } from "../medicalTestReport/medicalTestReport.model";
 import { TMedicalSpecializations } from "../specializations/specializations.interface";
 import Specialization from "../specializations/specializations.model";
 import { nonPatientSearchableField } from "./admin.constant";
@@ -37,6 +39,21 @@ const createTest = async (payload: TTest) => {
     return newTest;
   } catch (error: any) {
     throw new AppError("Failed to create new Test service!", 400);
+  }
+};
+
+/**
+ * @creating_medical_test_report
+ */
+
+const createTestReport = async (payload: TmedicalTestReport) => {
+  try {
+    payload.id = await generateServiceId(MedicalTestReport);
+
+    const newTestReport: any = await MedicalTestReport.create(payload);
+    return newTestReport;
+  } catch (error: any) {
+    throw new AppError("Failed to create new Test report!", 400);
   }
 };
 
@@ -119,4 +136,5 @@ export const adminServices = {
   createTest,
   findAllAdmin,
   createSpecialization,
+  createTestReport,
 };

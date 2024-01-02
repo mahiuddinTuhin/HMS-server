@@ -12,7 +12,7 @@ export const medicalValidation = z.object({
       invalid_type_error: "patientId must be a string",
     }),
 
-    diagnosis: z.array(z.string().optional()).optional(),
+    MedicalTestReport: z.array(z.string().optional()).optional(),
 
     allMedications: z.array(z.string().optional()),
 

@@ -52,6 +52,20 @@ const createTest: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+/* creating test report controller */
+const createTestReport: RequestHandler = catchAsync(async (req, res) => {
+  const testReportData = req.body;
+
+  const newTestReport = await adminServices.createTestReport(testReportData);
+
+  return responseToRequest(res, {
+    status: httpStatus?.OK,
+    success: true,
+    message: "Test report Created Successfully!",
+    data: newTestReport,
+  });
+});
+
 /**
  *  @find all admin router
  */
@@ -66,4 +80,5 @@ export const adminController = {
   createTest,
   findAllAdmin,
   createSpecialization,
+  createTestReport,
 };

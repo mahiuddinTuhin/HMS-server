@@ -5,28 +5,20 @@ const { Schema } = mongoose;
 
 const medicalTestReportSchema = new Schema<TmedicalTestReport>({
   id: { type: String, required: [true, "Medical Test Id is required."] },
-  name: { type: String, required: [true, "Name is required."] },
-  details: { type: String, required: [true, "Name is required."] },
-  charge: { type: Number, required: [true, "Charge is required."] },
   isPaid: { type: Boolean, default: true },
-  reports: [{ type: Object, required: [true, "Reports is required."] }],
-  summary: { type: String, required: [true, "Summary is required."] },
-  equipments: { type: [String], required: [true, "Equipments is required."] },
-  doctor: {
-    type: Schema.Types.ObjectId,
-    ref: "Doctor",
-    required: [true, "Doctor is required."],
-  },
+  reports: [{ type: Object }],
+  summary: { type: String },
   patient: {
     type: Schema.Types.ObjectId,
     ref: "Patient",
     required: [true, "Patient is required."],
   },
-  staff: {
+  test: {
     type: Schema.Types.ObjectId,
-    ref: "Staff",
-    required: [true, "Staff is required."],
+    ref: "Test",
+    required: [true, "test id is required."],
   },
+
   reportAvailableDate: {
     type: String,
     required: [true, "Report Available date is required."],
@@ -37,7 +29,7 @@ const medicalTestReportSchema = new Schema<TmedicalTestReport>({
   },
 });
 
-export const medicalTestReport = model<TmedicalTestReport>(
+export const MedicalTestReport = model<TmedicalTestReport>(
   "medicalTestReport",
   medicalTestReportSchema,
 );

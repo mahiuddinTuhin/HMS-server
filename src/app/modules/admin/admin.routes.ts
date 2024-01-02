@@ -5,6 +5,7 @@ import auth from "../../middleware/auth";
 import validateMultipleDocuemnt from "../../middleware/validateMultipleDocuemnt";
 import TestValidation from "../Test/Test.validation";
 import DepartmentValidation from "../department/departmentValidation";
+import medicalTestReportValidation from "../medicalTestReport/medicalTestReport.validation";
 import specializationsValidation from "../specializations/specialization.validation";
 import { adminController } from "./admin.controllers";
 
@@ -40,6 +41,14 @@ router.post(
   auth(userRole.admin),
   validateRequest(TestValidation),
   adminController.createTest,
+);
+
+/* creating test report routes */
+router.post(
+  "/create-test-report",
+  auth(userRole.admin),
+  validateRequest(medicalTestReportValidation),
+  adminController.createTestReport,
 );
 
 /**

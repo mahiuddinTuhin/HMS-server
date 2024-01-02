@@ -21,12 +21,12 @@ const medicalHistorySchema = new Schema<TMedicalHistory>({
     ref: "Appointment",
     required: [true, "appointment Id is required."],
   },
-  diagonosis: [
+  MedicalTestReport: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Diagnosi",
+      ref: "MedicalTestReport",
       unique: true,
-      required: [true, "Diagnosis Id is required."],
+      required: [true, "MedicalTestReport Id is required."],
     },
   ],
   allMedications: [String],
