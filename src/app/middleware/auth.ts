@@ -28,15 +28,18 @@ const auth = (...requiredRoles: TUserRole[]) =>
       throw new AppError("Unauthorized request!", httpStatus.UNAUTHORIZED);
     }
 
-    const { id, role } = decoded;
+    const { id, role, _id, email } = decoded;
     const iat = decoded.iat as number;
 
+    /* checking where as this user exist correctly or not */
     const user: TUser = await User.isTokenIdExist(id);
 
+    /* convert lastPassword changed time in seconds */
     const passChangeTimeInSecond =
       new Date(user.passwordChangedAt as Date).getTime() / 1000;
 
     // checking if the access token created before the password change
+    /* throw error if access token is older than last password changing time */
     if (passChangeTimeInSecond > iat) {
       throw new AppError("Unauthorized request!", httpStatus.UNAUTHORIZED);
     }
