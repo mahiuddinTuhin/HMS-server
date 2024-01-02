@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { TEducation } from "../../interfaces/TCommon.interface";
 
 export type TDoctor = {
+  _id?: mongoose.Types.ObjectId;
   id: string;
   user: mongoose.Types.ObjectId;
   department: mongoose.Types.ObjectId;

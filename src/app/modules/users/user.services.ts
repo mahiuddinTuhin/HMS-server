@@ -560,7 +560,7 @@ const getMe = async (id: string, role: string) => {
  *
  * isDeleted from User
  * removing doctor id from department
- * removing doctor id from specializations
+ * removing doctor id from all specializations
  * close all appointments of this doctor
  *
  */
@@ -569,84 +569,111 @@ const deleteDoctor = async (id: string) => {
   const session = await mongoose.startSession();
 
   try {
-    session.startTransaction();
+    const result = await session.withTransaction(async () => {
+      /* find user and change isDeleted field value to true */
+      const deletedUser = (await User.findOneAndUpdate(
+        {
+          $and: [
+            { _id: new Types.ObjectId(id) },
+            { isDeleted: false },
+            { role: userRole.doctor },
+          ],
+        },
+        {
+          $set: { isDeleted: true },
+        },
+        { new: true, session },
+      )) as TUser;
 
-    /* checking whether doctor is available or not */
-    const doesDoctorExist = await User.findOne({
-      $and: [{ _id: new Types.ObjectId(id) }, { isDeleted: false }],
+      if (!deletedUser) {
+        throw new AppError(
+          "Doctor does not exist. Enter Doctor id properly.",
+          StatusCodes.BAD_REQUEST,
+        );
+      }
+
+      /* finding doctor data using the user id from Doctor collection */
+      const doctorData = (await Doctor.findOne(
+        {
+          user: new Types.ObjectId(deletedUser?._id),
+        },
+        null,
+        { session },
+      )) as TDoctor;
+
+      /* removing doctor id from department */
+      await Department.findByIdAndUpdate(
+        doctorData.department, // object id
+        {
+          $pull: {
+            doctors: doctorData.user, //doctorData.user is a object id
+          },
+        },
+        { session },
+      );
+
+      /* removing doctor id from specializations */
+
+      await Promise.all(
+        doctorData?.specializations?.map(async (spec) => {
+          await Specialization.findByIdAndUpdate(
+            spec,
+            {
+              $pull: {
+                doctors: doctorData.user, //doctorData.user is a object id
+              },
+            },
+            {
+              session,
+            },
+          );
+        }),
+      );
+
+      /* close all appointments of this doctor */
+      await Promise.all(
+        doctorData?.pendingAppointments?.map(async (appointmentId) => {
+          const appointed = await Appointment.findByIdAndUpdate(
+            appointmentId,
+            {
+              $set: {
+                isClosed: true,
+              },
+            },
+            { new: true, session },
+          );
+
+          await Patient.findOneAndUpdate(
+            { user: appointed?.patient },
+            {
+              $pull: {
+                pendingAppointments: appointmentId,
+              },
+            },
+            {
+              session,
+            },
+          );
+        }),
+      );
+
+      const updatedDoctor = await Doctor.findByIdAndUpdate(
+        {
+          _id: doctorData?._id,
+        },
+        {
+          $set: {
+            pendingAppointments: [],
+          },
+        },
+        { session },
+      );
+
+      return updatedDoctor;
     });
 
-    if (!doesDoctorExist) {
-      throw new AppError(
-        "Doctor does not exist. Enter doctor id properly.",
-        StatusCodes.BAD_REQUEST,
-      );
-    }
-
-    /* in user collection, change isDeleted to true */
-    const deletedUser = (await User.findByIdAndUpdate(
-      id,
-      {
-        $set: { isDeleted: true },
-      },
-      { new: true, session },
-    )) as TUser;
-
-    /* finding doctor data from Doctor collection */
-    const doctorData = (await Doctor.findOne({
-      user: new Types.ObjectId(deletedUser?._id),
-    })) as TDoctor;
-
-    /* removing doctor id from department */
-    await Department.findByIdAndUpdate(
-      doctorData.department, // object id
-      {
-        $pull: {
-          doctors: doctorData.user, //doctorData.user is a object id
-        },
-      },
-      { session },
-    );
-
-    /* removing doctor id from specializations */
-
-    await Promise.all(
-      doctorData?.specializations?.map(async (spec) => {
-        await Specialization.findByIdAndUpdate(
-          spec,
-          {
-            $pull: {
-              doctors: doctorData.user, //doctorData.user is a object id
-            },
-          },
-          {
-            session,
-          },
-        );
-      }),
-    );
-
-    /* close all appointments of this doctor */
-    await Promise.all(
-      doctorData?.pendingAppointments?.map(async (appointmentId) => {
-        await Appointment.findByIdAndUpdate(
-          appointmentId,
-          {
-            $set: {
-              isClosed: true,
-            },
-          },
-          {
-            session,
-          },
-        );
-      }),
-    );
-
-    await session.commitTransaction();
-    await session.endSession();
+    return result;
   } catch (error: any) {
-    await session.abortTransaction();
     await session.endSession();
     throw new AppError(error?.message, 400);
   }
@@ -657,6 +684,17 @@ const deleteDoctor = async (id: string) => {
  *   isDeleted: true
  */
 const deleteAdmin = async (id: string) => {
+  /* checking whether doctor is available or not */
+  const doesAdminExist = await User.findOne({
+    $and: [{ _id: new Types.ObjectId(id) }, { isDeleted: false }],
+  });
+
+  if (!doesAdminExist) {
+    throw new AppError(
+      "Admin does not exist. Enter Admin id properly.",
+      StatusCodes.BAD_REQUEST,
+    );
+  }
   const deletedAdmin = await User.findByIdAndUpdate(
     id,
     {
@@ -674,6 +712,17 @@ const deleteAdmin = async (id: string) => {
  *   isDeleted: true
  */
 const deleteNurse = async (id: string) => {
+  /* checking whether doctor is available or not */
+  const doesNurseExist = await User.findOne({
+    $and: [{ _id: new Types.ObjectId(id) }, { isDeleted: false }],
+  });
+
+  if (!doesNurseExist) {
+    throw new AppError(
+      "Nurse does not exist. Enter Nurse id properly.",
+      StatusCodes.BAD_REQUEST,
+    );
+  }
   const deletedNurse = await User.findByIdAndUpdate(
     id,
     {
@@ -691,6 +740,17 @@ const deleteNurse = async (id: string) => {
  *   isDeleted: true
  */
 const deleteStaff = async (id: string) => {
+  /* checking whether doctor is available or not */
+  const doesStaffExist = await User.findOne({
+    $and: [{ _id: new Types.ObjectId(id) }, { isDeleted: false }],
+  });
+
+  if (!doesStaffExist) {
+    throw new AppError(
+      "Staff does not exist. Enter Staff id properly.",
+      StatusCodes.BAD_REQUEST,
+    );
+  }
   const deletedStaff = await User.findByIdAndUpdate(
     id,
     {
@@ -701,6 +761,105 @@ const deleteStaff = async (id: string) => {
     { new: true },
   );
   return deletedStaff;
+};
+
+/*
+ * delete patient by id service
+ *
+ * isDeleted true from User
+ * remove all pending appointments of this patient
+ * remove all these appointment from doctor's pending appointment
+ * making isClosed field value true for all of these appointment
+ *
+ */
+
+const deletePatient = async (id: string) => {
+  const session = await mongoose.startSession();
+
+  try {
+    const result = await session.withTransaction(async () => {
+      /* finding id and update the isDeleted field to true */
+
+      const updatedUser: any = await User.findOneAndUpdate(
+        {
+          $and: [
+            { _id: new Types.ObjectId(id) },
+            { isDeleted: false },
+            { role: userRole.patient },
+          ],
+        },
+        {
+          $set: { isDeleted: true },
+        },
+        { new: true, session },
+      );
+
+      if (!updatedUser) {
+        throw new AppError(
+          "Patient does not exist. Enter Patient id properly.",
+          StatusCodes.BAD_REQUEST,
+        );
+      }
+
+      /* finding Patient data by user id */
+
+      const PatientData: any = await Patient.findOne({
+        user: updatedUser?._id,
+      }).session(session);
+
+      /* close all appointments of this patient from patient collection */
+      await Promise.all(
+        PatientData?.pendingAppointments?.map(async (appointmentId: string) => {
+          const appointed = await Appointment.findByIdAndUpdate(
+            appointmentId,
+            {
+              $set: {
+                isClosed: true,
+              },
+            },
+            {
+              new: true,
+              session,
+            },
+          );
+
+          await Doctor.findOneAndUpdate(
+            { user: appointed?.doctor },
+            {
+              $pull: {
+                pendingAppointments: appointmentId,
+              },
+            },
+            {
+              session,
+            },
+          );
+        }),
+      );
+
+      /* make empty the pending appointment of patient */
+      const updatedPatient = await Patient.findByIdAndUpdate(
+        {
+          _id: PatientData?._id,
+        },
+        {
+          $set: { pendingAppointments: [] },
+        },
+        {
+          new: true,
+          session,
+        },
+      );
+
+      return updatedPatient;
+    });
+
+    return result;
+    /* check phind.com */
+  } catch (error: any) {
+    await session.endSession();
+    throw new AppError(error?.message, 400);
+  }
 };
 
 export const userServices = {
@@ -718,4 +877,5 @@ export const userServices = {
   deleteAdmin,
   deleteNurse,
   deleteStaff,
+  deletePatient,
 };

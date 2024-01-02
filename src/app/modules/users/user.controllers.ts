@@ -198,7 +198,7 @@ const getMe: RequestHandler = catchAsync(async (req, res) => {
 
 const deleteDocById: RequestHandler = catchAsync(async (req, res) => {
   const id = req.params.userId;
-  const newDoc = userServices.deleteDoctor(id);
+  const newDoc = await userServices.deleteDoctor(id);
 
   newDoc &&
     ResponseToServer(
@@ -244,6 +244,17 @@ const deleteStaff: RequestHandler = catchAsync(async (req, res) => {
     ResponseToServer(req, res, true, 200, "successfully deleted the staff.");
 });
 
+/*
+ *   delete patient controller
+ */
+
+const deletePatient: RequestHandler = catchAsync(async (req, res) => {
+  const id = req.params.userId;
+  const result = await userServices.deletePatient(id);
+  result &&
+    ResponseToServer(req, res, true, 200, "successfully deleted the Patient.");
+});
+
 export const userControllers = {
   createAdmin,
   createDoctor,
@@ -259,4 +270,5 @@ export const userControllers = {
   deleteAdmin,
   deleteNurse,
   deleteStaff,
+  deletePatient,
 };

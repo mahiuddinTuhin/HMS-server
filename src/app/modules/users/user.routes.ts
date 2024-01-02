@@ -122,4 +122,11 @@ router.delete(
   userControllers.deleteStaff,
 );
 
+/* delete patient */
+router.delete(
+  "/delete-patient/:userId",
+  auth(userRole.admin),
+  userControllers.deletePatient,
+);
+
 export const userRoutes = router;
