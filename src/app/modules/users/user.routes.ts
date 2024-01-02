@@ -104,8 +104,12 @@ router.delete(
   userControllers.deleteDocById,
 );
 
-/* delete doctor */
+/* delete admin */
 /* need super admin here */
 router.delete("/delete-admin/:userId", userControllers.deleteAdmin);
+
+/* delete nurse */
+/* need super nurse here */
+router.delete("/delete-nurse/:userId", userControllers.deleteNurse);
 
 export const userRoutes = router;

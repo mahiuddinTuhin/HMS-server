@@ -669,6 +669,25 @@ const deleteAdmin = async (id: string) => {
   return deletedAdmin;
 };
 
+/*
+ *   Delete nurse
+ *   isDeleted: true
+ */
+const deleteNurse = async (id: string) => {
+  const deletedNurse = await User.findByIdAndUpdate(
+    id,
+    {
+      $set: {
+        isDeleted: true,
+      },
+    },
+    { new: true },
+  );
+  return deletedNurse;
+};
+
+
+
 export const userServices = {
   createAdminService,
   createDocService,
@@ -682,4 +701,5 @@ export const userServices = {
   getMe,
   deleteDoctor,
   deleteAdmin,
+  deleteNurse,
 };
