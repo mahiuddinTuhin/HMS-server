@@ -10,31 +10,45 @@ const medicalHistorySchema = new Schema<TMedicalHistory>({
   doctor: {
     type: Schema.Types.ObjectId,
     required: [true, "Doctor Id is required."],
-    ref: "Doctors",
+    ref: "Doctor",
     unique: true,
   },
   patient: {
     type: Schema.Types.ObjectId,
-    ref: "Patients",
+    ref: "Patient",
     unique: true,
     required: [true, "Patient Id is required."],
   },
   diagonosis: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Diagnosis",
+      ref: "Diagnosi",
       unique: true,
       required: [true, "Diagnosis Id is required."],
     },
   ],
-  medications: [String],
+  allMedications: [
+    {
+      date: Date,
+      medications: [String],
+    },
+  ],
   releasedOn: String,
   bill: {
     type: Number,
-    required: [true, "Bill is required!"],
+    default: 0,
+  },
+
+  isPaid: {
+    type: Boolean,
   },
   doctorComments: String,
   patientComments: String,
+
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 export const MedicalHistory = model<TMedicalHistory>(

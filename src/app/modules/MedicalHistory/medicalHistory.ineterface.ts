@@ -6,15 +6,16 @@ type TMedications = {
 };
 
 export type TMedicalHistory = {
+  _id?: Types.ObjectId;
   id: string;
   doctor: Types.ObjectId;
   patient: Types.ObjectId;
-  diagonosis: Types.ObjectId[];
-  medications: TMedications[];
+  diagonosis?: Types.ObjectId[];
+  allMedications?: TMedications[];
   releasedOn?: string;
   bill?: number;
-  isPaid: boolean;
-  doctorComments: string;
-  patientComments: string;
-  isDeleted: boolean;
+  isPaid?: boolean;
+  doctorComments?: string;
+  patientComments?: string;
+  isDeleted?: boolean;
 };
