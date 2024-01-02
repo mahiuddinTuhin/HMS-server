@@ -17,6 +17,7 @@ router.get(
   auth(userRole.doctor),
   doctorsController.findDocByIdController,
 );
+
 router.get("/", doctorsController.getAllDocController);
 router.put("/", doctorsController.updateDocByIdController);
 

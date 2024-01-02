@@ -66,20 +66,6 @@ const findDocByIdController: RequestHandler = catchAsync(async (req, res) => {
   );
 });
 
-const deleteDocByIdController: RequestHandler = catchAsync(async (req, res) => {
-  const id = req.params.id;
-  const newDoc = doctorServices.deleteDocByIdService(id);
-
-  ResponseToServer(
-    req,
-    res,
-    true,
-    200,
-    "successfully deleted doctor's data.",
-    newDoc,
-  );
-});
-
 const updateDocByIdController: RequestHandler = catchAsync(async (req, res) => {
   const id = req.params.id;
   const data = req.body;
@@ -126,7 +112,6 @@ const findDoctorBySymptoms: RequestHandler = catchAsync(async (req, res) => {
 export const doctorsController = {
   findDocByIdController,
   updateDocByIdController,
-  deleteDocByIdController,
   getAllDocController,
   createAppointment,
   createMedicalHistory,

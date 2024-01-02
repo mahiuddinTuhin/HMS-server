@@ -97,4 +97,15 @@ router.get(
 // router.delete("/:userId", userControllers.deleteUserById);
 router.put("/:userId", userControllers.updateUserById);
 
+/* delete doctor */
+router.delete(
+  "/delete-doctor/:userId",
+  auth(userRole.admin),
+  userControllers.deleteDocById,
+);
+
+/* delete doctor */
+/* need super admin here */
+router.delete("/delete-admin/:userId", userControllers.deleteAdmin);
+
 export const userRoutes = router;

@@ -195,6 +195,33 @@ const getMe: RequestHandler = catchAsync(async (req, res) => {
       data: result,
     });
 });
+
+const deleteDocById: RequestHandler = catchAsync(async (req, res) => {
+  const id = req.params.userId;
+  const newDoc = userServices.deleteDoctor(id);
+
+  newDoc &&
+    ResponseToServer(
+      req,
+      res,
+      true,
+      200,
+      "successfully deleted doctor's data.",
+      newDoc,
+    );
+});
+
+/*
+ *   delete admin controller
+ */
+
+const deleteAdmin: RequestHandler = catchAsync(async (req, res) => {
+  const id = req.params.userId;
+  const result = await userServices.deleteAdmin(id);
+  result &&
+    ResponseToServer(req, res, true, 200, "successfully deleted the admin.");
+});
+
 export const userControllers = {
   createAdmin,
   createDoctor,
@@ -206,4 +233,6 @@ export const userControllers = {
   createStaff,
   resetPassword,
   getMe,
+  deleteDocById,
+  deleteAdmin,
 };

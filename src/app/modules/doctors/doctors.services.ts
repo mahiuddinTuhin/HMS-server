@@ -166,6 +166,8 @@ const appointedTimeOfDoc = async (doctor_id: string) => {
 
 /*
  *find doctor by symptoms
+ *
+ *
  */
 
 const findDoctorBySymptoms = async (symptoms: string) => {

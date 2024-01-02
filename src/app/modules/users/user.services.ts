@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { StatusCodes } from "http-status-codes";
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import AppError from "../../errors/customError";
 import { TPasswordReset } from "../../interfaces/TCommon.interface";
 import { userRole } from "../../interfaces/interfaces";
@@ -10,6 +10,7 @@ import uploadToCloudinary from "../../utils/uploadToCloudinary";
 import generateUserId from "../../utils/userIdGenerator";
 import { TAdmin } from "../admin/admin.interface";
 import { Admin } from "../admin/admin.mode";
+import { Appointment } from "../appointment/appointment.model";
 import Department from "../department/department.model";
 import { TDoctor } from "../doctors/doctors.interface";
 import { Doctor } from "../doctors/doctors.model";
@@ -554,6 +555,120 @@ const getMe = async (id: string, role: string) => {
   return result;
 };
 
+/*
+ * delete_doctor_by_id_service
+ *
+ * isDeleted from User
+ * removing doctor id from department
+ * removing doctor id from specializations
+ * close all appointments of this doctor
+ *
+ */
+
+const deleteDoctor = async (id: string) => {
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    /* checking whether doctor is available or not */
+    const doesDoctorExist = await User.findOne({
+      $and: [{ _id: new Types.ObjectId(id) }, { isDeleted: false }],
+    });
+
+    if (!doesDoctorExist) {
+      throw new AppError(
+        "Doctor does not exist. Enter doctor id properly.",
+        StatusCodes.BAD_REQUEST,
+      );
+    }
+
+    /* in user collection, change isDeleted to true */
+    const deletedUser = (await User.findByIdAndUpdate(
+      id,
+      {
+        $set: { isDeleted: true },
+      },
+      { new: true, session },
+    )) as TUser;
+
+    /* finding doctor data from Doctor collection */
+    const doctorData = (await Doctor.findOne({
+      user: new Types.ObjectId(deletedUser?._id),
+    })) as TDoctor;
+
+    /* removing doctor id from department */
+    await Department.findByIdAndUpdate(
+      doctorData.department, // object id
+      {
+        $pull: {
+          doctors: doctorData.user, //doctorData.user is a object id
+        },
+      },
+      { session },
+    );
+
+    /* removing doctor id from specializations */
+
+    await Promise.all(
+      doctorData?.specializations?.map(async (spec) => {
+        await Specialization.findByIdAndUpdate(
+          spec,
+          {
+            $pull: {
+              doctors: doctorData.user, //doctorData.user is a object id
+            },
+          },
+          {
+            session,
+          },
+        );
+      }),
+    );
+
+    /* close all appointments of this doctor */
+    await Promise.all(
+      doctorData?.pendingAppointments?.map(async (appointmentId) => {
+        await Appointment.findByIdAndUpdate(
+          appointmentId,
+          {
+            $set: {
+              isClosed: true,
+            },
+          },
+          {
+            session,
+          },
+        );
+      }),
+    );
+
+    await session.commitTransaction();
+    await session.endSession();
+  } catch (error: any) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new AppError(error?.message, 400);
+  }
+};
+
+/*
+ *   Delete admin
+ *   isDeleted: true
+ */
+const deleteAdmin = async (id: string) => {
+  const deletedAdmin = await User.findByIdAndUpdate(
+    id,
+    {
+      $set: {
+        isDeleted: true,
+      },
+    },
+    { new: true },
+  );
+  return deletedAdmin;
+};
+
 export const userServices = {
   createAdminService,
   createDocService,
@@ -565,4 +680,6 @@ export const userServices = {
   getAllUser,
   resetPassword,
   getMe,
+  deleteDoctor,
+  deleteAdmin,
 };

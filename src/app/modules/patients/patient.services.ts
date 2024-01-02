@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { startSession } from "mongoose";
+import { Types, startSession } from "mongoose";
 import AppError from "../../errors/customError";
 import generateServiceId from "../../utils/generateServiceId";
 import { TAppointments } from "../appointment/appointment.interface";
@@ -23,7 +23,9 @@ const ceateAppointment = async (data: TAppointments) => {
 
     data.id = await generateServiceId(Appointment);
 
-    const doctor = await Doctor.findById(data?.doctor)
+    const doctor = await Doctor.findOne({
+      user: new Types.ObjectId(data?.doctor),
+    })
       .select("pendingAppointments")
       .populate("pendingAppointments");
 
@@ -46,7 +48,7 @@ const ceateAppointment = async (data: TAppointments) => {
 
     /* if doctor will be available on the specific time and date then creating appointment and modify doctor and patient collections. */
 
-    const oldApp: any = await Appointment.find();
+    // const oldApp: any = await Appointment.find();
     const newAppointment: any = await Appointment.create([data], { session });
 
     // console.log({ oldApp });
@@ -56,7 +58,7 @@ const ceateAppointment = async (data: TAppointments) => {
 
     /* modify doctor */
     await Doctor.findByIdAndUpdate(
-      data?.doctor,
+      doctor?._id,
       {
         $push: {
           pendingAppointments: newAppointment[0]?._id,
@@ -68,8 +70,8 @@ const ceateAppointment = async (data: TAppointments) => {
     );
 
     /* modify patient */
-    await Patient.findByIdAndUpdate(
-      data?.patient,
+    await Patient.findOneAndUpdate(
+      { user: new Types.ObjectId(data?.patient) },
       {
         $push: {
           pendingAppointments: newAppointment[0]?._id,
@@ -86,7 +88,7 @@ const ceateAppointment = async (data: TAppointments) => {
   } catch (error: any) {
     // console.log({ errorss: error instanceof AppError });
     if (error instanceof AppError) {
-      throw new AppError(error.message, 409);
+      throw new AppError(error.message, 400);
     }
     await session.abortTransaction();
     await session.endSession();
