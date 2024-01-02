@@ -18,10 +18,15 @@ const auth = (...requiredRoles: TUserRole[]) =>
       throw new AppError("Unauthorized request!", httpStatus.UNAUTHORIZED);
     }
 
-    const decoded = jwt.verify(
-      accessToken,
-      process.env.JWT_ACCESS_TOKEN_SECRET as string,
-    ) as JwtPayload;
+    let decoded;
+    try {
+      decoded = jwt.verify(
+        accessToken,
+        process.env.JWT_ACCESS_TOKEN_SECRET as string,
+      ) as JwtPayload;
+    } catch (error) {
+      throw new AppError("Unauthorized request!", httpStatus.UNAUTHORIZED);
+    }
 
     const { id, role } = decoded;
     const iat = decoded.iat as number;

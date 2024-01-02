@@ -5,19 +5,21 @@ const medicalHistorySchema = new Schema<TMedicalHistory>({
   id: {
     type: String,
     required: [true, "Medical History Id is required."],
-    unique: true,
   },
   doctor: {
     type: Schema.Types.ObjectId,
     required: [true, "Doctor Id is required."],
     ref: "Doctor",
-    unique: true,
   },
   patient: {
     type: Schema.Types.ObjectId,
     ref: "Patient",
-    unique: true,
     required: [true, "Patient Id is required."],
+  },
+  appointment: {
+    type: Schema.Types.ObjectId,
+    ref: "Appointment",
+    required: [true, "appointment Id is required."],
   },
   diagonosis: [
     {
@@ -27,13 +29,7 @@ const medicalHistorySchema = new Schema<TMedicalHistory>({
       required: [true, "Diagnosis Id is required."],
     },
   ],
-  allMedications: [
-    {
-      date: Date,
-      medications: [String],
-    },
-  ],
-  releasedOn: String,
+  allMedications: [String],
   bill: {
     type: Number,
     default: 0,

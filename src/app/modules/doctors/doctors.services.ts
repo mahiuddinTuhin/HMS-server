@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusCodes } from "http-status-codes";
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 import AppError from "../../errors/customError";
+import generateServiceId from "../../utils/generateServiceId";
 import { TMedicalHistory } from "../MedicalHistory/medicalHistory.ineterface";
 import { MedicalHistory } from "../MedicalHistory/medicalHistory.model";
 import { TAppointments } from "../appointment/appointment.interface";
@@ -82,19 +83,90 @@ const createAppointment = async (data: TAppointments) => {
 };
 
 /* creating a medical history by doctor */
-const createMedicalHistory = async (data: TMedicalHistory) => {
+const createMedicalHistory = async (payload: TMedicalHistory) => {
+  const session = await mongoose.startSession();
   try {
-    const newMedicalHistory: any = await MedicalHistory.create(data);
-    if (!newMedicalHistory) {
-      throw new AppError(
-        "Creating Medical History failed! from doctor services.",
-        StatusCodes.BAD_REQUEST,
+    const result = await session.withTransaction(async () => {
+      const id = await generateServiceId(MedicalHistory);
+      payload.id = id;
+      const newMedicalHistory: any = await MedicalHistory.create([payload], {
+        session,
+      });
+      if (!newMedicalHistory) {
+        throw new AppError(
+          "Creating Medical History has failed! .",
+          StatusCodes.BAD_REQUEST,
+        );
+      }
+
+      /* closed the appointment */
+      const updatedAppointment = await Appointment.findByIdAndUpdate(
+        { _id: payload?.appointment },
+        {
+          $set: {
+            isClosed: true,
+          },
+        },
+        {
+          new: true,
+          session,
+        },
       );
-    }
-    return newMedicalHistory;
+
+      if (!updatedAppointment) {
+        throw new AppError(
+          "Failed to update appointment! Recheck the appointment id. .",
+          StatusCodes.BAD_REQUEST,
+        );
+      }
+
+      /* remove the appointment from doctor's pendintAppointment */
+      const updatedDoctor = await Doctor.findOneAndUpdate(
+        { user: payload?.doctor },
+        {
+          $pull: {
+            pendingAppointments: payload?.appointment,
+          },
+        },
+        {
+          session,
+        },
+      );
+      if (!updatedDoctor) {
+        throw new AppError(
+          "Failed to update doctor! Recheck the doctor id. .",
+          StatusCodes.BAD_REQUEST,
+        );
+      }
+
+      /* remove the appointment from patient's pendintAppointment */
+
+      const updatedPatient = await Patient.findOneAndUpdate(
+        { user: payload?.patient },
+        {
+          $pull: {
+            pendingAppointments: payload?.appointment,
+          },
+        },
+        {
+          session,
+        },
+      );
+      if (!updatedPatient) {
+        throw new AppError(
+          "Failed to update patient! Recheck the patient id. .",
+          StatusCodes.BAD_REQUEST,
+        );
+      }
+
+      return newMedicalHistory;
+    });
+
+    return result;
   } catch (error) {
+    await session.endSession();
     throw new AppError(
-      `Creating Medical History  failed from doctor services!: ${error}`,
+      `Creating Medical History  has failed !: ${error}`,
       StatusCodes.INTERNAL_SERVER_ERROR,
     );
   }

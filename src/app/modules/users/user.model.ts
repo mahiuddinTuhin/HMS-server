@@ -180,6 +180,7 @@ userSchema.static("isUserExist", async function isUserExist(id: string) {
  */
 userSchema.static("isTokenIdExist", async function isUserExist(id: string) {
   /* query in database */
+
   const user = await User.findOne({
     $or: [{ id: id }, { email: id }],
   }).select("+password");

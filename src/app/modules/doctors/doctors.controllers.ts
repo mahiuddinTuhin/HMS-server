@@ -27,10 +27,17 @@ const createAppointment: RequestHandler = catchAsync(async (req, res) => {
 /* creating a medical history controller by doctor */
 const createMedicalHistory: RequestHandler = catchAsync(async (req, res) => {
   const medicalHistoryData = req.body;
-  const newMedicalHistory =
+  const newMedicalHistory: any =
     await doctorServices.createMedicalHistory(medicalHistoryData);
   if (newMedicalHistory) {
-    ResponseToServer(req, res, true, StatusCodes.OK, newMedicalHistory);
+    ResponseToServer(
+      req,
+      res,
+      true,
+      StatusCodes.OK,
+      "Successfully created medical history.",
+      newMedicalHistory,
+    );
   } else {
     throw new AppError(
       "Creating new Medical History failed from doctor controller!",

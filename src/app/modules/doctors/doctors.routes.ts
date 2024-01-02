@@ -1,12 +1,19 @@
 import { Router } from "express";
 import { userRole } from "../../interfaces/interfaces";
+import validateRequest from "../../middleware/ZodValidator";
 import auth from "../../middleware/auth";
+import { medicalValidation } from "../MedicalHistory/medicalHistory.Validation";
 import { doctorsController } from "./doctors.controllers";
 
 const router = Router();
 
 /* creating medical history routes */
-router.post("/create-medicalhistory", doctorsController.createMedicalHistory);
+router.post(
+  "/create-medicalhistory",
+  auth(userRole.doctor),
+  validateRequest(medicalValidation),
+  doctorsController.createMedicalHistory,
+);
 
 /* find doctor's data by symptoms  */
 router.get("/symptoms", doctorsController.findDoctorBySymptoms);
