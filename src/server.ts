@@ -3,18 +3,22 @@ import "dotenv/config";
 import { Server } from "http";
 import { connect } from "mongoose";
 import app from "./app";
+import config from "./app/config";
 const port = process.env.PORT;
 
 let server: Server;
+
 async function main() {
   try {
-    const db = await connect(process.env.DB_URL as string, {
+    console.log(config.DB_URL_COMPASS);
+    const db = await connect(config.DB_URL_ATLAS as string, {
       serverSelectionTimeoutMS: 10000, // Increase timeout to 30 seconds
     });
 
     // Check if the connection is successful
     if (db) {
       server = app.listen(port, () => {
+        // console.log(config.DB_URL_COMPASS);
         console.log(
           chalk.bgGreenBright.bold(
             `Server is running on port: ${port} and connected to the database`,

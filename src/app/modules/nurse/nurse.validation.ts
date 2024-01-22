@@ -4,7 +4,7 @@ const NurseValidation = z.object({
   body: z.object({
     user: z.string().optional(),
     id: z.string().optional(),
-    shift: z.enum(["day", "night"]),
+    shift: z.enum(["day", "night"]).optional(),
     email: z
       .string({
         required_error: "Email is required",
@@ -69,13 +69,6 @@ const NurseValidation = z.object({
         invalid_type_error: "Gender must be a string",
       })
       .min(4, "Gender shoulbd be minimum 4 character long!"),
-    profileImage: z
-      .string({
-        required_error: "Profile image URL is required",
-        invalid_type_error: "Profile image URL must be a string",
-      })
-      .min(5, "Profile image URL shoulbd be minimum 5 character long!")
-      .optional(),
   }),
 });
 

@@ -2,11 +2,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { v2 as cloudinary } from "cloudinary";
 import multer from "multer";
+import config from "../config";
 import AppError from "../errors/customError";
 const fs = require("fs");
 
 cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
+  cloud_name: config.CLOUD_NAME,
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
 });

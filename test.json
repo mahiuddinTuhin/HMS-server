@@ -1,24 +1,27 @@
-[
-  {
-    "allSymptoms": [
-      "Chest pain",
-      "Shortness of breath",
-      "Irregular heartbeat",
-      "Dizziness",
-      "Cyanosis",
-      "Poor feeding",
-      "Fatigue",
-      "Frequent infections",
-      "Swollen lymph nodes",
-      "Unexplained weight loss",
-      "Lump in breast",
-      "Change in breast shape",
-      "Sudden numbness",
-      "Difficulty speaking",
-      "Severe headache",
-      "Nausea or vomiting",
-      "Simple partial seizures",
-      "Loss of awareness"
-    ]
-  }
-]
+{
+  "email": "jane.doe2@example.com",
+  "phone": "+15555551234",
+  "education": [
+    {
+      "institute": "University of Science",
+      "degree": "Bachelor of Arts in Psychology",
+      "year": 2012
+    },
+    {
+      "institute": "City College",
+      "degree": "Master of Business Administration",
+      "year": 2015
+    }
+  ],
+  "fullName": {
+    "firstName": "Jane",
+    "middleName": "Elizabeth",
+    "lastName": "Doe"
+  },
+  "address": {
+    "presentAddress": "789 Elm Street, Springfield",
+    "permanentAddress": "456 Oak Avenue, Springfield"
+  },
+  "dateOfBirth": "1988-10-20",
+  "gender": "female"
+}

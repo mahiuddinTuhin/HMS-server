@@ -5,7 +5,8 @@ dotenv.config({ path: path.join((process.cwd(), ".env")) });
 
 export default {
   PORT: process.env.PORT,
-  DB_URL: process.env.DB_URL,
+  DB_URL_ATLAS: process.env.ATLAS,
+  DB_URL_COMPASS: process.env.COMPASS,
   JWT_ACCESS_TOKEN_SECRET: process.env.JWT_ACCESS_TOKEN_SECRET,
   JWT_ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN,
   JWT_REFRESH_TOKEN_SECRET: process.env.JWT_REFRESH_TOKEN_SECRET,
@@ -20,5 +21,6 @@ export default {
   CLOUD_NAME: process.env.CLOUD_NAME,
   API_KEY: process.env.API_KEY,
   API_SECRET: process.env.API_SECRET,
+  CLOUDINARY_URL: process.env.CLOUDINARY_URL,
   DEFAULT_PASSWORD: process.env.DEFAULT_PASSWORD,
 };

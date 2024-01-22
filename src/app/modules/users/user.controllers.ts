@@ -13,6 +13,7 @@ import { userServices } from "./user.services";
  *   creating admin controller
  */
 const createAdmin: RequestHandler = catchAsync(async (req, res) => {
+  console.log("create admin ");
   const data = req.body;
   const file = req.file as any;
   const path = file?.path;
@@ -55,6 +56,8 @@ const createNurse: RequestHandler = catchAsync(async (req, res) => {
   const file = req.file as any;
   const path = file?.path;
   data.path = path;
+
+  // console.log(data);
 
   const newNurse: any = await userServices.createNurseService(data);
 
