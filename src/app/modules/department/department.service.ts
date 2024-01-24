@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Types } from "mongoose";
+import { Doctor } from "../doctors/doctors.model";
+import Specialization from "../specializations/specializations.model";
 import Department from "./department.model";
 
 /*
@@ -25,17 +27,7 @@ const findAllDepartment = async () => {
  * return: "_id","specializations"
  */
 const findAllSpecializatios: any = async () => {
-  const allSpecializatios = await Department.aggregate([
-    {
-      $unwind: "$specializations",
-    },
-    {
-      $project: {
-        _id: "$specializations._id",
-        specializations: "$specializations.specializationName",
-      },
-    },
-  ]);
+  const allSpecializatios = await Specialization.find();
   return allSpecializatios;
 };
 
@@ -81,24 +73,55 @@ const findSpecializatioById: any = async (id: string) => {
  * return: problem, departmentId, specialization id
  */
 const findAllProblems: any = async () => {
-  const departments = await Department.aggregate([
+  /*
+   * Doctor's Model => specialization Model =>
+   */
+  const problems = await Doctor.aggregate([
     {
-      $unwind: "$specializations",
+      $lookup: {
+        from: "specializations",
+        localField: "specializations",
+        foreignField: "_id",
+        as: "specializationData",
+      },
     },
     {
-      $unwind: "$specializations.problems",
+      $unwind: "$specializationData",
     },
     {
-      $replaceRoot: {
-        newRoot: {
-          problem: "$specializations.problems",
-          departmentId: "$_id",
-          specializationsId: "$specializations._id",
+      $unwind: "$specializationData.problems",
+    },
+    {
+      $project: {
+        _id: false,
+        problem: "$specializationData.problems",
+        doctor: {
+          doctorId: "$_id",
+          doctorName: {
+            $concat: [
+              "$fullName.firstName",
+              " ",
+              "$fullName.middleName",
+              " ",
+              "$fullName.lastName",
+            ],
+          },
+          degree: "$education.degree",
+          profileImage: "$profileImage",
         },
       },
     },
+    // {
+    //   $replaceRoot: {
+    //     newRoot: {
+    //       problem: "$specializations.problems",
+    //       departmentId: "$_id",
+    //       specializationsId: "$specializations._id",
+    //     },
+    //   },
+    // },
   ]);
-  return departments;
+  return problems;
 };
 
 /*

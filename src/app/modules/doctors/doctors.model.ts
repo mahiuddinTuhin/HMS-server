@@ -26,7 +26,8 @@ export const doctorSchema = new Schema<TDoctor>(
     },
     specializations: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: "Specialization",
         required: [true, "specializations is required"],
       },
     ],

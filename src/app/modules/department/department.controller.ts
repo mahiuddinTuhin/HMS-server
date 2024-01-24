@@ -50,6 +50,8 @@ const findSpecializationById: RequestHandler = catchAsync(async (req, res) => {
 const findAllProblems: RequestHandler = catchAsync(async (req, res) => {
   const AllProblems = await departmentService.findAllProblems();
 
+  // console.log({ AllProblems });
+
   responseToRequest(res, {
     success: true,
     status: 200,
