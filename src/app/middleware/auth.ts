@@ -28,7 +28,9 @@ const auth = (...requiredRoles: TUserRole[]) =>
       throw new AppError("Unauthorized request!", httpStatus.UNAUTHORIZED);
     }
 
-    const { id, role, _id, email } = decoded;
+    // console.log("decoded");
+
+    const { id, role, _id, email, exp } = decoded;
     const iat = decoded.iat as number;
 
     /* checking where as this user exist correctly or not */

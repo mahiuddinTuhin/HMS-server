@@ -1,10 +1,16 @@
 import { Router } from "express";
+import { userRole } from "../../interfaces/interfaces";
+import auth from "../../middleware/auth";
 import departmentController from "./department.controller";
 
 const router = Router();
 
 /* find  all problems */
-router.get("/problems", departmentController.findAllProblems);
+router.get(
+  "/problems",
+  auth(userRole.admin, userRole.patient),
+  departmentController.findAllProblems,
+);
 
 /* find  all symptoms */
 router.get("/symptoms", departmentController.findAllSymptoms);
