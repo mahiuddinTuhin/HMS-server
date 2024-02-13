@@ -20,8 +20,6 @@ export const globalErrorHandler: ErrorRequestHandler = (
     let message = err.message || "Something went wring!";
     let statusCode = err.statusCode || 500;
 
-    // console.log({ err });
-
     let errorSources: Partial<TErrorSources[]> = [
       {
         path: "",

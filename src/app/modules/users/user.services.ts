@@ -503,7 +503,7 @@ const getUserById = async (id: number) => {
 };
 
 const getAllUser = async (query: Record<string, any>) => {
-  const searchTerm = query?.searchTerm || "";
+  const searchTerm = query?.searchTerm || {};
 
   const result = await User.find(searchTerm);
 

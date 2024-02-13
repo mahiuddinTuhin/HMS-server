@@ -10,7 +10,6 @@ let server: Server;
 
 async function main() {
   try {
-    console.log(config.DB_URL_COMPASS);
     const db = await connect(config.DB_URL_ATLAS as string, {
       serverSelectionTimeoutMS: 10000, // Increase timeout to 30 seconds
     });

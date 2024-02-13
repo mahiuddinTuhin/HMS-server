@@ -13,7 +13,6 @@ import { userServices } from "./user.services";
  *   creating admin controller
  */
 const createAdmin: RequestHandler = catchAsync(async (req, res) => {
-  console.log("create admin ");
   const data = req.body;
   const file = req.file as any;
   const path = file?.path;

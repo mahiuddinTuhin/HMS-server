@@ -13,27 +13,32 @@ cloudinary.config({
 });
 
 const uploadToCloudinary = (path: string, imageName: string) => {
-  return new Promise((resolve, reject) => {
-    cloudinary.uploader.upload(
-      path, //local image path
-      { public_id: imageName },
-      function (error, result) {
-        if (error) {
-          reject(error);
-        }
-        resolve(result);
+  if (!path) {
+    throw new AppError("File path does not found!", 400);
+  }
 
-        // removing image file from 'path' of image
-        fs.unlink(path, (err: any) => {
-          if (err) {
-            throw new AppError("Error in deleting file after uploads", 400);
+  return new Promise((resolve, reject) => {
+    try {
+      cloudinary.uploader.upload(
+        path, //local image path
+        { public_id: imageName },
+        function (error, result) {
+          if (error) {
+            reject(error);
           }
-          // else {
-          //   console.log("File is deleted.");
-          // }
-        });
-      },
-    );
+          resolve(result);
+
+          // removing image file from 'path' of image
+          fs.unlink(path, (err: any) => {
+            if (err) {
+              throw new AppError("Error in deleting file after uploads", 400);
+            }
+          });
+        },
+      );
+    } catch (error: any) {
+      throw new AppError(error.message, 400);
+    }
   });
 };
 
