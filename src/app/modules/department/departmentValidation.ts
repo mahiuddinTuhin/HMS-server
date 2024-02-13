@@ -21,21 +21,15 @@ const DepartmentValidation = z.object({
 
     specializations: z.array(z.string().optional()).optional(),
 
-    medicalLicense: z.array(
-      z
-        .string({
-          required_error: "Licences is required",
-          invalid_type_error: "Licences must be a string",
-        })
-        .min(10),
-    ),
+    medicalLicense: z
+      .string({
+        required_error: "Licences is required",
+        invalid_type_error: "Licences must be a string",
+      })
+      .min(10),
+
     medicalHistory: z.array(z.string().optional()).optional(),
 
-    contact: z.object({
-      email: z.array(z.string()),
-      phone: z.array(z.string()),
-      address: z.array(z.string()),
-    }),
     isDeleted: z.boolean().default(false),
   }),
 });

@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { contactSchema } from "../../schema/CommonSchema";
 import TDepartment from "./department.interface";
 
 // Define a Mongoose schema for TDepartment
@@ -25,12 +24,10 @@ const departmentSchema = new Schema<TDepartment>(
         ref: "Specialization",
       },
     ],
-    medicalLicense: [
-      {
-        type: String,
-        required: true,
-      },
-    ],
+    medicalLicense: {
+      type: String,
+      required: true,
+    },
     medicalHistory: [
       {
         type: Schema.Types.ObjectId,
@@ -43,7 +40,7 @@ const departmentSchema = new Schema<TDepartment>(
         ref: "Doctor",
       },
     ],
-    contact: contactSchema,
+    contact: String,
     isDeleted: {
       type: Boolean,
       default: false,

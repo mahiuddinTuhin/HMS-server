@@ -12,7 +12,7 @@ type TDepartment = {
   specializations: Types.ObjectId[];
   medicalHistory?: Types.ObjectId[];
   doctors: Types.ObjectId[];
-  contact: TContact;
+  contact: TContact | string;
   /*
    type TContact = {
     phone: string[];
@@ -20,7 +20,7 @@ type TDepartment = {
     address: string[];
 }
   */
-  medicalLicense: string[];
+  medicalLicense: string[] | string;
   isDeleted: true | false;
 };
 
