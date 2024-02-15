@@ -17,6 +17,7 @@ const router = Router();
 /* 1. creating admin */
 router.post(
   "/create-admin",
+  auth(userRole.superAdmin),
   upload.single("file"),
   jsonParseData,
   validateRequest(userValidation),

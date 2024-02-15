@@ -9,7 +9,7 @@ export type TUser = {
   passwordChangedAt?: Date;
   email?: string;
   phone?: string;
-  role: "patient" | "doctor" | "admin" | "nurse" | "staff";
+  role: "patient" | "doctor" | "admin" | "nurse" | "staff" | "superAdmin";
   status?: "active" | "deactive";
   failed_login_attempts?: number;
   last_login?: Date;

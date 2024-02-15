@@ -14,6 +14,7 @@ const router = Router();
 /* creating department routes */
 router.post(
   "/create-department",
+  auth(userRole.superAdmin),
   validateRequest(DepartmentValidation),
   adminController.createDepartment,
 );

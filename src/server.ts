@@ -4,6 +4,7 @@ import { Server } from "http";
 import { connect } from "mongoose";
 import app from "./app";
 import config from "./app/config";
+import seedSuperAdmin from "./app/db";
 const port = process.env.PORT;
 
 let server: Server;
@@ -16,6 +17,7 @@ async function main() {
 
     // Check if the connection is successful
     if (db) {
+      await seedSuperAdmin();
       server = app.listen(port, () => {
         // console.log(config.DB_URL_COMPASS);
         console.log(

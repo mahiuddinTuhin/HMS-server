@@ -3,6 +3,7 @@ export const userRole = {
   doctor: "doctor",
   nurse: "nurse",
   admin: "admin",
+  superAdmin: "superAdmin",
   staff: "staff",
 } as const;
 

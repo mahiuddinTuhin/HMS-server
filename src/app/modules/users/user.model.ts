@@ -61,7 +61,7 @@ const userSchema = new mongoose.Schema<TUser, UserStaticModel>(
     role: {
       type: String,
       required: [true, "Role is required!"],
-      enum: ["patient", "doctor", "admin", "nurse", "staff"],
+      enum: ["patient", "doctor", "admin", "nurse", "staff", "superAdmin"],
       message:
         "{VALUES} is not correct role. Choose patient, doctor, admin, nurse or staff as role",
     },
