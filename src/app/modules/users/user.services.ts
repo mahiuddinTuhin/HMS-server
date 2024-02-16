@@ -46,17 +46,21 @@ const createAdminService = async (data: any) => {
       );
     }
 
-    // generating image name for imageDB
-    const imageName = `image-${generatedUserId}`;
-
     /*
      *  uploads to cloudinary with path and imageName
      * return secure_url
      */
-    const { secure_url } = (await uploadToCloudinary(
-      data?.path,
-      imageName,
-    )) as any;
+    let profileImage = "";
+
+    if (data?.path) {
+      // generating image name for imageDB
+      const imageName = `image-${generatedUserId}`;
+      const { secure_url } = (await uploadToCloudinary(
+        data?.path,
+        imageName,
+      )) as any;
+      profileImage = secure_url;
+    }
 
     /* taking necessary data for common user */
 
@@ -87,7 +91,7 @@ const createAdminService = async (data: any) => {
       ...restOfData,
       id: newUser[0]?.id,
       user: newUser[0]?._id,
-      profileImage: secure_url,
+      profileImage,
     };
 
     const newAdmin = await Admin.create([adminData], { session });
@@ -140,10 +144,18 @@ const createDocService = async (data: any) => {
      *  uploads to cloudinary with path and imageName
      * return secure_url
      */
-    const { secure_url } = (await uploadToCloudinary(
-      data?.path,
-      imageName,
-    )) as any;
+
+    let profileImage = "";
+
+    if (data?.path) {
+      const { secure_url } = (await uploadToCloudinary(
+        data?.path,
+        imageName,
+      )) as any;
+
+      profileImage = secure_url;
+    }
+
     /* taking necessary data for common user */
 
     const userData: Partial<TUser> = {
@@ -174,7 +186,7 @@ const createDocService = async (data: any) => {
       ...restOfData,
       id: newUser[0]?.id,
       user: newUser[0]?._id,
-      profileImage: secure_url,
+      profileImage,
     };
 
     // creting doctor document
@@ -259,10 +271,17 @@ const createNurseService = async (data: any) => {
      *  uploads to cloudinary with path and imageName
      * return secure_url
      */
-    const { secure_url } = (await uploadToCloudinary(
-      data?.path,
-      imageName,
-    )) as any;
+
+    let profileImage = "";
+
+    if (data?.path) {
+      const { secure_url } = (await uploadToCloudinary(
+        data?.path,
+        imageName,
+      )) as any;
+
+      profileImage = secure_url;
+    }
 
     /* taking necessary data for common user */
     const userData: Partial<TUser> = {
@@ -287,7 +306,7 @@ const createNurseService = async (data: any) => {
       ...restOfData,
       id: newUser[0]?.id,
       user: newUser[0]?._id,
-      profileImage: secure_url,
+      profileImage,
     };
 
     const newNurse = await Nurse.create([nurseData], { session });
@@ -343,10 +362,16 @@ const createPatientService = async (data: any) => {
      *  uploads to cloudinary with path and imageName
      * return secure_url
      */
-    const { secure_url } = (await uploadToCloudinary(
-      data?.path,
-      imageName,
-    )) as any;
+    let profileImage = "";
+
+    if (data?.path) {
+      const { secure_url } = (await uploadToCloudinary(
+        data?.path,
+        imageName,
+      )) as any;
+
+      profileImage = secure_url;
+    }
 
     /* taking necessary data for common user */
     const userData: Partial<TUser> = {
@@ -379,7 +404,7 @@ const createPatientService = async (data: any) => {
       ...restOfData,
       id: newUser[0]?.id,
       user: newUser[0]?._id,
-      profileImage: secure_url,
+      profileImage,
     };
 
     const newPatient = await Patient.create([patientData], { session });
@@ -434,10 +459,16 @@ const createStaffService = async (data: any) => {
      *  uploads to cloudinary with path and imageName
      * return secure_url
      */
-    const { secure_url } = (await uploadToCloudinary(
-      data?.path,
-      imageName,
-    )) as any;
+     let profileImage = "";
+
+     if (data?.path) {
+       const { secure_url } = (await uploadToCloudinary(
+         data?.path,
+         imageName,
+       )) as any;
+
+       profileImage = secure_url;
+     }
 
     /* taking necessary data for common user */
     const userData: Partial<TUser> = {
@@ -470,7 +501,7 @@ const createStaffService = async (data: any) => {
       ...restOfData,
       id: newUser[0]?.id,
       user: newUser[0]?._id,
-      profileImage: secure_url,
+      profileImage
     };
 
     const newStaff = await Staff.create([staffData], { session });
