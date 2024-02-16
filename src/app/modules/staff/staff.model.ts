@@ -20,7 +20,7 @@ const staffSchema = new Schema<TStaff>({
   address: utilsSchema.addressSchema,
   dateOfBirth: { type: String, required: [true, "Date of birth is required"] },
   gender: { type: String, required: [true, "Gender is required"] },
-  profileImage: { type: String, required: [true, "Profile image is required"] },
+  profileImage: { type: String, default: "" },
   isDeleted: {
     type: Boolean,
     default: false,

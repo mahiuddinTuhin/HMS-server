@@ -63,7 +63,7 @@ const NurseSchema = new Schema<TNurse>(
     gender: { type: String, required: [true, "Gender is required"] },
     profileImage: {
       type: String,
-      required: [true, "Profile image URL is required"],
+      default: "",
     },
     isDeleted: {
       type: Boolean,

@@ -79,7 +79,7 @@ export const doctorSchema = new Schema<TDoctor>(
     gender: { type: String, required: [true, "Gender is required"] },
     profileImage: {
       type: String,
-      required: [true, "Profile image URL is required"],
+      default: "",
     },
     license_info: {
       type: String,
