@@ -12,7 +12,7 @@ export const birthDatePattern =
 const educationValidation = z.object({
   institute: z.string().min(4),
   degree: z.string().min(2),
-  year: z.number(),
+  year: z.string(),
 });
 
 const fullNameValidation = z.object({
@@ -28,7 +28,7 @@ const addressValidation = z.object({
 
 // Basic email regex pattern
 
-const phoneValidation = z.string().min(11).regex(phonePattern);
+const phoneValidation = z.string().min(11);
 
 const passwordValidation = z
   .string()

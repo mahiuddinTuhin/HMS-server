@@ -66,8 +66,13 @@ const createSpecialization = async (payload: TMedicalSpecializations[]) => {
   try {
     session.startTransaction();
 
+    let newPayload = payload;
+    if (!Array.isArray(payload)) {
+      newPayload = [payload];
+    }
+
     const newSpecializations: any = await Promise.all(
-      payload?.map(async (data) => {
+      newPayload?.map(async (data) => {
         data.id = await generateServiceId(Specialization);
 
         const specialization = await Specialization.create([data], {

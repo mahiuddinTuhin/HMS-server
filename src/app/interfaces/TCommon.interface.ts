@@ -8,7 +8,7 @@ export type TContact = {
 export type TEducation = {
   institute: string;
   degree: string;
-  year: number;
+  year: string;
 };
 
 export type TPersonalInfo = {
